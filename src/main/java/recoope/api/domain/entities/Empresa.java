@@ -35,4 +35,52 @@ public class Empresa {
     }
 
     public Empresa() {}
+
+    public Long getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Long idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
+    }
+
+    public String getEmailEmpresa() {
+        return emailEmpresa;
+    }
+
+    public void setEmailEmpresa(String emailEmpresa) {
+        this.emailEmpresa = emailEmpresa;
+    }
+
+    public String getSenhaEmpresa() {
+        return senhaEmpresa;
+    }
+
+    public void setSenhaEmpresa(String senhaEmpresa) {
+        this.senhaEmpresa = senhaEmpresa;
+    }
+
+    public String getTelefoneEmpresa() {
+        return telefoneEmpresa;
+    }
+
+    public void setTelefoneEmpresa(String telefoneEmpresa) {
+        this.telefoneEmpresa = telefoneEmpresa;
+    }
+
+    public String getCnpjEmpresa() {
+        return cnpjEmpresa;
+    }
+
+    public void setCnpjEmpresa(String cnpjEmpresa) {
+        this.cnpjEmpresa = cnpjEmpresa;
+    }
 }

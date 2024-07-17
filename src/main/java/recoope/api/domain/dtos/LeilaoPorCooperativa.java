@@ -1,13 +1,14 @@
-package recoope.api.domain.entities;
+package recoope.api.domain.dtos;
 
 import jakarta.persistence.*;
+import recoope.api.domain.entities.*;
 
 import java.sql.Time;
 import java.sql.Date;
 
 @Entity
 @Table(name = "leilao")
-public class Leilao {
+public class LeilaoPorCooperativa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_leilao")
@@ -33,11 +34,7 @@ public class Leilao {
     @JoinColumn(name = "id_produto")
     private Produto produto;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cooperativa")
-    private Cooperativa cooperativa;
-
-    public Leilao(Long idLeilao, Date dataInicioLeilao, Date dataFimLeilao, String detalhesLeilao, Time horaLeilao, Endereco endereco, Produto produto, Cooperativa cooperativa) {
+    public LeilaoPorCooperativa(Long idLeilao, Date dataInicioLeilao, Date dataFimLeilao, String detalhesLeilao, Time horaLeilao, Endereco endereco, Produto produto) {
         this.idLeilao = idLeilao;
         this.dataInicioLeilao = dataInicioLeilao;
         this.dataFimLeilao = dataFimLeilao;
@@ -45,10 +42,9 @@ public class Leilao {
         this.horaLeilao = horaLeilao;
         this.endereco = endereco;
         this.produto = produto;
-        this.cooperativa = cooperativa;
     }
 
-    public Leilao() {}
+    public LeilaoPorCooperativa() {}
 
     public Long getIdLeilao() {
         return idLeilao;
@@ -104,13 +100,5 @@ public class Leilao {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
-    }
-
-    public Cooperativa getCooperativa() {
-        return cooperativa;
-    }
-
-    public void setCooperativa(Cooperativa cooperativa) {
-        this.cooperativa = cooperativa;
     }
 }

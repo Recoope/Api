@@ -35,4 +35,44 @@ public class Lance {
     }
 
     public Lance() {}
+
+    public Long getIdLance() {
+        return idLance;
+    }
+
+    public void setIdLance(Long idLance) {
+        this.idLance = idLance;
+    }
+
+    public Leilao getLeilao() {
+        return leilao;
+    }
+
+    public void setLeilao(Leilao leilao) {
+        this.leilao = leilao;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Double getValor() {
+        return valor;
+    }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
+
+    public Date getDataLance() {
+        return dataLance;
+    }
+
+    public void setDataLance(Date dataLance) {
+        this.dataLance = dataLance;
+    }
 }

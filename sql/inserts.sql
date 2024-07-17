@@ -34,7 +34,25 @@ values
     (2, '2024-08-02', '2024-08-08', 'Leilão de papéis recicláveis', '14:00', 2, 2, 2),
     (3, '2024-08-03', '2024-08-09', 'Leilão de vidros recicláveis', '16:00', 3, 3, 3),
     (4, '2024-08-04', '2024-08-10', 'Leilão de metais recicláveis', '17:00', 4, 4, 4),
-    (5, '2024-08-05', '2024-08-11', 'Leilão de resíduos orgânicos', '13:00', 1, 5, 5);
+    (5, '2024-08-05', '2024-08-11', 'Leilão de resíduos orgânicos', '13:00', 1, 5, 5),
+    (6, '2024-08-06', '2024-08-12', 'Leilão de eletrônicos recicláveis', '15:00', 2, 1, 2),
+    (7, '2024-08-07', '2024-08-13', 'Leilão de móveis recicláveis', '14:00', 3, 2, 3),
+    (8, '2024-08-08', '2024-08-14', 'Leilão de roupas recicláveis', '16:00', 4, 3, 4),
+    (9, '2024-08-09', '2024-08-15', 'Leilão de brinquedos recicláveis', '17:00', 1, 4, 5),
+    (10, '2024-08-10', '2024-08-16', 'Leilão de livros recicláveis', '13:00', 2, 5, 1),
+    (11, '2024-08-11', '2024-08-17', 'Leilão de utensílios de cozinha recicláveis', '15:00', 3, 1, 2),
+    (12, '2024-08-12', '2024-08-18', 'Leilão de materiais de construção recicláveis', '14:00', 4, 2, 3),
+    (13, '2024-08-13', '2024-08-19', 'Leilão de baterias recicláveis', '16:00', 1, 3, 4),
+    (14, '2024-08-14', '2024-08-20', 'Leilão de pneus recicláveis', '17:00', 2, 4, 5),
+    (15, '2024-08-15', '2024-08-21', 'Leilão de materiais de escritório recicláveis', '13:00', 3, 5, 1),
+    (16, '2024-08-16', '2024-08-22', 'Leilão de instrumentos musicais recicláveis', '15:00', 4, 1, 2),
+    (17, '2024-08-17', '2024-08-23', 'Leilão de máquinas e ferramentas recicláveis', '14:00', 1, 2, 3),
+    (18, '2024-08-18', '2024-08-24', 'Leilão de equipamentos de jardinagem recicláveis', '16:00', 2, 3, 4),
+    (19, '2024-08-19', '2024-08-25', 'Leilão de produtos de limpeza recicláveis', '17:00', 3, 4, 5),
+    (20, '2024-08-20', '2024-08-26', 'Leilão de artigos esportivos recicláveis', '13:00', 4, 5, 1),
+    (21, '2024-08-21', '2024-08-27', 'Leilão de acessórios de moda recicláveis', '15:00', 1, 1, 2),
+    (22, '2024-08-22', '2024-08-28', 'Leilão de embalagens recicláveis', '14:00', 2, 2, 3);
+
 
 insert into lance (id_lance, id_leilao, id_empresa, valor, data_lance)
 values
@@ -42,9 +60,9 @@ values
     (2, 1, 2, 60.00, '2024-08-03'),
     (3, 2, 3, 35.00, '2024-08-04'),
     (4, 2, 4, 40.00, '2024-08-05'),
-    (5, 3, 5, 25.00, '2024-08-06'),
+    (5, 3, 3, 25.00, '2024-08-06'),
     (6, 3, 1, 30.00, '2024-08-07'),
     (7, 4, 2, 45.00, '2024-08-08'),
     (8, 4, 3, 50.00, '2024-08-09'),
     (9, 5, 4, 20.00, '2024-08-10'),
-    (10, 5, 5, 22.00, '2024-08-11');
+    (10, 5, 4, 22.00, '2024-08-11');

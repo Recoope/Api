@@ -12,6 +12,7 @@ public class Cooperativa
     private Long idCooperativa;
     @Column(name = "nome_cooperativa")
     private String nomeCooperativa;
+
     @Column(name = "email_cooperativa")
     private String emailCooperativa;
     @Column(name = "senha_cooperativa")
@@ -26,4 +27,36 @@ public class Cooperativa
     }
 
     public Cooperativa() {}
+
+    public Long getIdCooperativa() {
+        return idCooperativa;
+    }
+
+    public void setIdCooperativa(Long idCooperativa) {
+        this.idCooperativa = idCooperativa;
+    }
+
+    public String getNomeCooperativa() {
+        return nomeCooperativa;
+    }
+
+    public void setNomeCooperativa(String nomeCooperativa) {
+        this.nomeCooperativa = nomeCooperativa;
+    }
+
+    public String getEmailCooperativa() {
+        return emailCooperativa;
+    }
+
+    public void setEmailCooperativa(String emailCooperativa) {
+        this.emailCooperativa = emailCooperativa;
+    }
+
+    public String getSenhaCooperativa() {
+        return senhaCooperativa;
+    }
+
+    public void setSenhaCooperativa(String senhaCooperativa) {
+        this.senhaCooperativa = senhaCooperativa;
+    }
 }

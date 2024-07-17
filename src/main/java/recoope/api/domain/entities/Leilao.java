@@ -2,7 +2,8 @@ package recoope.api.domain.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.sql.Time;
+import java.sql.Date;
 
 @Entity
 @Table(name = "leilao")
@@ -22,7 +23,7 @@ public class Leilao {
     private String detalhesLeilao;
 
     @Column(name = "hora_leilao")
-    private Date horaLeilao;
+    private Time horaLeilao;
 
     @ManyToOne
     @JoinColumn(name = "id_endereco")
@@ -32,7 +33,11 @@ public class Leilao {
     @JoinColumn(name = "id_produto")
     private Produto produto;
 
-    public Leilao(Long idLeilao, Date dataInicioLeilao, Date dataFimLeilao, String detalhesLeilao, Date horaLeilao, Endereco endereco, Produto produto) {
+    @ManyToOne
+    @JoinColumn(name = "id_cooperativa")
+    private Cooperativa idCooperativa;
+
+    public Leilao(Long idLeilao, Date dataInicioLeilao, Date dataFimLeilao, String detalhesLeilao, Time horaLeilao, Endereco endereco, Produto produto, Cooperativa idCooperativa) {
         this.idLeilao = idLeilao;
         this.dataInicioLeilao = dataInicioLeilao;
         this.dataFimLeilao = dataFimLeilao;
@@ -40,6 +45,7 @@ public class Leilao {
         this.horaLeilao = horaLeilao;
         this.endereco = endereco;
         this.produto = produto;
+        this.idCooperativa = idCooperativa;
     }
 
     public Leilao() {}

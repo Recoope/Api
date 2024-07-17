@@ -2,7 +2,6 @@ package recoope.api.domain.entities;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "cooperativa")
 public class Cooperativa

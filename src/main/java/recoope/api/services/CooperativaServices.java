@@ -1,6 +1,8 @@
 package recoope.api.services;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import recoope.api.domain.ApiResponse;
 import recoope.api.domain.dtos.LeilaoPorCooperativa;
 import recoope.api.domain.entities.Cooperativa;
 import recoope.api.domain.entities.Leilao;
@@ -10,6 +12,7 @@ import recoope.api.repository.ILeilaoRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class CooperativaServices {
@@ -21,31 +24,47 @@ public class CooperativaServices {
         _leilaoRepository = leilaoRepository;
     }
 
-    public Cooperativa pegarPorId(Long id) {
+    public ApiResponse<Cooperativa> pegarPorId(Long id) {
+
         Optional<Cooperativa> cooperativa = _cooperativaRepository.findById(id);
 
-        if (cooperativa.isPresent()) {
-            return cooperativa.get();
-        }
+        if (cooperativa.isPresent())
+            return new ApiResponse<>("Cooperativa encontrada com sucesso!", cooperativa.get());
+        else return new ApiResponse<>("Cooperativa não encontrada!");
 
-        return null;
     }
 
-    public List<Cooperativa> buscar(String nomeCooperativa){
+    public ApiResponse<List<Cooperativa>> buscar(String nomeCooperativa){
         List<Cooperativa> cooperativas = _cooperativaRepository.pegarPorNome(nomeCooperativa.toLowerCase());
-
-        return cooperativas;
+        if (!cooperativas.isEmpty())
+            return new ApiResponse<>(cooperativas.size() + " Resultados encontrados.", cooperativas);
+        else return new ApiResponse<>("Nenhuma cooperativa encontrada.");
     }
 
-    public List<LeilaoPorCooperativa> leiloes(Long idCooperativa){
+    public ApiResponse<List<LeilaoPorCooperativa>> leiloes(Long idCooperativa){
+        Cooperativa coop = pegarPorId(idCooperativa).data;
+        if (coop == null) return new ApiResponse<>("Cooperativa não existe.");
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativa(idCooperativa);
-        return toDtoList(leiloesResult);
+        if (!leiloesResult.isEmpty())
+            return new ApiResponse<>(
+                    leiloesResult.size() + " Resultados encontrados.",
+                    toDtoList(leiloesResult)
+            );
+        else return new ApiResponse<>("Não foi encontrado nenhum leilão.");
     }
 
-    public List<LeilaoPorCooperativa> leiloesPorMaterial(Long idCooperativa, String material) {
-        List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(idCooperativa, material.toLowerCase());
-        return toDtoList(leiloesResult);
+    public ApiResponse<List<LeilaoPorCooperativa>> leiloesPorMaterial(Long idCooperativa, String material) {
+        Cooperativa coop = pegarPorId(idCooperativa).data;
+        if (coop == null) return new ApiResponse<>("Cooperativa não existe.");
+
+        List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(idCooperativa, material.toLowerCase());;
+        if (!leiloesResult.isEmpty())
+            return new ApiResponse<>(
+                    leiloesResult.size() + " Resultados encontrados.",
+                    toDtoList(leiloesResult)
+            );
+        else return new ApiResponse<>("Não foi encontrado nenhum leilão.");
     }
 
     private List<LeilaoPorCooperativa> toDtoList(List<Leilao> leiloes) {

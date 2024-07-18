@@ -16,6 +16,6 @@ public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
     @Query(value = "SELECT l FROM Leilao l WHERE l.cooperativa.idCooperativa = ?1")
     List<Leilao> porCooperativa(Long idCooperativa);
 
-    @Query(value = "SELECT l FROM Leilao l WHERE l.cooperativa = ?1 AND lower(l.produto.tipoProduto) LIKE %?2%")
+    @Query(value = "SELECT l FROM Leilao l WHERE l.cooperativa.idCooperativa = ?1 AND lower(l.produto.tipoProduto) LIKE %?2%")
     List<Leilao> porCooperativaEMaterial(Long idCooperativa, String material);
 }

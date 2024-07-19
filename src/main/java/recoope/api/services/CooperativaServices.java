@@ -37,7 +37,7 @@ public class CooperativaServices {
     public ApiResponse<List<Cooperativa>> buscar(String nomeCooperativa){
         List<Cooperativa> cooperativas = _cooperativaRepository.pegarPorNome(nomeCooperativa.toLowerCase());
         if (!cooperativas.isEmpty())
-            return new ApiResponse<>(cooperativas.size() + " Resultados encontrados.", cooperativas);
+            return new ApiResponse<>(cooperativas);
         else return new ApiResponse<>("Nenhuma cooperativa encontrada.");
     }
 
@@ -47,10 +47,7 @@ public class CooperativaServices {
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativa(idCooperativa);
         if (!leiloesResult.isEmpty())
-            return new ApiResponse<>(
-                    leiloesResult.size() + " Resultados encontrados.",
-                    toDtoList(leiloesResult)
-            );
+            return new ApiResponse<>(toDtoList(leiloesResult));
         else return new ApiResponse<>("Não foi encontrado nenhum leilão.");
     }
 
@@ -60,10 +57,7 @@ public class CooperativaServices {
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(idCooperativa, material.toLowerCase());;
         if (!leiloesResult.isEmpty())
-            return new ApiResponse<>(
-                    leiloesResult.size() + " Resultados encontrados.",
-                    toDtoList(leiloesResult)
-            );
+            return new ApiResponse<>(toDtoList(leiloesResult));
         else return new ApiResponse<>("Não foi encontrado nenhum leilão.");
     }
 

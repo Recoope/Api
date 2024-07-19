@@ -6,24 +6,22 @@ import java.util.*;
 public class ApiResponse<T> {
     public String message;
     public T data;
-    private Date executed;
+    private Date executedAt = dataAtual();
 
     public ApiResponse(String message, T data) {
         this.message = message;
         this.data = data;
-        this.executed = dataAtual();
+        this.executedAt = dataAtual();
     }
 
     public ApiResponse(String message) {
         this.message = message;
         this.data = null;
-        this.executed = dataAtual();
     }
 
-    public ApiResponse(List<> data) {
-        this.message = list.size() + " resultados encontrados";
-        this.data = list;
-
+    public ApiResponse(List data) {
+        this.message = data.size() + " resultado(s) encontrados";
+        this.data = (T) data;
     }
 
     public String getMessage() {
@@ -42,13 +40,10 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
-    public Date getExecuted() {
-        return executed;
+    public Date getExecutedAt() {
+        return executedAt;
     }
 
-    public void setExecuted(Date executed) {
-        this.executed = executed;
-    }
 
     private Date dataAtual() {
         Calendar date = new GregorianCalendar();

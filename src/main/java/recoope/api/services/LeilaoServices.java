@@ -23,13 +23,21 @@ public class LeilaoServices {
         if (leilao.isPresent())
             return new ApiResponse<>("Leilão encontrado com sucesso!", leilao.get());
         else return new ApiResponse<>("Leilão não encontrado!");
+
+    }
+
+    public ApiResponse<List<Leilao>> todos() {
+        List<Leilao> leiloes = _leilaoRepository.findAll();
+
+        if (!leiloes.isEmpty())
+            return new ApiResponse<>(leiloes);
+        else return new ApiResponse<>("Nenhum leilão encontrado!");
     }
 
     public ApiResponse<List<Leilao>> pegarPorMaterial(String material) {
         List<Leilao> leiloes = _leilaoRepository.pegarPorMaterial(material.toLowerCase());
 
-        if (!leiloes.isEmpty()) return new ApiResponse<>("");
-
-        return leiloes;
+        if (!leiloes.isEmpty()) return new ApiResponse<>(leiloes);
+        else return new ApiResponse<>("Nenhum leilão encontrado!");
     }
 }

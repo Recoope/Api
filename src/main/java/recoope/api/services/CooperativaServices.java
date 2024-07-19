@@ -1,6 +1,5 @@
 package recoope.api.services;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import recoope.api.domain.ApiResponse;
 import recoope.api.domain.dtos.LeilaoPorCooperativa;
@@ -12,7 +11,6 @@ import recoope.api.repository.ILeilaoRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
 public class CooperativaServices {
@@ -30,35 +28,36 @@ public class CooperativaServices {
 
         if (cooperativa.isPresent())
             return new ApiResponse<>("Cooperativa encontrada com sucesso!", cooperativa.get());
-        else return new ApiResponse<>("Cooperativa não encontrada!");
-
+        else return new ApiResponse<>(404, "Cooperativa não encontrada!");
     }
 
     public ApiResponse<List<Cooperativa>> buscar(String nomeCooperativa){
-        List<Cooperativa> cooperativas = _cooperativaRepository.pegarPorNome(nomeCooperativa.toLowerCase());
+        nomeCooperativa = nomeCooperativa.toLowerCase().trim();
+
+        List<Cooperativa> cooperativas = _cooperativaRepository.pegarPorNome(nomeCooperativa);
         if (!cooperativas.isEmpty())
             return new ApiResponse<>(cooperativas);
-        else return new ApiResponse<>("Nenhuma cooperativa encontrada.");
+        else return new ApiResponse<>(404, "Nenhuma cooperativa encontrada.");
     }
 
     public ApiResponse<List<LeilaoPorCooperativa>> leiloes(Long idCooperativa){
         Cooperativa coop = pegarPorId(idCooperativa).data;
-        if (coop == null) return new ApiResponse<>("Cooperativa não existe.");
+        if (coop == null) return new ApiResponse<>(400, "Cooperativa não existe.");
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativa(idCooperativa);
         if (!leiloesResult.isEmpty())
             return new ApiResponse<>(toDtoList(leiloesResult));
-        else return new ApiResponse<>("Não foi encontrado nenhum leilão.");
+        else return new ApiResponse<>(404, "Não foi encontrado nenhum leilão.");
     }
 
     public ApiResponse<List<LeilaoPorCooperativa>> leiloesPorMaterial(Long idCooperativa, String material) {
         Cooperativa coop = pegarPorId(idCooperativa).data;
-        if (coop == null) return new ApiResponse<>("Cooperativa não existe.");
+        if (coop == null) return new ApiResponse<>(400, "Cooperativa não existe.");
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(idCooperativa, material.toLowerCase());;
         if (!leiloesResult.isEmpty())
             return new ApiResponse<>(toDtoList(leiloesResult));
-        else return new ApiResponse<>("Não foi encontrado nenhum leilão.");
+        else return new ApiResponse<>(404, "Não foi encontrado nenhum leilão.");
     }
 
     private List<LeilaoPorCooperativa> toDtoList(List<Leilao> leiloes) {

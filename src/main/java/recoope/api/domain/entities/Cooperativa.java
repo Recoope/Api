@@ -1,6 +1,5 @@
 package recoope.api.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,7 +12,6 @@ public class Cooperativa
     private Long idCooperativa;
     @Column(name = "nome_cooperativa")
     private String nomeCooperativa;
-
     @Column(name = "email_cooperativa")
     private String emailCooperativa;
     @Column(name = "senha_cooperativa")

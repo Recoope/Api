@@ -1,20 +1,26 @@
 package recoope.api.domain;
 
 
+import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class ApiResponse<T> {
+    private int statusCode = 200;
     public String message;
     public T data;
-    private Date executedAt = dataAtual();
+    private final LocalDate executedAt = dataAtual();
 
     public ApiResponse(String message, T data) {
         this.message = message;
         this.data = data;
-        this.executedAt = dataAtual();
     }
 
-    public ApiResponse(String message) {
+    public ApiResponse(int statusCode, String message) {
+        this.statusCode = statusCode;
         this.message = message;
         this.data = null;
     }
@@ -24,32 +30,26 @@ public class ApiResponse<T> {
         this.data = (T) data;
     }
 
-    public String getMessage() {
-        return message;
+    public ResponseEntity<ApiResponse> get() {
+        return ResponseEntity.status(statusCode).body(ApiResponse.this);
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getMessage() {
+        return message;
     }
 
     public T getData() {
         return data;
     }
 
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public Date getExecutedAt() {
+    public LocalDate getExecutedAt() {
         return executedAt;
     }
 
 
-    private Date dataAtual() {
-        Calendar date = new GregorianCalendar();
-        date.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-
-        return date.getTime();
+    private static LocalDate dataAtual() {
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("GMT-03:00"));
+        return zonedDateTime.toLocalDate();
     }
 }
 

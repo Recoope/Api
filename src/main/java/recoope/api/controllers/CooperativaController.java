@@ -1,13 +1,12 @@
 package recoope.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.ApiResponse;
-import recoope.api.domain.dtos.LeilaoPorCooperativa;
 import recoope.api.domain.entities.Cooperativa;
 import recoope.api.services.CooperativaServices;
 
-import java.util.List;
 
 @Tag(name = "Cooperativa")
 @RestController
@@ -20,25 +19,25 @@ public class CooperativaController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Cooperativa> pegarPorId(@PathVariable Long id) {
-        return _cooperativaServices.pegarPorId(id);
+    public ResponseEntity<ApiResponse> pegarPorId(@PathVariable Long id) {
+        return _cooperativaServices.pegarPorId(id).get();
     }
 
     @GetMapping("buscar/{nomeCooperativa}")
-    public ApiResponse<List<Cooperativa>> buscar(@PathVariable String nome) {
-        return _cooperativaServices.buscar(nome);
+    public ResponseEntity<ApiResponse> buscar(@PathVariable String nomeCooperativa) {
+        return _cooperativaServices.buscar(nomeCooperativa).get();
     }
 
     @GetMapping("{id}/leiloes/")
-    public ApiResponse<List<LeilaoPorCooperativa>> leiloes(@PathVariable Long id) {
-        return _cooperativaServices.leiloes(id);
+    public ResponseEntity<ApiResponse> leiloes(@PathVariable Long id) {
+        return _cooperativaServices.leiloes(id).get();
     }
 
     @GetMapping("{id}/leiloes/{material}")
-    public ApiResponse<List<LeilaoPorCooperativa>> leiloesPorMaterial(
+    public ResponseEntity<ApiResponse> leiloesPorMaterial(
             @PathVariable Long id,
             @PathVariable String material)
     {
-        return _cooperativaServices.leiloesPorMaterial(id, material);
+        return _cooperativaServices.leiloesPorMaterial(id, material).get();
     }
 }

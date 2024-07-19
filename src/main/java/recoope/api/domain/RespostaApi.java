@@ -8,30 +8,30 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-public class ApiResponse<T> {
+public class RespostaApi<T> {
     private int statusCode = 200;
     public String message;
     public T data;
     private final LocalDate executedAt = dataAtual();
 
-    public ApiResponse(String message, T data) {
+    public RespostaApi(String message, T data) {
         this.message = message;
         this.data = data;
     }
 
-    public ApiResponse(int statusCode, String message) {
+    public RespostaApi(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
         this.data = null;
     }
 
-    public ApiResponse(List data) {
+    public RespostaApi(List data) {
         this.message = data.size() + " resultado(s) encontrados";
         this.data = (T) data;
     }
 
-    public ResponseEntity<ApiResponse> get() {
-        return ResponseEntity.status(statusCode).body(ApiResponse.this);
+    public ResponseEntity<RespostaApi> get() {
+        return ResponseEntity.status(statusCode).body(RespostaApi.this);
     }
 
     public String getMessage() {

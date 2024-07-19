@@ -2,13 +2,10 @@ package recoope.api.services;
 
 
 import org.springframework.stereotype.Service;
-import recoope.api.domain.ApiResponse;
+import recoope.api.domain.RespostaApi;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.inputs.EmpresaRegistroParams;
 import recoope.api.repository.IEmpresaRepository;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class EmpresaServices {
@@ -18,7 +15,7 @@ public class EmpresaServices {
         this.empresaRepository = empresaRepository;
     }
 
-    public ApiResponse<Empresa> cadastrar(EmpresaRegistroParams params) {
+    public RespostaApi<Empresa> cadastrar(EmpresaRegistroParams params) {
 
         Empresa novaEmpresa = new Empresa();
 
@@ -28,14 +25,14 @@ public class EmpresaServices {
         String cnpj = params.getCnpj().replaceAll("[./-]", "").trim();
 
         if (validaCNPJ(cnpj)) novaEmpresa.setCnpjEmpresa(cnpj);
-        else return new ApiResponse<>(400, "CNPJ inválido.");
+        else return new RespostaApi<>(400, "CNPJ inválido.");
 
         // Verificação do email.
         String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
         String email = params.getEmail().trim();
 
         if (email.matches(emailRegex)) novaEmpresa.setEmailEmpresa(params.getEmail());
-        else return new ApiResponse<>(400, "Email inválido.");
+        else return new RespostaApi<>(400, "Email inválido.");
 
         // Verificação do telefone.
         String telefoneRegex = "^\\(?[1-9]{2}\\)? ?(?:[2-8]|9[0-9])[0-9]{3}-?[0-9]{4}$";
@@ -43,7 +40,7 @@ public class EmpresaServices {
 
         if (telefone.matches(telefoneRegex))
             novaEmpresa.setTelefoneEmpresa(params.getTelefone());
-        else return new ApiResponse<>(400, "Telefone inválido.");
+        else return new RespostaApi<>(400, "Telefone inválido.");
 
         // Verificação senha.
         String conf = params.getConfirmacaoSenha();
@@ -51,10 +48,10 @@ public class EmpresaServices {
 
         if (conf.equals(senha))
             novaEmpresa.setSenhaEmpresa(params.getSenha());
-        else return new ApiResponse<>(400,"As senhas não correspondem.");
+        else return new RespostaApi<>(400,"As senhas não correspondem.");
 
         empresaRepository.save(novaEmpresa);
-        return new ApiResponse<>("Empresa cadastrada com sucesso!", novaEmpresa);
+        return new RespostaApi<>("Empresa cadastrada com sucesso!", novaEmpresa);
     }
 
     private boolean validaCNPJ (String CNPJ) {

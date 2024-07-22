@@ -1,48 +1,35 @@
-package recoope.api.domain.entities;
+package recoope.api.domain.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "empresa")
-public class Empresa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_empresa")
+public class EmpresaDto {
     private Long idEmpresa;
 
-    @Column(name = "nome_empresa")
     private String nomeEmpresa;
 
-    @Column(name = "email_empresa")
     private String emailEmpresa;
 
-    @JsonIgnore
-    @Column(name = "senha_empresa")
-    private String senhaEmpresa;
-
-    @Column(name = "telefone_empresa")
     private String telefoneEmpresa;
 
-    @Column(name = "cnpj_empresa")
     private String cnpjEmpresa;
 
-    @Column(name = "registro_empresa")
     private Date registroEmpresa;
 
-    public Empresa(Long idEmpresa, String nomeEmpresa, String emailEmpresa, String senhaEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa) {
+    private String tempoConosco;
+
+    private String leiloesParticipados;
+
+    public EmpresaDto(Long idEmpresa, String nomeEmpresa, String emailEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa, String tempoConosco, String leiloesParticipados) {
         this.idEmpresa = idEmpresa;
         this.nomeEmpresa = nomeEmpresa;
         this.emailEmpresa = emailEmpresa;
-        this.senhaEmpresa = senhaEmpresa;
         this.telefoneEmpresa = telefoneEmpresa;
         this.cnpjEmpresa = cnpjEmpresa;
         this.registroEmpresa = registroEmpresa;
+        this.tempoConosco = tempoConosco;
+        this.leiloesParticipados = leiloesParticipados;
     }
-
-    public Empresa() {}
 
     public Long getIdEmpresa() {
         return idEmpresa;
@@ -68,14 +55,6 @@ public class Empresa {
         this.emailEmpresa = emailEmpresa;
     }
 
-    public String getSenhaEmpresa() {
-        return senhaEmpresa;
-    }
-
-    public void setSenhaEmpresa(String senhaEmpresa) {
-        this.senhaEmpresa = senhaEmpresa;
-    }
-
     public String getTelefoneEmpresa() {
         return telefoneEmpresa;
     }
@@ -98,5 +77,21 @@ public class Empresa {
 
     public void setRegistroEmpresa(Date registroEmpresa) {
         this.registroEmpresa = registroEmpresa;
+    }
+
+    public String getTempoConosco() {
+        return tempoConosco;
+    }
+
+    public void setTempoConosco(String tempoConosco) {
+        this.tempoConosco = tempoConosco;
+    }
+
+    public String getLeiloesParticipados() {
+        return leiloesParticipados;
+    }
+
+    public void setLeiloesParticipados(String leiloesParticipados) {
+        this.leiloesParticipados = leiloesParticipados;
     }
 }

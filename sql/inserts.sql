@@ -1,24 +1,30 @@
-insert into cooperativa (id_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa)
-values
-    (1, 'Cooperativa Viva', 'coopviva@email.com', 'senha123'),
-    (2, 'SuperCoop', 'supercoop@email.com', 'senha456'),
-    (3, '365 Cooperativa', '365coop@email.com', 'senha789'),
-    (4, 'Cooperativa 3 Irmãos', 'cooperativa3irmaos@email.com', 'senhaabc'),
-    (5, 'Green Cooperativa', 'gcoop@email.com', 'senhaxyz');
 
-insert into empresa (id_empresa, nome_empresa, email_empresa, senha_empresa, telefone_empresa, cnpj_empresa)
+insert into endereco (id_endereco, cidade, bairro, rua, numero)
 values
-    (1, 'Switf', 'ouvidoria@switfembalagens.com', 'senha123', '(11) 98765-4321', '12345678901234'),
-    (2, 'Freeboy Inc.', 'atendimento@freeboy.com', 'senha456', '(21) 98765-4321', '56789012345678'),
-    (3, 'JSA', 'atendimento@jsa.com', 'senha789', '(31) 98765-4321', '90123456781234'),
-    (4, 'Picpacks', 'sac@picpacks.com', 'senhaabc', '(41) 98765-4321', '34567890123456');
+    (1, 'São Paulo', 'Bela Vista', 'Av. Paulista', 1000),
+    (2, 'São Paulo', 'Morumbi', 'Av. Giovanni Gronchi', 500),
+    (3, 'Taboão da Serra', 'Jardim Triangulo', 'Estrada das Olarias', 200),
+    (4, 'São Bernardo do Campo', 'Taboão', 'Av. do Taboão', 300),
+    (5, 'São Paulo', 'Pinheiros', 'Rua dos Pinheiros', 200),
+    (6, 'São Paulo', 'Vila Madalena', 'Rua Harmonia', 500),
+    (7, 'São Paulo', 'Itaim Bibi', 'Av. Brigadeiro Faria Lima', 1500),
+    (8, 'São Paulo', 'Moema', 'Av. Ibirapuera', 800),
+    (9, 'São Paulo', 'Vila Mariana', 'Rua Vergueiro', 1000);
 
-insert into endereco (id_endereco, cidade, rua, numero)
+insert into cooperativa (id_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa, registro_cooperativa, id_endereco)
 values
-    (1, 'São Paulo', 'Av. Paulista', 1000),
-    (2, 'São Paulo', 'Av. Giovanni Gronchi', 500),
-    (3, 'Taboão da Serra', 'Estrada das Olarias', 200),
-    (4, 'São Bernardo do Campo', 'Av. do Taboão', 300);
+    (1, 'Cooperativa Viva', 'coopviva@email.com', 'senha123', '2019-08-28'),
+    (2, 'SuperCoop', 'supercoop@email.com', 'senha456', '2020-07-18'),
+    (3, '365 Cooperativa', '365coop@email.com', 'senha789', '2022-01-22'),
+    (4, 'Cooperativa 3 Irmãos', 'cooperativa3irmaos@email.com', 'senhaabc', '2023-12-08'),
+    (5, 'Green Cooperativa', 'gcoop@email.com', 'senhaxyz', '2024-03-19');
+
+insert into empresa (id_empresa, nome_empresa, email_empresa, senha_empresa, telefone_empresa, cnpj_empresa, registro_empresa)
+values
+    (1, 'Switf', 'ouvidoria@switfembalagens.com', 'senha123', '(11) 98765-4321', '12345678901234', '2017-12-21'),
+    (2, 'Freeboy Inc.', 'atendimento@freeboy.com', 'senha456', '(21) 98765-4321', '56789012345678', '2019-09-10'),
+    (3, 'JSA', 'atendimento@jsa.com', 'senha789', '(31) 98765-4321', '90123456781234', '2022-04-29'),
+    (4, 'Picpacks', 'sac@picpacks.com', 'senhaabc', '(41) 98765-4321', '34567890123456', '2023-10-06');
 
 insert into produto (id_produto, tipo_produto, valor_produto, peso, foto_leilao)
 values
@@ -52,7 +58,6 @@ values
     (20, '2024-08-20', '2024-08-26', 'Leilão de artigos esportivos recicláveis', '13:00', 4, 5, 1),
     (21, '2024-08-21', '2024-08-27', 'Leilão de acessórios de moda recicláveis', '15:00', 1, 1, 2),
     (22, '2024-08-22', '2024-08-28', 'Leilão de embalagens recicláveis', '14:00', 2, 2, 3);
-
 
 insert into lance (id_lance, id_leilao, id_empresa, valor, data_lance)
 values

@@ -40,8 +40,7 @@ public class CooperativaController {
     @GetMapping("{id}/leiloes/{material}")
     public ResponseEntity<RespostaApi> leiloesPorMaterial(
             @PathVariable Long id,
-            @PathVariable String material)
-    {
+            @PathVariable String material) {
         return _cooperativaServices.leiloesPorMaterial(id, material).get();
     }
 }

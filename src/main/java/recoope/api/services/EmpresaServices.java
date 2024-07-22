@@ -3,16 +3,48 @@ package recoope.api.services;
 
 import org.springframework.stereotype.Service;
 import recoope.api.domain.RespostaApi;
+import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.inputs.EmpresaRegistroParams;
 import recoope.api.repository.IEmpresaRepository;
+import recoope.api.repository.ILanceRepository;
+
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class EmpresaServices {
     private final IEmpresaRepository empresaRepository;
+    private final ILanceRepository lanceRepository;
 
-    public EmpresaServices(IEmpresaRepository empresaRepository) {
+    public EmpresaServices(IEmpresaRepository empresaRepository, ILanceRepository lanceRepository) {
         this.empresaRepository = empresaRepository;
+        this.lanceRepository = lanceRepository;
+    }
+
+    public RespostaApi<EmpresaDto> pegarPorId(Long id) {
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+
+        if (empresa.isPresent()){
+            Empresa empresaEnt = empresa.get();
+
+            String tempoConosco = tempoConosco(empresaEnt.getRegistroEmpresa());
+            String leiloesParticipados = leiloesParticipados(empresaEnt.getIdEmpresa());
+
+            EmpresaDto empresaDto = new EmpresaDto(
+                    empresaEnt.getIdEmpresa(),
+                    empresaEnt.getNomeEmpresa(),
+                    empresaEnt.getEmailEmpresa(),
+                    empresaEnt.getTelefoneEmpresa(),
+                    empresaEnt.getCnpjEmpresa(),
+                    empresaEnt.getRegistroEmpresa(),
+                    tempoConosco,
+                    leiloesParticipados
+            );
+
+            return new RespostaApi<>("Empresa encontrada com sucesso!", empresaDto);
+        }
+        else return new RespostaApi<>(404, "Empresa não encontrada!");
     }
 
     public RespostaApi<Empresa> cadastrar(EmpresaRegistroParams params) {
@@ -49,6 +81,9 @@ public class EmpresaServices {
         if (conf.equals(senha))
             novaEmpresa.setSenhaEmpresa(params.getSenha());
         else return new RespostaApi<>(400,"As senhas não correspondem.");
+
+        // Registrando data do cadastro
+        novaEmpresa.setRegistroEmpresa(new Date());
 
         empresaRepository.save(novaEmpresa);
         return new RespostaApi<>("Empresa cadastrada com sucesso!", novaEmpresa);
@@ -98,5 +133,39 @@ public class EmpresaServices {
         } catch (Exception erro) {
             return(false);
         }
+    }
+
+    private String tempoConosco(Date dataRegistro) {
+        Date dataAtual = new Date();
+
+        int qtdMeses, qtdAnos;
+        qtdAnos = dataAtual.getYear() - dataRegistro.getYear();
+
+        int mesAtual = dataAtual.getMonth() + 1;
+        int mesRegistro = dataRegistro.getMonth() + 1;
+
+        if (mesAtual < mesRegistro) qtdMeses = (12 - mesRegistro) + mesAtual;
+        else qtdMeses = mesAtual - mesRegistro;
+
+        if (qtdMeses == 0) qtdAnos += 1;
+
+        StringBuilder tempoConosco = new StringBuilder();
+        if (qtdAnos != 0) {
+            if (qtdAnos == 1) tempoConosco.append("1 ano");
+            else tempoConosco.append(String.format("%d anos", qtdAnos));
+        }
+        if (qtdMeses != 0) {
+            if (qtdAnos != 0) tempoConosco.append(" e ");
+
+            if (qtdAnos == 1) tempoConosco.append("1 mês");
+            else tempoConosco.append(String.format("%d meses", qtdMeses));
+        }
+
+        return tempoConosco.toString();
+    }
+
+    private String leiloesParticipados(Long id) {
+        int lp = lanceRepository.empresaLeiloesParticipados(id);
+        return lp == 1 ? lp + "leilão." : lp + " leilões.";
     }
 }

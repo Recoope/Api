@@ -6,11 +6,20 @@ drop table if exists empresa;
 drop table if exists endereco;
 drop table if exists produto;
 
+create table endereco(
+    id_endereco serial primary key,
+    cidade varchar(100),
+    bairro varchar(100),
+    rua varchar(100),
+    numero int
+);
+
 create table cooperativa(
     id_cooperativa serial primary key,
     nome_cooperativa varchar(100),
     email_cooperativa varchar(100),
-    senha_cooperativa varchar(100)
+    senha_cooperativa varchar(100),
+    registro_cooperativa date
 );
 
 create table empresa(
@@ -19,14 +28,8 @@ create table empresa(
     email_empresa varchar(100),
     senha_empresa varchar(100),
     telefone_empresa varchar(15),
-    cnpj_empresa varchar(20)
-);
-
-create table endereco(
-    id_endereco serial primary key,
-    cidade varchar(100),
-    rua varchar(100),
-    numero int
+    cnpj_empresa varchar(20),
+    registro_empresa date
 );
 
 create table produto(

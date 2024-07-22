@@ -3,7 +3,7 @@ package recoope.api.domain.entities;
 import jakarta.persistence.*;
 
 import java.sql.Time;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "leilao")

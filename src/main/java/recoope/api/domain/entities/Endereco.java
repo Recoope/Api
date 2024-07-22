@@ -13,15 +13,19 @@ public class Endereco {
     @Column(name = "cidade")
     private String cidade;
 
+    @Column(name = "bairro")
+    private String bairro;
+
     @Column(name = "rua")
     private String rua;
 
     @Column(name = "numero")
     private Integer numero;
 
-    public Endereco(Long idEndereco, String cidade, String rua, Integer numero) {
+    public Endereco(Long idEndereco, String cidade, String bairro, String rua, Integer numero) {
         this.idEndereco = idEndereco;
         this.cidade = cidade;
+        this.bairro = bairro;
         this.rua = rua;
         this.numero = numero;
     }
@@ -42,6 +46,14 @@ public class Endereco {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
     public String getRua() {

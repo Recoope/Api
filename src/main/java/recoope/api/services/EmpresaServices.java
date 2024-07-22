@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
-import recoope.api.domain.inputs.EmpresaRegistroParams;
+import recoope.api.domain.inputs.EmpresaParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 
@@ -47,46 +47,86 @@ public class EmpresaServices {
         else return new RespostaApi<>(404, "Empresa não encontrada!");
     }
 
-    public RespostaApi<Empresa> cadastrar(EmpresaRegistroParams params) {
+    public RespostaApi<Empresa> cadastrar(EmpresaParams params) {
+        return validaEmpresa(params, false, null);
+    }
 
-        Empresa novaEmpresa = new Empresa();
+    public RespostaApi<Empresa> alterar(Long id, EmpresaParams params) {
+        Optional<Empresa> empresaOptional = empresaRepository.findById(id);
 
-        novaEmpresa.setNomeEmpresa(params.getNome());
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+
+            if (params.getNome() == null) params.setNome(empresa.getNomeEmpresa());
+            if (params.getCnpj() == null) params.setCnpj(empresa.getCnpjEmpresa());
+            if (params.getEmail() == null) params.setEmail(empresa.getEmailEmpresa());
+            if (params.getTelefone() == null) params.setTelefone(empresa.getTelefoneEmpresa());
+            if (params.getSenha() == null) params.setSenha(empresa.getSenhaEmpresa());
+
+            return validaEmpresa(params, true, empresa);
+
+        } else {
+            return new RespostaApi<>(404, "Empresa não encontrada!");
+        }
+    }
+
+    private RespostaApi<Empresa> validaEmpresa(EmpresaParams params, boolean alteracao, Empresa empresaAlterada) {
+
+        String nome, cnpj, email, telefone, conf, senha;
+
+        try {
+            nome = params.getNome().trim();
+            cnpj = params.getCnpj().replaceAll("[./-]", "").trim();
+            email = params.getEmail().trim();
+            telefone = params.getTelefone().replaceAll("[() -]", "").trim();
+            conf = params.getConfirmacaoSenha();
+            senha = params.getSenha();
+        } catch (NullPointerException npe) {
+            return new RespostaApi<>(500, "Não devem ser enviados parametros nulos.");
+        }
+
+        Empresa empresaValidada = new Empresa();
+
+        if (nome.length() > 3) empresaValidada.setNomeEmpresa(nome);
+        else return new RespostaApi<>(400, "O nome da empresa deve conter pelo menos 3 caracteres.");
 
         // Verificação CNPJ.
-        String cnpj = params.getCnpj().replaceAll("[./-]", "").trim();
-
-        if (validaCNPJ(cnpj)) novaEmpresa.setCnpjEmpresa(cnpj);
+        if (validaCNPJ(cnpj)) empresaValidada.setCnpjEmpresa(cnpj);
         else return new RespostaApi<>(400, "CNPJ inválido.");
 
         // Verificação do email.
         String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
-        String email = params.getEmail().trim();
 
-        if (email.matches(emailRegex)) novaEmpresa.setEmailEmpresa(params.getEmail());
+        if (email.matches(emailRegex)) empresaValidada.setEmailEmpresa(email);
         else return new RespostaApi<>(400, "Email inválido.");
 
         // Verificação do telefone.
         String telefoneRegex = "^\\(?[1-9]{2}\\)? ?(?:[2-8]|9[0-9])[0-9]{3}-?[0-9]{4}$";
-        String telefone = params.getTelefone().replaceAll("[() -]", "").trim();
 
         if (telefone.matches(telefoneRegex))
-            novaEmpresa.setTelefoneEmpresa(params.getTelefone());
+            empresaValidada.setTelefoneEmpresa(telefone);
         else return new RespostaApi<>(400, "Telefone inválido.");
 
         // Verificação senha.
-        String conf = params.getConfirmacaoSenha();
-        String senha = params.getSenha();
-
-        if (conf.equals(senha))
-            novaEmpresa.setSenhaEmpresa(params.getSenha());
+        if (senha.equals(conf))
+            empresaValidada.setSenhaEmpresa(senha);
+        else if (alteracao && (empresaAlterada.getSenhaEmpresa().equals(senha)))
+            empresaValidada.setSenhaEmpresa(empresaAlterada.getSenhaEmpresa());
         else return new RespostaApi<>(400,"As senhas não correspondem.");
 
-        // Registrando data do cadastro
-        novaEmpresa.setRegistroEmpresa(new Date());
+        if (!alteracao) {
+            // Registrando data do cadastro
+            empresaValidada.setRegistroEmpresa(new Date());
 
-        empresaRepository.save(novaEmpresa);
-        return new RespostaApi<>("Empresa cadastrada com sucesso!", novaEmpresa);
+            empresaRepository.save(empresaValidada);
+            return new RespostaApi<>("Empresa cadastrada com sucesso!", empresaValidada);
+        } else {
+            empresaValidada.setIdEmpresa(empresaAlterada.getIdEmpresa());
+            empresaValidada.setRegistroEmpresa(empresaAlterada.getRegistroEmpresa());
+
+            empresaRepository.save(empresaValidada);
+            return new RespostaApi<>("Empresa atualizada com sucesso!", empresaValidada);
+        }
     }
 
     private boolean validaCNPJ (String CNPJ) {

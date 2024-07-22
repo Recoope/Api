@@ -11,7 +11,7 @@ values
     (8, 'São Paulo', 'Moema', 'Av. Ibirapuera', 800),
     (9, 'São Paulo', 'Vila Mariana', 'Rua Vergueiro', 1000);
 
-insert into cooperativa (id_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa, registro_cooperativa, id_endereco)
+insert into cooperativa (id_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa, registro_cooperativa)
 values
     (1, 'Cooperativa Viva', 'coopviva@email.com', 'senha123', '2019-08-28'),
     (2, 'SuperCoop', 'supercoop@email.com', 'senha456', '2020-07-18'),

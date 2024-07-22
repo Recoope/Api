@@ -5,6 +5,7 @@ import recoope.api.domain.RespostaApi;
 import recoope.api.domain.entities.Leilao;
 import recoope.api.repository.ILeilaoRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +17,20 @@ public class LeilaoServices {
         _leilaoRepository = leilaoRepository;
     }
 
+    public RespostaApi<Leilao> pegarPorDataFim(Date data) {
+        List<Leilao> leiloes = _leilaoRepository.porDataDeFim(data);
+
+        if (!leiloes.isEmpty())
+            return new RespostaApi<>(leiloes);
+        else return new RespostaApi<>(404, "Nenhum leilão encontrado nesta data!");
+    }
+
     public RespostaApi<Leilao> pegarPorId(Long id) {
         Optional<Leilao> leilao = _leilaoRepository.findById(id);
 
         if (leilao.isPresent())
             return new RespostaApi<>("Leilão encontrado com sucesso!", leilao.get());
         else return new RespostaApi<>(404, "Leilão não encontrado!");
-
     }
 
     public RespostaApi<List<Leilao>> todos() {

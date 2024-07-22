@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import recoope.api.domain.entities.Leilao;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,7 @@ public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
 
     @Query(value = "SELECT l FROM Leilao l WHERE l.cooperativa.idCooperativa = ?1 AND lower(l.produto.tipoProduto) LIKE %?2%")
     List<Leilao> porCooperativaEMaterial(Long idCooperativa, String material);
+
+    @Query(value = "SELECT l FROM Leilao l WHERE l.dataFimLeilao = ?1")
+    List<Leilao> porDataDeFim(Date data);
 }

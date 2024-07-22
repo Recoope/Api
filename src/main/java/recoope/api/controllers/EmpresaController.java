@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
-import recoope.api.domain.inputs.EmpresaRegistroParams;
+import recoope.api.domain.inputs.EmpresaParams;
 import recoope.api.services.EmpresaServices;
 
 @Tag(name = "Empresa")
@@ -26,7 +26,13 @@ public class EmpresaController {
 
     @Operation(summary = "Cadastrar cooperativa.")
     @PostMapping("/cadastrar")
-    public ResponseEntity<RespostaApi> cadastrar(@RequestBody EmpresaRegistroParams empresaRegistroParams){
+    public ResponseEntity<RespostaApi> cadastrar(@RequestBody EmpresaParams empresaRegistroParams){
         return empresaServices.cadastrar(empresaRegistroParams).get();
+    }
+
+    @Operation(summary = "Alterar cooperativa.")
+    @PatchMapping("/alterar/{id}")
+    public ResponseEntity<RespostaApi> alterar(@PathVariable Long id, @RequestBody EmpresaParams empresaRegistroParams){
+        return empresaServices.alterar(id, empresaRegistroParams).get();
     }
 }

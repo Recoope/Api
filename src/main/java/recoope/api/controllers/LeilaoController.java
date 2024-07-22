@@ -3,13 +3,14 @@ package recoope.api.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.services.LeilaoServices;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Tag(name = "Leilao")
 @RestController
@@ -28,14 +29,20 @@ public class LeilaoController {
     }
 
     @Operation(summary = "Pegar todos os leilões.")
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<RespostaApi> todos() {
         return leilaoServices.todos().get();
     }
 
     @Operation(summary = "Pegar todos os leilões, filtrando por tipo de produto.")
-    @GetMapping("material/{material}")
+    @GetMapping("/material/{material}")
     public ResponseEntity<RespostaApi> pegarPorMaterial(@PathVariable String material) {
         return leilaoServices.pegarPorMaterial(material).get();
+    }
+
+    @Operation(summary = "Pegar leilões pela sua data de fim.")
+    @GetMapping("/fim")
+    public ResponseEntity<RespostaApi> pegarPorDataDeFim(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date data) {
+        return leilaoServices.pegarPorDataFim(data).get();
     }
 }

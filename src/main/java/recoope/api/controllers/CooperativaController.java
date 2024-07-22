@@ -25,19 +25,19 @@ public class CooperativaController {
     }
 
     @Operation(summary = "Buscar cooperativas.")
-    @GetMapping("buscar/{nomeCooperativa}")
+    @GetMapping("/buscar/{nomeCooperativa}")
     public ResponseEntity<RespostaApi> buscar(@PathVariable String nomeCooperativa) {
         return _cooperativaServices.buscar(nomeCooperativa).get();
     }
 
     @Operation(summary = "Pegar leilões pertencentes a uma cooperativa.")
-    @GetMapping("{id}/leiloes/")
+    @GetMapping("/{id}/leiloes/")
     public ResponseEntity<RespostaApi> leiloes(@PathVariable Long id) {
         return _cooperativaServices.leiloes(id).get();
     }
 
     @Operation(summary = "Pegar leilões pertencentes a uma cooperativa, e filtrar por tipo de produto.")
-    @GetMapping("{id}/leiloes/{material}")
+    @GetMapping("/{id}/leiloes/{material}")
     public ResponseEntity<RespostaApi> leiloesPorMaterial(
             @PathVariable Long id,
             @PathVariable String material) {

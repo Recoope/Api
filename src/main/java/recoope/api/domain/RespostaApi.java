@@ -14,6 +14,12 @@ public class RespostaApi<T> {
     public T data;
     private final LocalDate executedAt = dataAtual();
 
+    public RespostaApi(int statusCode, String message, T data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+    }
+
     public RespostaApi(String message, T data) {
         this.message = message;
         this.data = data;

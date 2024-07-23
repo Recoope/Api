@@ -35,4 +35,10 @@ public class EmpresaController {
     public ResponseEntity<RespostaApi> alterar(@PathVariable Long id, @RequestBody EmpresaParams empresaRegistroParams){
         return empresaServices.alterar(id, empresaRegistroParams).get();
     }
+
+    @Operation(summary = "Deletar cooperativa.")
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<RespostaApi> remover(@PathVariable Long id) {
+        return empresaServices.remover(id).get();
+    }
 }

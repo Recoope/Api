@@ -1,5 +1,6 @@
 package recoope.api.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -12,6 +13,7 @@ public class Lance {
     @Column(name = "id_lance")
     private Long idLance;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_leilao")
     private Leilao leilao;

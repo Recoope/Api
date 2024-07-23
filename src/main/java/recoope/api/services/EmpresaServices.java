@@ -1,6 +1,7 @@
 package recoope.api.services;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.EmpresaDto;
@@ -70,6 +71,15 @@ public class EmpresaServices {
         }
     }
 
+    public RespostaApi<Empresa> remover(Long id) {
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+
+        if (empresa.isPresent()) {
+            empresaRepository.delete(empresa.get());
+            return new RespostaApi<>("Empresa removida com sucesso!", empresa.get());
+        } else return new RespostaApi<>(404, "Empresa não encontrada!");
+    }
+
     private RespostaApi<Empresa> validaEmpresa(EmpresaParams params, boolean alteracao, Empresa empresaAlterada) {
 
         String nome, cnpj, email, telefone, conf, senha;
@@ -119,13 +129,13 @@ public class EmpresaServices {
             empresaValidada.setRegistroEmpresa(new Date());
 
             empresaRepository.save(empresaValidada);
-            return new RespostaApi<>("Empresa cadastrada com sucesso!", empresaValidada);
+            return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", empresaValidada);
         } else {
             empresaValidada.setIdEmpresa(empresaAlterada.getIdEmpresa());
             empresaValidada.setRegistroEmpresa(empresaAlterada.getRegistroEmpresa());
 
             empresaRepository.save(empresaValidada);
-            return new RespostaApi<>("Empresa atualizada com sucesso!", empresaValidada);
+            return new RespostaApi<>(201, "Empresa atualizada com sucesso!", empresaValidada);
         }
     }
 
@@ -208,4 +218,6 @@ public class EmpresaServices {
         int lp = lanceRepository.empresaLeiloesParticipados(id);
         return lp == 1 ? lp + "leilão." : lp + " leilões.";
     }
+
+
 }

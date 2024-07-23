@@ -1,7 +1,6 @@
 package recoope.api.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.services.LeilaoServices;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Tag(name = "Leilao")

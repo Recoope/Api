@@ -124,6 +124,8 @@ public class EmpresaServices {
             empresaValidada.setSenhaEmpresa(empresaAlterada.getSenhaEmpresa());
         else return new RespostaApi<>(400,"As senhas não correspondem.");
 
+        empresaValidada.setIdEmpresa(empresaRepository.lastId() + 1);
+
         if (!alteracao) {
             // Registrando data do cadastro
             empresaValidada.setRegistroEmpresa(new Date());

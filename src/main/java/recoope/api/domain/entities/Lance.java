@@ -2,6 +2,7 @@ package recoope.api.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import recoope.api.domain.dtos.LanceDto;
 
 import java.sql.Date;
 
@@ -76,5 +77,9 @@ public class Lance {
 
     public void setDataLance(Date dataLance) {
         this.dataLance = dataLance;
+    }
+
+    public LanceDto toDto() {
+        return new LanceDto(idLance, leilao, empresa, valor, dataLance);
     }
 }

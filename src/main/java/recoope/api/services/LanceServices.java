@@ -44,7 +44,7 @@ public class LanceServices {
                 else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, "Esse lance é igual ao maior lance do leilão, ele deve ser maior.");
                 else return new RespostaApi<>(400, "Esse lance é menor que o maior lance do leilão.");
 
-                lance.setIdLance(_empresaRepository.lastId() + 1);
+                lance.setIdLance(_lanceRepository.lastId() + 1);
 
                 _lanceRepository.save(lance);
                 return new RespostaApi<>("Lance atribuido com sucesso!", lance.toDto());
@@ -67,7 +67,7 @@ public class LanceServices {
                 if (!lances.isEmpty()) {
                     _lanceRepository.deleteAllInBatch(lances);
                     return new RespostaApi<>("Lance(s) cancelado com sucesso!", lances);
-                } else return new RespostaApi<>(404, "O leilão não possui lances dessa empresa!");
+                } else return new RespostaApi<>(400, "O leilão não possui lances dessa empresa!");
             } else return new RespostaApi<>(404, "Empresa não encontrada!");
         } else return new RespostaApi<>(404, "Leilão não encontrado!");
 

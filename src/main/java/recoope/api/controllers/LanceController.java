@@ -12,7 +12,7 @@ import recoope.api.services.LanceServices;
 @RestController
 @RequestMapping("/lance")
 public class LanceController {
-    private LanceServices lanceServices;
+    private final LanceServices lanceServices;
 
     public LanceController(LanceServices lanceServices) {
         this.lanceServices = lanceServices;

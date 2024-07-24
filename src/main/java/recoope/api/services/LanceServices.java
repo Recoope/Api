@@ -9,6 +9,7 @@ import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 import recoope.api.repository.ILeilaoRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,24 @@ public class LanceServices {
         } else return new RespostaApi<>(404, "Leilão não encontrado!");
     }
 
+    public RespostaApi<List<Lance>> cancelarLance(Long idEmpresa, Long idLeilao) {
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(idEmpresa);
+        Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
 
+        if (leilaoOptional.isPresent()) {
+            if (empresaOptional.isPresent()) {
+                Empresa empresa = empresaOptional.get();
+                Leilao leilao = leilaoOptional.get();
+
+                List<Lance> lances = _lanceRepository.pegarLances(empresa, leilao);
+
+                if (!lances.isEmpty()) {
+                    _lanceRepository.deleteAllInBatch(lances);
+                    return new RespostaApi<>("Lance(s) cancelado com sucesso!", lances);
+                } else return new RespostaApi<>(404, "O leilão não possui lances dessa empresa!");
+            } else return new RespostaApi<>(404, "Empresa não encontrada!");
+        } else return new RespostaApi<>(404, "Leilão não encontrado!");
+
+    }
 
 }

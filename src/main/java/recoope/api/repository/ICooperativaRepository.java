@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ICooperativaRepository extends JpaRepository<Cooperativa, Long> {
-    @Query(value = "SELECT c FROM Cooperativa c WHERE lower(c.nomeCooperativa) LIKE %?1%")
+    @Query("SELECT c FROM Cooperativa c WHERE lower(c.nomeCooperativa) LIKE %?1%")
     List<Cooperativa> pegarPorNome(String nome);
 }

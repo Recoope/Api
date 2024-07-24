@@ -19,8 +19,14 @@ public class LanceController {
     }
 
     @Operation(summary = "Dar lance em leilão.")
-    @PostMapping("/{leilaoId}")
-    public ResponseEntity<RespostaApi> darLance(@PathVariable Long leilaoId, @RequestBody LanceParams leilaoParams){
-        return lanceServices.darLance(leilaoId, leilaoParams).get();
+    @PostMapping("/{idLeilao}")
+    public ResponseEntity<RespostaApi> darLance(@PathVariable Long idLeilao, @RequestBody LanceParams leilaoParams) {
+        return lanceServices.darLance(idLeilao, leilaoParams).get();
+    }
+
+    @Operation(summary = "Cancelar lances.")
+    @DeleteMapping("/cancelar")
+    public ResponseEntity<RespostaApi> cancelarLance(@RequestParam Long idEmpresa, @RequestParam Long idLeilao) {
+        return lanceServices.cancelarLance(idEmpresa, idLeilao).get();
     }
 }

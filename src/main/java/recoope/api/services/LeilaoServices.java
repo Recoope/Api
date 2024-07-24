@@ -90,7 +90,7 @@ public class LeilaoServices {
         long diferencaMillis = data.getTime() - agora.getTime();
 
         if (diferencaMillis <= 0) {
-            return "fechado!";
+            return "0";
         }
 
         long segundos = diferencaMillis / 1000;

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.inputs.EmpresaParams;
+import recoope.api.domain.inputs.LoginParams;
 import recoope.api.services.EmpresaServices;
 
 @Tag(name = "Empresa")
@@ -16,6 +17,12 @@ public class EmpresaController {
 
     public EmpresaController(EmpresaServices empresaServices) {
         this.empresaServices = empresaServices;
+    }
+
+    @Operation(summary = "Login da empresa.")
+    @PostMapping("/login")
+    public ResponseEntity<RespostaApi> login(LoginParams loginParams) {
+        return empresaServices.login(loginParams).get();
     }
 
     @Operation(summary = "Pegar empresa pelo ID.")

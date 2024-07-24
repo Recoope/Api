@@ -14,7 +14,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/leilao")
 public class LeilaoController {
-    private LeilaoServices leilaoServices;
+    private final LeilaoServices leilaoServices;
 
     public LeilaoController(LeilaoServices leilaoServices) {
         this.leilaoServices = leilaoServices;

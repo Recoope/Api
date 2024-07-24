@@ -4,6 +4,11 @@ public class LoginParams {
     private String cnpjOuEmail;
     private String senha;
 
+    public LoginParams(String cnpjOuEmail, String senha) {
+        this.cnpjOuEmail = cnpjOuEmail;
+        this.senha = senha;
+    }
+
     public String getCnpjOuEmail() {
         return cnpjOuEmail;
     }

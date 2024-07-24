@@ -47,7 +47,7 @@ public class LanceServices {
                 lance.setIdLance(_lanceRepository.lastId() + 1);
 
                 _lanceRepository.save(lance);
-                return new RespostaApi<>("Lance atribuido com sucesso!", lance.toDto());
+                return new RespostaApi<>(201, "Lance atribuido com sucesso!", lance.toDto());
 
             } else return new RespostaApi<>(404, "Empresa não encontrada!");
         } else return new RespostaApi<>(404, "Leilão não encontrado!");

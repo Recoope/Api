@@ -107,7 +107,7 @@ public class EmpresaServices {
             conf = params.getConfirmacaoSenha();
             senha = params.getSenha();
         } catch (NullPointerException npe) {
-            return new RespostaApi<>(500, "Não devem ser enviados parametros nulos.");
+            return new RespostaApi<>(400, "Não devem ser enviados parametros nulos.");
         }
 
         Empresa empresaValidada = new Empresa();

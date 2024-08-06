@@ -1,12 +1,12 @@
 package recoope.api.services;
 
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.inputs.EmpresaParams;
+import recoope.api.domain.inputs.LoginParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 
@@ -15,16 +15,31 @@ import java.util.Optional;
 
 @Service
 public class EmpresaServices {
-    private final IEmpresaRepository empresaRepository;
-    private final ILanceRepository lanceRepository;
+    private final IEmpresaRepository _empresaRepository;
+    private final ILanceRepository _lanceRepository;
 
     public EmpresaServices(IEmpresaRepository empresaRepository, ILanceRepository lanceRepository) {
-        this.empresaRepository = empresaRepository;
-        this.lanceRepository = lanceRepository;
+        this._empresaRepository = empresaRepository;
+        this._lanceRepository = lanceRepository;
+    }
+
+    public RespostaApi<Empresa> login(LoginParams params) {
+        boolean cnpj = validaCNPJ(params.getCnpjOuEmail());
+        boolean email = validaEmail(params.getCnpjOuEmail());
+
+        if (cnpj || email) {
+            Optional<Empresa> empresa = _empresaRepository.login(params.getCnpjOuEmail(), params.getSenha());
+
+            if (empresa.isPresent())
+                return new RespostaApi<>("Login feito com sucesso!", empresa.get());
+            else return cnpj ?
+                new RespostaApi<>(404, "O CNPJ fornecido não possui uma correspondência ou a senha está incorreta.") :
+                new RespostaApi<>(404, "O E-mail fornecido não possui uma correspondência ou a senha está incorreta.");
+        } else return new RespostaApi<>(400, "Parâmetro fornecido não é um E-mail ou CNPJ.");
     }
 
     public RespostaApi<EmpresaDto> pegarPorId(Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
+        Optional<Empresa> empresa = _empresaRepository.findById(id);
 
         if (empresa.isPresent()){
             Empresa empresaEnt = empresa.get();
@@ -53,7 +68,7 @@ public class EmpresaServices {
     }
 
     public RespostaApi<Empresa> alterar(Long id, EmpresaParams params) {
-        Optional<Empresa> empresaOptional = empresaRepository.findById(id);
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(id);
 
         if (empresaOptional.isPresent()) {
             Empresa empresa = empresaOptional.get();
@@ -72,10 +87,10 @@ public class EmpresaServices {
     }
 
     public RespostaApi<Empresa> remover(Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
+        Optional<Empresa> empresa = _empresaRepository.findById(id);
 
         if (empresa.isPresent()) {
-            empresaRepository.delete(empresa.get());
+            _empresaRepository.delete(empresa.get());
             return new RespostaApi<>("Empresa removida com sucesso!", empresa.get());
         } else return new RespostaApi<>(404, "Empresa não encontrada!");
     }
@@ -92,7 +107,7 @@ public class EmpresaServices {
             conf = params.getConfirmacaoSenha();
             senha = params.getSenha();
         } catch (NullPointerException npe) {
-            return new RespostaApi<>(500, "Não devem ser enviados parametros nulos.");
+            return new RespostaApi<>(400, "Não devem ser enviados parametros nulos.");
         }
 
         Empresa empresaValidada = new Empresa();
@@ -105,9 +120,7 @@ public class EmpresaServices {
         else return new RespostaApi<>(400, "CNPJ inválido.");
 
         // Verificação do email.
-        String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
-
-        if (email.matches(emailRegex)) empresaValidada.setEmailEmpresa(email);
+        if (validaEmail(email)) empresaValidada.setEmailEmpresa(email);
         else return new RespostaApi<>(400, "Email inválido.");
 
         // Verificação do telefone.
@@ -124,24 +137,24 @@ public class EmpresaServices {
             empresaValidada.setSenhaEmpresa(empresaAlterada.getSenhaEmpresa());
         else return new RespostaApi<>(400,"As senhas não correspondem.");
 
-        empresaValidada.setIdEmpresa(empresaRepository.lastId() + 1);
+        empresaValidada.setIdEmpresa(_empresaRepository.lastId() + 1);
 
         if (!alteracao) {
             // Registrando data do cadastro
             empresaValidada.setRegistroEmpresa(new Date());
 
-            empresaRepository.save(empresaValidada);
+            _empresaRepository.save(empresaValidada);
             return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", empresaValidada);
         } else {
             empresaValidada.setIdEmpresa(empresaAlterada.getIdEmpresa());
             empresaValidada.setRegistroEmpresa(empresaAlterada.getRegistroEmpresa());
 
-            empresaRepository.save(empresaValidada);
+            _empresaRepository.save(empresaValidada);
             return new RespostaApi<>(201, "Empresa atualizada com sucesso!", empresaValidada);
         }
     }
 
-    private boolean validaCNPJ (String CNPJ) {
+    private boolean validaCNPJ(String CNPJ) {
 
         if (CNPJ.length() != 14 || CNPJ.matches("(\\d)\\1{13}")) {
             return false;
@@ -187,6 +200,11 @@ public class EmpresaServices {
         }
     }
 
+    private boolean validaEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+        return email.matches(emailRegex);
+    }
+
     private String tempoConosco(Date dataRegistro) {
         Date dataAtual = new Date();
 
@@ -217,7 +235,7 @@ public class EmpresaServices {
     }
 
     private String leiloesParticipados(Long id) {
-        int lp = lanceRepository.empresaLeiloesParticipados(id);
+        int lp = _lanceRepository.empresaLeiloesParticipados(id);
         return lp == 1 ? lp + "leilão." : lp + " leilões.";
     }
 

@@ -26,7 +26,7 @@ public class LanceServices {
 
     public RespostaApi<LanceDto> darLance(Long idLeilao, LanceParams params) {
         Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(params.getIdEmpresa());
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(params.getCnpj());
 
         if (leilaoOptional.isPresent()){
             if (empresaOptional.isPresent()) {

@@ -1,21 +1,21 @@
 package recoope.api.domain.inputs;
 
 public class LanceParams {
-    private Long idEmpresa;
+    private String cnpjEmpresa;
 
     private Double valor;
 
-    public LanceParams(Long idEmpresa, Double valor) {
-        this.idEmpresa = idEmpresa;
+    public LanceParams(String cnpjEmpresa, Double valor) {
+        this.cnpjEmpresa = cnpjEmpresa;
         this.valor = valor;
     }
 
-    public Long getIdEmpresa() {
-        return idEmpresa;
+    public String getCnpj() {
+        return cnpjEmpresa;
     }
 
-    public void setIdEmpresa(Long empresaId) {
-        this.idEmpresa = empresaId;
+    public void setCnpj(String empresaCnpj) {
+        this.cnpjEmpresa = cnpjEmpresa;
     }
 
     public Double getValor() {

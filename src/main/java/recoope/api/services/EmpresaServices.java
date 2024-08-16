@@ -38,17 +38,16 @@ public class EmpresaServices {
         } else return new RespostaApi<>(400, "Parâmetro fornecido não é um E-mail ou CNPJ.");
     }
 
-    public RespostaApi<EmpresaDto> pegarPorId(Long id) {
-        Optional<Empresa> empresa = _empresaRepository.findById(id);
+    public RespostaApi<EmpresaDto> pegarPorId(String cnpj) {
+        Optional<Empresa> empresa = _empresaRepository.findById(cnpj);
 
         if (empresa.isPresent()){
             Empresa empresaEnt = empresa.get();
 
             String tempoConosco = tempoConosco(empresaEnt.getRegistroEmpresa());
-            String leiloesParticipados = leiloesParticipados(empresaEnt.getIdEmpresa());
+            String leiloesParticipados = leiloesParticipados(empresaEnt.getCnpjEmpresa());
 
             EmpresaDto empresaDto = new EmpresaDto(
-                    empresaEnt.getIdEmpresa(),
                     empresaEnt.getNomeEmpresa(),
                     empresaEnt.getEmailEmpresa(),
                     empresaEnt.getTelefoneEmpresa(),
@@ -67,8 +66,8 @@ public class EmpresaServices {
         return validaEmpresa(params, false, null);
     }
 
-    public RespostaApi<Empresa> alterar(Long id, EmpresaParams params) {
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(id);
+    public RespostaApi<Empresa> alterar(String cnpj, EmpresaParams params) {
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
 
         if (empresaOptional.isPresent()) {
             Empresa empresa = empresaOptional.get();
@@ -86,8 +85,8 @@ public class EmpresaServices {
         }
     }
 
-    public RespostaApi<Empresa> remover(Long id) {
-        Optional<Empresa> empresa = _empresaRepository.findById(id);
+    public RespostaApi<Empresa> remover(String cnpj) {
+        Optional<Empresa> empresa = _empresaRepository.findById(cnpj);
 
         if (empresa.isPresent()) {
             _empresaRepository.delete(empresa.get());
@@ -137,7 +136,6 @@ public class EmpresaServices {
             empresaValidada.setSenhaEmpresa(empresaAlterada.getSenhaEmpresa());
         else return new RespostaApi<>(400,"As senhas não correspondem.");
 
-        empresaValidada.setIdEmpresa(_empresaRepository.lastId() + 1);
 
         if (!alteracao) {
             // Registrando data do cadastro
@@ -146,7 +144,7 @@ public class EmpresaServices {
             _empresaRepository.save(empresaValidada);
             return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", empresaValidada);
         } else {
-            empresaValidada.setIdEmpresa(empresaAlterada.getIdEmpresa());
+            empresaValidada.setCnpjEmpresa(empresaAlterada.getCnpjEmpresa());
             empresaValidada.setRegistroEmpresa(empresaAlterada.getRegistroEmpresa());
 
             _empresaRepository.save(empresaValidada);
@@ -234,7 +232,7 @@ public class EmpresaServices {
         return tempoConosco.toString();
     }
 
-    private String leiloesParticipados(Long id) {
+    private String leiloesParticipados(String id) {
         int lp = _lanceRepository.empresaLeiloesParticipados(id);
         return lp == 1 ? lp + "leilão." : lp + " leilões.";
     }

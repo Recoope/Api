@@ -53,8 +53,8 @@ public class LanceServices {
         } else return new RespostaApi<>(404, "Leilão não encontrado!");
     }
 
-    public RespostaApi<List<Lance>> cancelarLance(Long idEmpresa, Long idLeilao) {
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(idEmpresa);
+    public RespostaApi<List<Lance>> cancelarLance(String cnpj, Long idLeilao) {
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
         Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
 
         if (leilaoOptional.isPresent()) {

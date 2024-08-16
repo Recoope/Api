@@ -37,7 +37,7 @@ public class LanceController {
         @ApiResponse(responseCode = "404", description = "Empresa não possui lances no leilão.")
     })
     @DeleteMapping("/cancelar")
-    public ResponseEntity<RespostaApi> cancelarLance(@RequestParam Long idEmpresa, @RequestParam Long idLeilao) {
-        return lanceServices.cancelarLance(idEmpresa, idLeilao).get();
+    public ResponseEntity<RespostaApi> cancelarLance(@RequestParam String cnpj, @RequestParam Long idLeilao) {
+        return lanceServices.cancelarLance(cnpj, idLeilao).get();
     }
 }

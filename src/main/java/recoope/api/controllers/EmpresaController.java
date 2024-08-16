@@ -20,8 +20,8 @@ public class EmpresaController {
 
     @Operation(summary = "Pegar empresa pelo ID.")
     @GetMapping("/{id}")
-    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable Long id) {
-        return empresaServices.pegarPorId(id).get();
+    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable String cnpj) {
+        return empresaServices.pegarPorId(cnpj).get();
     }
 
     @Operation(summary = "Cadastrar empresa.")
@@ -32,13 +32,13 @@ public class EmpresaController {
 
     @Operation(summary = "Alterar empresa.")
     @PatchMapping("/alterar/{id}")
-    public ResponseEntity<RespostaApi> alterar(@PathVariable Long id, @RequestBody EmpresaParams empresaRegistroParams){
-        return empresaServices.alterar(id, empresaRegistroParams).get();
+    public ResponseEntity<RespostaApi> alterar(@PathVariable String cnpj, @RequestBody EmpresaParams empresaRegistroParams){
+        return empresaServices.alterar(cnpj, empresaRegistroParams).get();
     }
 
     @Operation(summary = "Deletar empresa.")
     @DeleteMapping("/remover/{id}")
-    public ResponseEntity<RespostaApi> remover(@PathVariable Long id) {
-        return empresaServices.remover(id).get();
+    public ResponseEntity<RespostaApi> remover(@PathVariable String cnpj) {
+        return empresaServices.remover(cnpj).get();
     }
 }

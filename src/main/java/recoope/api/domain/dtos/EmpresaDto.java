@@ -4,7 +4,6 @@ package recoope.api.domain.dtos;
 import java.util.Date;
 
 public class EmpresaDto {
-    private Long idEmpresa;
 
     private String nomeEmpresa;
 
@@ -20,8 +19,7 @@ public class EmpresaDto {
 
     private String leiloesParticipados;
 
-    public EmpresaDto(Long idEmpresa, String nomeEmpresa, String emailEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa, String tempoConosco, String leiloesParticipados) {
-        this.idEmpresa = idEmpresa;
+    public EmpresaDto(String nomeEmpresa, String emailEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa, String tempoConosco, String leiloesParticipados) {
         this.nomeEmpresa = nomeEmpresa;
         this.emailEmpresa = emailEmpresa;
         this.telefoneEmpresa = telefoneEmpresa;
@@ -29,10 +27,6 @@ public class EmpresaDto {
         this.registroEmpresa = registroEmpresa;
         this.tempoConosco = tempoConosco;
         this.leiloesParticipados = leiloesParticipados;
-    }
-
-    public Long getIdEmpresa() {
-        return idEmpresa;
     }
 
     public String getNomeEmpresa() {

@@ -8,11 +8,6 @@ import java.util.Date;
 @Entity
 @Table(name = "empresa")
 public class Empresa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_empresa")
-    private Long idEmpresa;
-
     @Column(name = "nome_empresa")
     private String nomeEmpresa;
 
@@ -26,14 +21,14 @@ public class Empresa {
     @Column(name = "telefone_empresa")
     private String telefoneEmpresa;
 
+    @Id
     @Column(name = "cnpj_empresa")
     private String cnpjEmpresa;
 
     @Column(name = "registro_empresa")
     private Date registroEmpresa;
 
-    public Empresa(Long idEmpresa, String nomeEmpresa, String emailEmpresa, String senhaEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa) {
-        this.idEmpresa = idEmpresa;
+    public Empresa(String nomeEmpresa, String emailEmpresa, String senhaEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa) {
         this.nomeEmpresa = nomeEmpresa;
         this.emailEmpresa = emailEmpresa;
         this.senhaEmpresa = senhaEmpresa;
@@ -43,14 +38,6 @@ public class Empresa {
     }
 
     public Empresa() {}
-
-    public Long getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(Long idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
 
     public String getNomeEmpresa() {
         return nomeEmpresa;

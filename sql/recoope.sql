@@ -63,7 +63,7 @@ create table log_lance(
                           delete_old int
 );
 
--- Tabelas normalizadas....................................................
+--Tabelas normalizadas....................................................
 create table cooperativa(
                             id_cooperativa serial primary key,
                             nome_cooperativa varchar,
@@ -108,11 +108,11 @@ create table leilao(
 --tabela app
 -- preguntar na aula do grilo
 CREATE TABLE lance (
-                       id_lance SERIAL PRIMARY KEY,
-                       id_leilao INT REFERENCES leilao(id_leilao),
-                       cnpj_empresa varchar REFERENCES empresa(cnpj_empresa),
-                       valor NUMERIC,
-                       data_lance DATE
+   id_lance SERIAL PRIMARY KEY,
+   id_leilao INT REFERENCES leilao(id_leilao),
+   cnpj_empresa varchar REFERENCES empresa(cnpj_empresa),
+   valor NUMERIC,
+   data_lance DATE
 );
 
 --Procedure para verificar se tudo que foi para o bancoi esta certo........................................
@@ -121,83 +121,56 @@ create or replace procedure insert_cooperativa (c_nome varchar, c_email varchar,
 language 'plpgsql' as
 $$
 begin
-    if not c_nome SIMILAR TO '%[0-9]%' then
-		if c_email SIMILAR TO '%[@.]%' and not c_email SIMILAR TO '%[0-9]%' then
-			if length(c_senha)>7 and c_senha SIMILAR TO '%[0-9]%' and c_senha SIMILAR TO '%[@.*%#!]%' then
-				INSERT INTO cooperativa (nome_cooperativa, email_cooperativa, senha_cooperativa) VALUES (c_nome, c_email, c_senha);
-
-else
-				raise exception 'Senha menor que 8 dígitos ou não tem numeros ou não possui caracteres especiais!!!';
+if c_email SIMILAR TO '%[@.]%' then
+    if length(c_senha)>7 and c_senha SIMILAR TO '%[0-9]%' and c_senha SIMILAR TO '%[@.*%#!]%' then
+        INSERT INTO cooperativa (nome_cooperativa, email_cooperativa, senha_cooperativa) VALUES (c_nome, c_email, c_senha);
+    else raise exception 'Senha menor que 8 dígitos ou não tem numeros ou não possui caracteres especiais!!!';
+    end if;
+else raise exception 'Email deve conter @ e .!!!';
 end if;
-else
-			raise exception 'Email não pode conter números e deve ter (@ e .)!!!';
-end if;
-else
-		raise exception 'Nome não pode conter número!!!';
-end if;
-
 commit;
 end;
 $$;
-
-call insert_cooperativa('nome','nome@gmail.com','senha123!');
 
 --Empresa
 create or replace procedure insert_empresa (e_nome varchar, e_email varchar, e_senha varchar, e_telefone varchar, e_cnpj varchar)
 language 'plpgsql' as
 $$
 begin
-    if not e_nome SIMILAR TO '%[0-9]%' then
-		if e_email SIMILAR TO '%[@.]%' and not e_email SIMILAR TO '%[0-9]%' then
-			if length(e_senha)>7 and e_senha SIMILAR TO '%[0-9]%' and e_senha SIMILAR TO '%[@.*%#!]%' then
-				if length(e_telefone)=11 and e_telefone SIMILAR TO '[0-9]+' then
-					if e_cnpj SIMILAR TO '[0-9]{2}\.[0-9]{3}\.[0-9]{3}/0001-[0-9]{2}' then
-						INSERT INTO empresa (nome_empresa, email_empresa, senha_empresa, telefone_empresa, cnpj_empresa) VALUES (e_nome, e_email, e_senha, e_telefone, e_cnpj);
-
-else
-						raise exception 'CNPJ não tem 19 dígitos ou tem letras!!!';
-end if;
-else
-					raise exception 'telefone não tem 11 dígitos ou tem letras!!!';
-end if;
-
-else
-				raise exception 'Senha menor que 8 dígitos ou não tem numeros ou não possui caracteres especiais!!!';
-end if;
-else
-			raise exception 'Email não pode conter números e deve ter (@ e .)!!!';
-end if;
-else
-		raise exception 'Nome não pode conter número!!!';
+if e_email SIMILAR TO '%[@.]%' then
+    if length(e_senha)>7 and e_senha SIMILAR TO '%[0-9]%' and e_senha SIMILAR TO '%[@.*%#!]%' then
+        if length(e_telefone)=11 and e_telefone SIMILAR TO '[0-9]+' then
+            if length(e_cnpj)=14 and e_cnpj then
+                INSERT INTO empresa (nome_empresa, email_empresa, senha_empresa, telefone_empresa, cnpj_empresa) VALUES (e_nome, e_email, e_senha, e_telefone, e_cnpj);
+            else raise exception 'CNPJ não tem 14 digitos!!!';
+            end if;
+        else raise exception 'Telefone não tem 11 dígitos ou tem letras!!!';
+        end if;
+    else raise exception 'Senha menor que 8 dígitos ou não tem numeros ou não possui caracteres especiais!!!';
+    end if;
+else raise exception 'Email não pode conter números e deve ter (@ e .)!!!';
 end if;
 
 commit;
 end;
 $$;
-
-call insert_empresa('nome','nome@gmail.com','senha123!','11973733007','12.345.678/0001-00');
 
 --Leilão
 create or replace procedure insert_leilao (l_data_inicio date, l_data_fim date, l_detalhes varchar, l_hora time, l_id_endereco int, l_id_produto int)
 language 'plpgsql' as
 $$
 begin
-
-   	if l_data_inicio < l_data_fim then
-		if exists (select id_endereco from endereco where id_endereco=l_id_endereco) and exists (select id_produto from produto where id_produto=l_id_produto) then
-			INSERT INTO leilao (data_inicio_leilao, data_fim_leilao, detalhes_leilao, hora_leilao) VALUES (l_data_inicio, l_data_fim, l_detalhes, l_hora);
-else
-   			raise exception 'Esse endereço ou produto não existe!!!';
-end if;
-else
-   		raise exception 'Data de início menor do que a de fim!!!';
+if l_data_inicio < l_data_fim then
+    if exists (select id_endereco from endereco where id_endereco=l_id_endereco) and exists (select id_produto from produto where id_produto=l_id_produto) then
+        INSERT INTO leilao (data_inicio_leilao, data_fim_leilao, detalhes_leilao, hora_leilao) VALUES (l_data_inicio, l_data_fim, l_detalhes, l_hora);
+    else raise exception 'Esse endereço ou produto não existe!!!';
+    end if;
+else raise exception 'Data de início menor do que a de fim!!!';
 end if;
 
 commit;
 end;
 $$;
-
-call insert_leilao('2000-7-20','2001-7-20','nebvhrbvhbvhjrbjvbjhr','12:05:20',1,1);
 
 --Endereco
 create or replace procedure insert_endereco (en_cidade varchar, en_rua varchar, en_numero int)
@@ -205,16 +178,12 @@ language 'plpgsql' as
 $$
 begin
     if not en_cidade SIMILAR TO '%[0-9]%' then
-		INSERT INTO endereco (cidade, rua, numero) VALUES (en_cidade, en_rua, en_numero);
-else
-		raise exception 'Cidade não pode conter número!!!';
+        INSERT INTO endereco (cidade, rua, numero) VALUES (en_cidade, en_rua, en_numero);
+    else raise exception 'Cidade não pode conter número!!!';
 end if;
-
 commit;
 end;
 $$;
-
-call insert_endereco('São paulo','Rua marechal hermes da fonesca',10);
 
 --Função de trigger....................................................
 --Cooperativa

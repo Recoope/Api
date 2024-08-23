@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cooperativa")
-public class Cooperativa
+public class    Cooperativa
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cooperativa")
-    private Long idCooperativa;
+    @Column(name = "cnpj_cooperativa")
+    private String cnpjCooperativa;
     @Column(name = "nome_cooperativa")
     private String nomeCooperativa;
     @Column(name = "email_cooperativa")
@@ -19,9 +19,9 @@ public class Cooperativa
     @Column(name = "senha_cooperativa")
     private String senhaCooperativa;
 
-    public Cooperativa(Long idCooperativa, String nomeCooperativa,String emailCooperativa,String senhaCooperativa)
+    public Cooperativa(String cnpjCooperativa, String nomeCooperativa,String emailCooperativa,String senhaCooperativa)
     {
-        this.idCooperativa = idCooperativa;
+        this.cnpjCooperativa = cnpjCooperativa;
         this.nomeCooperativa = nomeCooperativa;
         this.emailCooperativa = emailCooperativa;
         this.senhaCooperativa = senhaCooperativa;
@@ -29,12 +29,12 @@ public class Cooperativa
 
     public Cooperativa() {}
 
-    public Long getIdCooperativa() {
-        return idCooperativa;
+    public String getcnpjCooperativa() {
+        return cnpjCooperativa;
     }
 
-    public void setIdCooperativa(Long idCooperativa) {
-        this.idCooperativa = idCooperativa;
+    public void setcnpjCooperativa(String cnpjCooperativa) {
+        this.cnpjCooperativa = cnpjCooperativa;
     }
 
     public String getNomeCooperativa() {

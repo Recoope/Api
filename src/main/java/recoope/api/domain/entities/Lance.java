@@ -20,7 +20,7 @@ public class Lance {
     private Leilao leilao;
 
     @ManyToOne
-    @JoinColumn(name = "id_empresa")
+    @JoinColumn(name = "cnpj_empresa")
     private Empresa empresa;
 
     @Column(name = "valor")

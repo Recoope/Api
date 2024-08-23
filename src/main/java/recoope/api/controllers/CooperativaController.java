@@ -26,7 +26,7 @@ public class CooperativaController {
             @ApiResponse(responseCode = "404", description = "Cooperativa não encontrada.")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable Long id) {
+    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable String id) {
         return _cooperativaServices.pegarPorId(id).get();
     }
 
@@ -47,7 +47,7 @@ public class CooperativaController {
             @ApiResponse(responseCode = "404", description = "Nenhum leilão encontrada.")
     })
     @GetMapping("/{id}/leiloes/")
-    public ResponseEntity<RespostaApi> leiloes(@PathVariable Long id) {
+    public ResponseEntity<RespostaApi> leiloes(@PathVariable String id) {
         return _cooperativaServices.leiloes(id).get();
     }
 
@@ -57,9 +57,9 @@ public class CooperativaController {
             @ApiResponse(responseCode = "400", description = "Cooperativa não existe."),
             @ApiResponse(responseCode = "404", description = "Nenhum leilão encontrada.")
     })
-    @GetMapping("/{id}/leiloes/{material}")
+        @GetMapping("/{id}/leiloes/{material}")
     public ResponseEntity<RespostaApi> leiloesPorMaterial(
-            @PathVariable Long id,
+            @PathVariable String id,
             @PathVariable String material) {
         return _cooperativaServices.leiloesPorMaterial(id, material).get();
     }

@@ -14,11 +14,11 @@ public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
     @Query("SELECT l FROM Leilao l WHERE lower(l.produto.tipoProduto) LIKE %?1%")
     List<Leilao> pegarPorMaterial(String material);
 
-    @Query("SELECT l FROM Leilao l WHERE l.cooperativa.idCooperativa = ?1")
-    List<Leilao> porCooperativa(Long idCooperativa);
+    @Query("SELECT l FROM Leilao l WHERE l.cooperativa.cnpjCooperativa = ?1")
+    List<Leilao> porCooperativa(String idCooperativa);
 
-    @Query("SELECT l FROM Leilao l WHERE l.cooperativa.idCooperativa = ?1 AND lower(l.produto.tipoProduto) LIKE %?2%")
-    List<Leilao> porCooperativaEMaterial(Long idCooperativa, String material);
+    @Query("SELECT l FROM Leilao l WHERE l.cooperativa.cnpjCooperativa = ?1 AND lower(l.produto.tipoProduto) LIKE %?2%")
+    List<Leilao> porCooperativaEMaterial(String idCooperativa, String material);
 
     @Query("SELECT l FROM Leilao l WHERE l.dataFimLeilao = ?1")
     List<Leilao> porDataDeFim(Date data);

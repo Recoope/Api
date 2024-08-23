@@ -3,8 +3,10 @@ package recoope.api.services;
 
 import org.springframework.stereotype.Service;
 import recoope.api.domain.RespostaApi;
+import recoope.api.domain.Validacoes;
 import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
+import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
 import recoope.api.domain.inputs.LoginParams;
 import recoope.api.repository.IEmpresaRepository;
@@ -24,8 +26,8 @@ public class EmpresaServices {
     }
 
     public RespostaApi<Empresa> login(LoginParams params) {
-        boolean cnpj = validaCNPJ(params.getCnpjOuEmail());
-        boolean email = validaEmail(params.getCnpjOuEmail());
+        boolean cnpj = Validacoes.CNPJ(params.getCnpjOuEmail());
+        boolean email = Validacoes.EMAIL(params.getCnpjOuEmail());
 
         if (cnpj || email) {
             Optional<Empresa> empresa = _empresaRepository.login(params.getCnpjOuEmail(), params.getSenha());
@@ -63,40 +65,8 @@ public class EmpresaServices {
     }
 
     public RespostaApi<Empresa> cadastrar(EmpresaParams params) {
-        return validaEmpresa(params, false, null);
-    }
-
-    public RespostaApi<Empresa> alterar(String cnpj, EmpresaParams params) {
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
-
-        if (empresaOptional.isPresent()) {
-            Empresa empresa = empresaOptional.get();
-
-            if (params.getNome() == null) params.setNome(empresa.getNomeEmpresa());
-            if (params.getCnpj() == null) params.setCnpj(empresa.getCnpjEmpresa());
-            if (params.getEmail() == null) params.setEmail(empresa.getEmailEmpresa());
-            if (params.getTelefone() == null) params.setTelefone(empresa.getTelefoneEmpresa());
-            if (params.getSenha() == null) params.setSenha(empresa.getSenhaEmpresa());
-
-            return validaEmpresa(params, true, empresa);
-
-        } else {
-            return new RespostaApi<>(404, "Empresa não encontrada!");
-        }
-    }
-
-    public RespostaApi<Empresa> remover(String cnpj) {
-        Optional<Empresa> empresa = _empresaRepository.findById(cnpj);
-
-        if (empresa.isPresent()) {
-            _empresaRepository.delete(empresa.get());
-            return new RespostaApi<>("Empresa removida com sucesso!", empresa.get());
-        } else return new RespostaApi<>(404, "Empresa não encontrada!");
-    }
-
-    private RespostaApi<Empresa> validaEmpresa(EmpresaParams params, boolean alteracao, Empresa empresaAlterada) {
-
         String nome, cnpj, email, telefone, conf, senha;
+        Empresa novaEmpresa = new Empresa();
 
         try {
             nome = params.getNome().trim();
@@ -109,98 +79,97 @@ public class EmpresaServices {
             return new RespostaApi<>(400, "Não devem ser enviados parametros nulos.");
         }
 
-        Empresa empresaValidada = new Empresa();
-
-        if (nome.length() > 3) empresaValidada.setNomeEmpresa(nome);
+        // Verificação nome.
+        if (Validacoes.NOME(nome)) novaEmpresa.setNomeEmpresa(nome);
         else return new RespostaApi<>(400, "O nome da empresa deve conter pelo menos 3 caracteres.");
 
         // Verificação CNPJ.
-        if (validaCNPJ(cnpj)) empresaValidada.setCnpjEmpresa(cnpj);
-        else return new RespostaApi<>(400, "CNPJ inválido.");
+        if (Validacoes.CNPJ(cnpj)) {
+            if (_empresaRepository.findById(cnpj).isEmpty()) novaEmpresa.setCnpjEmpresa(cnpj);
+            else return new RespostaApi<>(400, "CNPJ já existente.");
+        } else return new RespostaApi<>(400, "CNPJ inválido.");
 
         // Verificação do email.
-        if (validaEmail(email)) empresaValidada.setEmailEmpresa(email);
-        else return new RespostaApi<>(400, "Email inválido.");
+        if (Validacoes.EMAIL(email)) {
+            if (_empresaRepository.findByTelefoneOuEmail(email).isEmpty()) novaEmpresa.setEmailEmpresa(email);
+            else return new RespostaApi<>(400, "Email já existente.");
+        } else return new RespostaApi<>(400, "Email inválido.");
 
         // Verificação do telefone.
-        String telefoneRegex = "^\\(?[1-9]{2}\\)? ?(?:[2-8]|9[0-9])[0-9]{3}-?[0-9]{4}$";
-
-        if (telefone.matches(telefoneRegex))
-            empresaValidada.setTelefoneEmpresa(telefone);
-        else return new RespostaApi<>(400, "Telefone inválido.");
+        if (Validacoes.TEL(telefone)) {
+            if (_empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) novaEmpresa.setTelefoneEmpresa(telefone);
+            else return new RespostaApi<>(400, "Telefone já existente.");
+        } else return new RespostaApi<>(400, "Telefone inválido.");
 
         // Verificação senha.
-        if (senha.equals(conf))
-            empresaValidada.setSenhaEmpresa(senha);
-        else if (alteracao && (empresaAlterada.getSenhaEmpresa().equals(senha)))
-            empresaValidada.setSenhaEmpresa(empresaAlterada.getSenhaEmpresa());
+        if (senha.equals(conf)) novaEmpresa.setSenhaEmpresa(senha);
         else return new RespostaApi<>(400,"As senhas não correspondem.");
 
+        // Registrando data do cadastro
+        novaEmpresa.setRegistroEmpresa(new Date());
 
-        if (!alteracao) {
-            // Registrando data do cadastro
-            empresaValidada.setRegistroEmpresa(new Date());
+        _empresaRepository.save(novaEmpresa);
+        return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", novaEmpresa);
+    }
 
-            _empresaRepository.save(empresaValidada);
-            return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", empresaValidada);
+    public RespostaApi<Empresa> alterar(String cnpj, AlterarEmpresaParams params) {
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
+        String nome, email, telefone;
+        boolean emailAlterado = false, telefoneAlterado = false;
+
+        Empresa empresaAlterada = new Empresa();
+
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+
+            if (params.getNome() == null) nome = empresa.getNomeEmpresa();
+            else nome = params.getNome().trim();
+            if (params.getEmail() == null) email = empresa.getEmailEmpresa();
+            else {
+                email = params.getEmail().trim();
+                emailAlterado = true;
+            }
+            if (params.getTelefone() == null) telefone = empresa.getTelefoneEmpresa();
+            else {
+                telefone = params.getTelefone().replaceAll("[() -]", "").trim();
+                telefoneAlterado = true;
+            }
+
         } else {
-            empresaValidada.setCnpjEmpresa(empresaAlterada.getCnpjEmpresa());
-            empresaValidada.setRegistroEmpresa(empresaAlterada.getRegistroEmpresa());
-
-            _empresaRepository.save(empresaValidada);
-            return new RespostaApi<>(201, "Empresa atualizada com sucesso!", empresaValidada);
+            return new RespostaApi<>(404, "Empresa não encontrada!");
         }
+
+        // Verificação nome.
+        if (Validacoes.NOME(nome)) empresaAlterada.setNomeEmpresa(nome);
+        else return new RespostaApi<>(400, "O nome da empresa deve conter pelo menos 3 caracteres.");
+
+        // Verificação do email.
+        if (Validacoes.EMAIL(email)) {
+            if (!emailAlterado || _empresaRepository.findByTelefoneOuEmail(email).isEmpty()) empresaAlterada.setEmailEmpresa(email);
+            else return new RespostaApi<>(400, "Email já existente.");
+        } else return new RespostaApi<>(400, "Email inválido.");
+
+        // Verificação do telefone.
+        if (Validacoes.TEL(telefone)) {
+            if (!telefoneAlterado || _empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) empresaAlterada.setTelefoneEmpresa(telefone);
+            else return new RespostaApi<>(400, "Telefone já existente.");
+        } else return new RespostaApi<>(400, "Telefone inválido.");
+
+
+        empresaAlterada.setCnpjEmpresa(empresaAlterada.getCnpjEmpresa());
+        empresaAlterada.setRegistroEmpresa(empresaAlterada.getRegistroEmpresa());
+
+        _empresaRepository.save(empresaAlterada);
+        return new RespostaApi<>(201, "Empresa atualizada com sucesso!", empresaAlterada);
     }
 
-    private boolean validaCNPJ(String CNPJ) {
+    public RespostaApi<Empresa> remover(String cnpj) {
+        Optional<Empresa> empresa = _empresaRepository.findById(cnpj);
 
-        if (CNPJ.length() != 14 || CNPJ.matches("(\\d)\\1{13}")) {
-            return false;
-        }
-
-        char dig13, dig14;
-        int sm, i, r, num, peso;
-
-        try {
-            sm = 0;
-            peso = 2;
-            for (i=11; i>=0; i--) {
-                num = (int)(CNPJ.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso + 1;
-                if (peso == 10)
-                    peso = 2;
-            }
-
-            r = sm % 11;
-            if ((r == 0) || (r == 1))
-                dig13 = '0';
-            else dig13 = (char)((11-r) + 48);
-
-            sm = 0;
-            peso = 2;
-            for (i=12; i>=0; i--) {
-                num = (int)(CNPJ.charAt(i)- 48);
-                sm = sm + (num * peso);
-                peso = peso + 1;
-                if (peso == 10)
-                    peso = 2;
-            }
-
-            r = sm % 11;
-            if ((r == 0) || (r == 1))
-                dig14 = '0';
-            else dig14 = (char)((11-r) + 48);
-
-            return (dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13));
-        } catch (Exception erro) {
-            return(false);
-        }
-    }
-
-    private boolean validaEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
-        return email.matches(emailRegex);
+        if (empresa.isPresent()) {
+            _empresaRepository.delete(empresa.get());
+            return new RespostaApi<>("Empresa removida com sucesso!", empresa.get());
+        } else return new RespostaApi<>(404, "Empresa não encontrada!");
     }
 
     private String tempoConosco(Date dataRegistro) {
@@ -236,6 +205,4 @@ public class EmpresaServices {
         int lp = _lanceRepository.empresaLeiloesParticipados(id);
         return lp == 1 ? lp + "leilão." : lp + " leilões.";
     }
-
-
 }

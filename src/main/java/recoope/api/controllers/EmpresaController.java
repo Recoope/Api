@@ -2,9 +2,11 @@ package recoope.api.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
+import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
 import recoope.api.services.EmpresaServices;
 
@@ -32,7 +34,7 @@ public class EmpresaController {
 
     @Operation(summary = "Alterar empresa.")
     @PatchMapping("/alterar/{cnpj}")
-    public ResponseEntity<RespostaApi> alterar(@PathVariable String cnpj, @RequestBody EmpresaParams empresaRegistroParams){
+    public ResponseEntity<RespostaApi> alterar(@PathVariable String cnpj, @RequestBody AlterarEmpresaParams empresaRegistroParams){
         return empresaServices.alterar(cnpj, empresaRegistroParams).get();
     }
 

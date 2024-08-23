@@ -1,6 +1,9 @@
 package recoope.api.domain.inputs;
 
+import jakarta.validation.constraints.NotNull;
+
 public class LanceParams {
+    @NotNull
     private String cnpjEmpresa;
 
     private Double valor;

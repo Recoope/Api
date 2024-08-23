@@ -25,13 +25,19 @@ public class LanceServices {
     }
 
     public RespostaApi<LanceDto> darLance(Long idLeilao, LanceParams params) {
-        Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(params.getCnpj());
 
-        if (leilaoOptional.isPresent()){
-            if (empresaOptional.isPresent()) {
-                Leilao leilao = leilaoOptional.get();
+        String cnpj = params.getCnpj();
+        Double valor = params.getValor();
+
+        if (cnpj == null || valor == null) return new RespostaApi<>(400, "CNPJ e valor devem ser informados.");
+
+        Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
+        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
+
+        if (empresaOptional.isPresent()){
+            if (leilaoOptional.isPresent()) {
                 Empresa empresa = empresaOptional.get();
+                Leilao leilao = leilaoOptional.get();
                 Lance lance = new Lance();
 
                 Lance maiorLanceReq = _lanceRepository.maiorLance(leilao);
@@ -40,7 +46,7 @@ public class LanceServices {
                 lance.setEmpresa(empresa);
                 lance.setLeilao(leilao);
 
-                if (maiorLance < params.getValor()) lance.setValor(params.getValor());
+                if (maiorLance < params.getValor()) lance.setValor(valor);
                 else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, "Esse lance é igual ao maior lance do leilão, ele deve ser maior.");
                 else return new RespostaApi<>(400, "Esse lance é menor que o maior lance do leilão.");
 
@@ -49,8 +55,8 @@ public class LanceServices {
                 _lanceRepository.save(lance);
                 return new RespostaApi<>(201, "Lance atribuido com sucesso!", lance.toDto());
 
-            } else return new RespostaApi<>(404, "Empresa não encontrada!");
-        } else return new RespostaApi<>(404, "Leilão não encontrado!");
+            } else return new RespostaApi<>(404, "Leilão não encontrado!");
+        } else return new RespostaApi<>(404, "Empresa não encontrada!");
     }
 
     public RespostaApi<List<Lance>> cancelarLance(String cnpj, Long idLeilao) {

@@ -1,19 +1,11 @@
 package recoope.api.domain.inputs;
 
-import jakarta.validation.constraints.NotNull;
-
 public class EmpresaParams {
-    @NotNull
     private String nome;
-    @NotNull
     private String cnpj;
-    @NotNull
     private String email;
-    @NotNull
     private String telefone;
-    @NotNull
     private String senha;
-    @NotNull
     private String confirmacaoSenha;
 
     public String getNome() {

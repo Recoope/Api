@@ -8,7 +8,7 @@ import recoope.api.domain.entities.Cooperativa;
 import java.util.List;
 
 @Repository
-public interface ICooperativaRepository extends JpaRepository<Cooperativa, Long> {
+public interface ICooperativaRepository extends JpaRepository<Cooperativa, String> {
     @Query("SELECT c FROM Cooperativa c WHERE lower(c.nomeCooperativa) LIKE %?1%")
     List<Cooperativa> pegarPorNome(String nome);
 }

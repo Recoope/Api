@@ -22,7 +22,7 @@ public class CooperativaServices {
         _leilaoRepository = leilaoRepository;
     }
 
-    public RespostaApi<Cooperativa> pegarPorId(Long id) {
+    public RespostaApi<Cooperativa> pegarPorId(String id) {
 
         Optional<Cooperativa> cooperativa = _cooperativaRepository.findById(id);
 
@@ -40,21 +40,21 @@ public class CooperativaServices {
         else return new RespostaApi<>(404, "Nenhuma cooperativa encontrada.");
     }
 
-    public RespostaApi<List<LeilaoPorCooperativa>> leiloes(Long idCooperativa){
-        Cooperativa coop = pegarPorId(idCooperativa).data;
+    public RespostaApi<List<LeilaoPorCooperativa>> leiloes(String cnpjCooperativa){
+        Cooperativa coop = pegarPorId(cnpjCooperativa).data;
         if (coop == null) return new RespostaApi<>(400, "Cooperativa não existe.");
 
-        List<Leilao> leiloesResult = _leilaoRepository.porCooperativa(idCooperativa);
+        List<Leilao> leiloesResult = _leilaoRepository.porCooperativa(cnpjCooperativa);
         if (!leiloesResult.isEmpty())
             return new RespostaApi<>(toDtoList(leiloesResult));
         else return new RespostaApi<>(404, "Não foi encontrado nenhum leilão.");
     }
 
-    public RespostaApi<List<LeilaoPorCooperativa>> leiloesPorMaterial(Long idCooperativa, String material) {
-        Cooperativa coop = pegarPorId(idCooperativa).data;
+    public RespostaApi<List<LeilaoPorCooperativa>> leiloesPorMaterial(String cnpjCooperativa, String material) {
+        Cooperativa coop = pegarPorId(cnpjCooperativa).data;
         if (coop == null) return new RespostaApi<>(400, "Cooperativa não existe.");
 
-        List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(idCooperativa, material.toLowerCase());;
+        List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(cnpjCooperativa, material.toLowerCase());;
         if (!leiloesResult.isEmpty())
             return new RespostaApi<>(toDtoList(leiloesResult));
         else return new RespostaApi<>(404, "Não foi encontrado nenhum leilão.");

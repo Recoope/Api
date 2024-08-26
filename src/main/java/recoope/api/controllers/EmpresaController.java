@@ -1,6 +1,8 @@
 package recoope.api.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +42,21 @@ public class EmpresaController {
     }
 
     @Operation(summary = "Deletar empresa.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Empresa deletada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
+    })
     @DeleteMapping("/remover/{cpnj}")
     public ResponseEntity<RespostaApi> remover(@PathVariable String cnpj) {
         return empresaServices.remover(cnpj).get();
     }
 
+    @Operation(summary = "Login empresa.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Login feito com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Credenciais nulas foram passadas."),
+            @ApiResponse(responseCode = "404", description = "Credenciais não possuem correspondecia.")
+    })
     @PostMapping("login")
     public ResponseEntity<RespostaApi> login(@RequestBody LoginParams params) {
         return empresaServices.login(params).get();

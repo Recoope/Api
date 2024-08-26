@@ -1,8 +1,15 @@
 package recoope.api.domain.dtos;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class EmpresaDto {
 
     private String nomeEmpresa;
@@ -18,43 +25,4 @@ public class EmpresaDto {
     private String tempoConosco;
 
     private String leiloesParticipados;
-
-    public EmpresaDto(String nomeEmpresa, String emailEmpresa, String telefoneEmpresa, String cnpjEmpresa, Date registroEmpresa, String tempoConosco, String leiloesParticipados) {
-        this.nomeEmpresa = nomeEmpresa;
-        this.emailEmpresa = emailEmpresa;
-        this.telefoneEmpresa = telefoneEmpresa;
-        this.cnpjEmpresa = cnpjEmpresa;
-        this.registroEmpresa = registroEmpresa;
-        this.tempoConosco = tempoConosco;
-        this.leiloesParticipados = leiloesParticipados;
-    }
-
-    public String getNomeEmpresa() {
-        return nomeEmpresa;
-    }
-
-    public String getEmailEmpresa() {
-        return emailEmpresa;
-    }
-
-    public String getTelefoneEmpresa() {
-        return telefoneEmpresa;
-    }
-
-    public String getCnpjEmpresa() {
-        return cnpjEmpresa;
-    }
-
-    public Date getRegistroEmpresa() {
-        return registroEmpresa;
-    }
-
-    public String getTempoConosco() {
-        return tempoConosco;
-    }
-
-    public String getLeiloesParticipados() {
-        return leiloesParticipados;
-    }
-
 }

@@ -1,3 +1,4 @@
+
 package recoope.api;
 
 import org.springframework.boot.SpringApplication;
@@ -12,5 +13,4 @@ public class RecoopeApiApplication {
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
 		SpringApplication.run(RecoopeApiApplication.class, args);
 	}
-
 }

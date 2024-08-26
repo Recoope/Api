@@ -26,7 +26,7 @@ public class LanceServices {
 
     public RespostaApi<LanceDto> darLance(Long idLeilao, LanceParams params) {
 
-        String cnpj = params.getCnpj();
+        String cnpj = params.getCnpjEmpresa();
         Double valor = params.getValor();
 
         if (cnpj == null || valor == null) return new RespostaApi<>(400, "CNPJ e valor devem ser informados.");

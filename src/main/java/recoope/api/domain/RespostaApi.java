@@ -1,6 +1,5 @@
 package recoope.api.domain;
 
-
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;

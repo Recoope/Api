@@ -1,4 +1,3 @@
-
 --Função de trigger....................................................
 --Cooperativa
 create or replace function func_log_cooperativa()

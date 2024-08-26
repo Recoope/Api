@@ -1,9 +1,13 @@
 package recoope.api.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "produto")
+@Getter
+@Setter
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,55 +25,4 @@ public class Produto {
 
     @Column(name = "foto_leilao")
     private String fotoLeilao;
-
-    public Produto(Long idProduto, String tipoProduto, Double valorProduto, Double peso, String fotoLeilao) {
-        this.idProduto = idProduto;
-        this.tipoProduto = tipoProduto;
-        this.valorProduto = valorProduto;
-        this.peso = peso;
-        this.fotoLeilao = fotoLeilao;
-    }
-
-    public Produto() {}
-
-    public Long getIdProduto() {
-        return idProduto;
-    }
-
-    public void setIdProduto(Long idProduto) {
-        this.idProduto = idProduto;
-    }
-
-    public String getTipoProduto() {
-        return tipoProduto;
-    }
-
-    public void setTipoProduto(String tipoProduto) {
-        this.tipoProduto = tipoProduto;
-    }
-
-    public Double getValorProduto() {
-        return valorProduto;
-    }
-
-    public void setValorProduto(Double valorProduto) {
-        this.valorProduto = valorProduto;
-    }
-
-    public Double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(Double peso) {
-        this.peso = peso;
-    }
-
-    public String getFotoLeilao() {
-        return fotoLeilao;
-    }
-
-    public void setFotoLeilao(String fotoLeilao) {
-        this.fotoLeilao = fotoLeilao;
-    }
-
 }

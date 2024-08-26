@@ -73,15 +73,17 @@ create table cooperativa(
     cnpj_cooperativa VARCHAR(14) primary key,
     nome_cooperativa varchar,
     email_cooperativa varchar,
-    senha_cooperativa varchar
+    senha_cooperativa varchar,
+    registro_cooperativa date
 );
 
 create table empresa(
+    cnpj_empresa varchar(14) primary key,
     nome_empresa varchar,
     email_empresa varchar,
     senha_empresa varchar,
     telefone_empresa varchar,
-    cnpj_empresa varchar(14) primary key
+    registro_empresa date
 );
 
 create table produto(
@@ -116,6 +118,6 @@ CREATE TABLE lance (
     id_lance SERIAL PRIMARY KEY,
     id_leilao INT REFERENCES leilao(id_leilao),
     cnpj_empresa varchar REFERENCES empresa(cnpj_empresa),
-    valor NUMERIC,
-    data_lance DATE
+    valor numeric,
+    data_lance date
 );

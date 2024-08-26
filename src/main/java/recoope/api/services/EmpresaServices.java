@@ -26,15 +26,15 @@ public class EmpresaServices {
     }
 
     public RespostaApi<Empresa> login(LoginParams params) {
-        boolean cnpj = Validacoes.CNPJ(params.getCnpjOuEmail());
-        boolean email = Validacoes.EMAIL(params.getCnpjOuEmail());
+        boolean isViaCnpj = Validacoes.CNPJ(params.getCnpjOuEmail());
+        boolean isViaEmail = Validacoes.EMAIL(params.getCnpjOuEmail());
 
-        if (cnpj || email) {
+        if (isViaCnpj || isViaEmail) {
             Optional<Empresa> empresa = _empresaRepository.login(params.getCnpjOuEmail(), params.getSenha());
 
             if (empresa.isPresent())
                 return new RespostaApi<>("Login feito com sucesso!", empresa.get());
-            else return cnpj ?
+            else return isViaCnpj ?
                 new RespostaApi<>(404, "O CNPJ fornecido não possui uma correspondência ou a senha está incorreta.") :
                 new RespostaApi<>(404, "O E-mail fornecido não possui uma correspondência ou a senha está incorreta.");
         } else return new RespostaApi<>(400, "Parâmetro fornecido não é um E-mail ou CNPJ.");

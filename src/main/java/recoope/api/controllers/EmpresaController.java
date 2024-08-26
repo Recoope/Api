@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
+import recoope.api.domain.inputs.LoginParams;
 import recoope.api.services.EmpresaServices;
 
 @Tag(name = "Empresa")
@@ -42,5 +43,10 @@ public class EmpresaController {
     @DeleteMapping("/remover/{cpnj}")
     public ResponseEntity<RespostaApi> remover(@PathVariable String cnpj) {
         return empresaServices.remover(cnpj).get();
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<RespostaApi> login(@RequestBody LoginParams params) {
+        return empresaServices.login(params).get();
     }
 }

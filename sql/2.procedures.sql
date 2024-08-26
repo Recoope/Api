@@ -40,8 +40,8 @@ commit;
 end;
 $$;
 
---Leilão
-create or replace procedure insert_leilao (l_data_inicio date, l_data_fim date, l_detalhes varchar, l_hora time, l_id_endereco int, l_id_produto int)
+-- Lance
+create or replace procedure insert_lance (id_leilao int, cnpj_empresa date, l_detalhes varchar, l_hora time, l_id_endereco int, l_id_produto int)
     language 'plpgsql' as
 $$
 begin
@@ -68,3 +68,33 @@ begin
 commit;
 end;
 $$;
+
+--Leilão
+create or replace procedure insert_leilao (l_data_inicio date, l_data_fim date, l_detalhes varchar, l_hora time, l_id_endereco int, l_id_produto int)
+    language 'plpgsql' as
+$$
+begin
+    if l_data_inicio < l_data_fim then
+        if exists (select id_endereco from endereco where id_endereco=l_id_endereco) and exists (select id_produto from produto where id_produto=l_id_produto) then
+            INSERT INTO leilao (data_inicio_leilao, data_fim_leilao, detalhes_leilao, hora_leilao) VALUES (l_data_inicio, l_data_fim, l_detalhes, l_hora);
+else raise exception 'Esse endereço ou produto não existe!!!';
+end if;
+else raise exception 'Data de início menor do que a de fim!!!';
+end if;
+commit;
+end;
+$$;
+
+--Endereco
+create or replace procedure insert_endereco (en_cidade varchar, en_rua varchar, en_numero int)
+    language 'plpgsql' as
+$$
+begin
+    if not en_cidade SIMILAR TO '%[0-9]%' then
+        INSERT INTO endereco (cidade, rua, numero) VALUES (en_cidade, en_rua, en_numero);
+else raise exception 'Cidade não pode conter número!!!';
+end if;
+commit;
+end;
+$$;
+

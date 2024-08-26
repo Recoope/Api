@@ -2,7 +2,7 @@ package recoope.api.domain;
 
 public class Validacoes {
     public static boolean CNPJ(String CNPJ) {
-        if (CNPJ.length() != 14 || CNPJ.matches("(\\d)\\1{13}")) {
+        if (CNPJ == null || CNPJ.length() != 14 || CNPJ.matches("(\\d)\\1{13}")) {
             return false;
         }
 
@@ -48,12 +48,12 @@ public class Validacoes {
 
     public static boolean EMAIL(String email) {
         String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
-        return email.matches(emailRegex);
+        return email != null && email.matches(emailRegex);
     }
 
     public static boolean TEL(String tel) {
         String telefoneRegex = "^\\(?[1-9]{2}\\)? ?(?:[2-8]|9[0-9])[0-9]{3}-?[0-9]{4}$";
-        return tel.matches(telefoneRegex);
+        return tel != null && tel.matches(telefoneRegex);
     }
 
     public static boolean NOME(String nome) {

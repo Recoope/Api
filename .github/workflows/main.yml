@@ -1,0 +1,25 @@
+name: Recoope CD
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "dev" ]
+    
+permissions:
+  contents: read
+
+jobs:
+  RenderDeploy:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Render Deploy Action
+          uses: johnbeynon/render-deploy-action@v0.0.8
+          with:
+            # ID of the service to deploy
+            service-id: ${{SERVICE_ID}}
+              
+            # A Render API key
+            api-key: ${{API_KEY}}

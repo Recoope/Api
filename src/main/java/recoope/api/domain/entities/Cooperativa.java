@@ -16,7 +16,6 @@ import java.util.Date;
 public class Cooperativa
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cnpj_cooperativa")
     private String cnpjCooperativa;
 

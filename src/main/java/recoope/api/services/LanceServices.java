@@ -25,58 +25,62 @@ public class LanceServices {
     }
 
     public RespostaApi<LanceDto> darLance(Long idLeilao, LanceParams params) {
-
         String cnpj = params.getCnpjEmpresa();
         Double valor = params.getValor();
+        Empresa empresa;
+        Leilao leilao;
 
-        if (cnpj == null || valor == null) return new RespostaApi<>(400, "CNPJ e valor devem ser informados.");
+        if (cnpj == null || valor == null) return new RespostaApi<>(400, "CNPJ e valor não podem ser informados.");
 
-        Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
         Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
 
         if (empresaOptional.isPresent()){
+
+            Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
             if (leilaoOptional.isPresent()) {
-                Empresa empresa = empresaOptional.get();
-                Leilao leilao = leilaoOptional.get();
-                Lance lance = new Lance();
-
-                Lance maiorLanceReq = _lanceRepository.maiorLance(leilao);
-                Double maiorLance = maiorLanceReq == null ? 0 : maiorLanceReq.getValor();
-
-                lance.setEmpresa(empresa);
-                lance.setLeilao(leilao);
-
-                if (maiorLance < params.getValor()) lance.setValor(valor);
-                else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, "Esse lance é igual ao maior lance do leilão, ele deve ser maior.");
-                else return new RespostaApi<>(400, "Esse lance é menor que o maior lance do leilão.");
-
-                lance.setIdLance(_lanceRepository.lastId() + 1);
-
-                _lanceRepository.save(lance);
-                return new RespostaApi<>(201, "Lance atribuido com sucesso!", lance.toDto());
-
+                empresa = empresaOptional.get();
+                leilao = leilaoOptional.get();
             } else return new RespostaApi<>(404, "Leilão não encontrado!");
         } else return new RespostaApi<>(404, "Empresa não encontrada!");
+
+        Lance lance = new Lance();
+
+        Lance maiorLanceReq = _lanceRepository.maiorLance(leilao);
+        Double maiorLance = maiorLanceReq == null ? 0 : maiorLanceReq.getValor();
+
+        lance.setEmpresa(empresa);
+        lance.setLeilao(leilao);
+
+        if (maiorLance < params.getValor()) lance.setValor(valor);
+        else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, "Esse lance é igual ao maior lance do leilão, ele deve ser maior.");
+        else return new RespostaApi<>(400, "Esse lance é menor que o maior lance do leilão.");
+
+        lance.setIdLance(_lanceRepository.lastId() + 1);
+
+        _lanceRepository.save(lance);
+        return new RespostaApi<>(201, "Lance atribuido com sucesso!", lance.toDto());
     }
 
     public RespostaApi<List<Lance>> cancelarLance(String cnpj, Long idLeilao) {
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
         Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
+        Empresa empresa;
+        Leilao leilao;
 
         if (leilaoOptional.isPresent()) {
+            Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
             if (empresaOptional.isPresent()) {
-                Empresa empresa = empresaOptional.get();
-                Leilao leilao = leilaoOptional.get();
-
-                List<Lance> lances = _lanceRepository.pegarLances(empresa, leilao);
-
-                if (!lances.isEmpty()) {
-                    _lanceRepository.deleteAllInBatch(lances);
-                    return new RespostaApi<>("Lance(s) cancelado com sucesso!", lances);
-                } else return new RespostaApi<>(400, "O leilão não possui lances dessa empresa!");
+                empresa = empresaOptional.get();
+                leilao = leilaoOptional.get();
             } else return new RespostaApi<>(404, "Empresa não encontrada!");
         } else return new RespostaApi<>(404, "Leilão não encontrado!");
 
+
+        List<Lance> lances = _lanceRepository.pegarLances(empresa, leilao);
+
+        if (!lances.isEmpty()) {
+            _lanceRepository.deleteAllInBatch(lances);
+            return new RespostaApi<>("Lance(s) cancelado com sucesso!", lances);
+        } else return new RespostaApi<>(400, "O leilão não possui lances dessa empresa!");
     }
 
 }

@@ -69,7 +69,7 @@ public class EmpresaServices {
 
     public RespostaApi<Empresa> cadastrar(EmpresaParams params) {
         String nome, cnpj, email, telefone, conf, senha;
-        Empresa novaEmpresa = new Empresa();
+        Date data_registro;
 
         try {
             nome = params.getNome().trim();
@@ -82,37 +82,26 @@ public class EmpresaServices {
             return new RespostaApi<>(400, "Não devem ser enviados parametros nulos.");
         }
 
-        // Verificação nome.
-        if (Validacoes.NOME(nome)) novaEmpresa.setNomeEmpresa(nome);
-        else return new RespostaApi<>(400, "O nome da empresa deve conter pelo menos 3 caracteres.");
-
-        // Verificação CNPJ.
-        if (Validacoes.CNPJ(cnpj)) {
-            if (_empresaRepository.findById(cnpj).isEmpty()) novaEmpresa.setCnpjEmpresa(cnpj);
-            else return new RespostaApi<>(400, "CNPJ já existente.");
-        } else return new RespostaApi<>(400, "CNPJ inválido.");
-
-        // Verificação do email.
-        if (Validacoes.EMAIL(email)) {
-            if (_empresaRepository.findByTelefoneOuEmail(email).isEmpty()) novaEmpresa.setEmailEmpresa(email);
-            else return new RespostaApi<>(400, "Email já existente.");
-        } else return new RespostaApi<>(400, "Email inválido.");
-
-        // Verificação do telefone.
-        if (Validacoes.TEL(telefone)) {
-            if (_empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) novaEmpresa.setTelefoneEmpresa(telefone);
-            else return new RespostaApi<>(400, "Telefone já existente.");
-        } else return new RespostaApi<>(400, "Telefone inválido.");
-
-        // Verificação senha.
-        if (senha.equals(conf)) novaEmpresa.setSenhaEmpresa(senha);
-        else return new RespostaApi<>(400,"As senhas não correspondem.");
-
         // Registrando data do cadastro
-        novaEmpresa.setRegistroEmpresa(new Date());
+        data_registro = new Date();
+        Empresa emp = new Empresa(cnpj, nome, email, senha, telefone, data_registro);
 
-        _empresaRepository.save(novaEmpresa);
-        return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", novaEmpresa);
+        // Verificação nome.
+        if (!Validacoes.NOME(nome)) return new RespostaApi<>(400, "O nome da empresa deve conter pelo menos 3 caracteres.");
+        // Verificação CNPJ.
+        if (!Validacoes.CNPJ(cnpj)) return new RespostaApi<>(400, "CNPJ inválido.");
+        if (_empresaRepository.findById(cnpj).isPresent()) return new RespostaApi<>(400, "CNPJ já existente.");
+        // Verificação do email.
+        if (!Validacoes.EMAIL(email)) return new RespostaApi<>(400, "Email inválido.");
+        if (_empresaRepository.findByTelefoneOuEmail(email).isPresent()) return new RespostaApi<>(400, "Email já existente.");
+        // Verificação do telefone.
+        if (!Validacoes.TEL(telefone)) return new RespostaApi<>(400, "Telefone inválido.");
+        if (_empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) return new RespostaApi<>(400, "Telefone já existente.");
+        // Verificação senha.
+        if (!senha.equals(conf)) return new RespostaApi<>(400,"As senhas não correspondem.");
+
+        _empresaRepository.inserir(cnpj, nome, email, senha, telefone, data_registro);
+        return new RespostaApi<>(201, "Empresa cadastrada com sucesso!", emp);
     }
 
     public RespostaApi<Empresa> alterar(String cnpj, AlterarEmpresaParams params) {
@@ -127,20 +116,20 @@ public class EmpresaServices {
 
             if (params.getNome() == null) nome = empresa.getNomeEmpresa();
             else nome = params.getNome().trim();
+
             if (params.getEmail() == null) email = empresa.getEmailEmpresa();
             else {
                 email = params.getEmail().trim();
                 emailAlterado = true;
             }
+
             if (params.getTelefone() == null) telefone = empresa.getTelefoneEmpresa();
             else {
                 telefone = params.getTelefone().replaceAll("[() -]", "").trim();
                 telefoneAlterado = true;
             }
 
-        } else {
-            return new RespostaApi<>(404, "Empresa não encontrada!");
-        }
+        } else return new RespostaApi<>(404, "Empresa não encontrada!");
 
         // Verificação nome.
         if (Validacoes.NOME(nome)) empresaAlterada.setNomeEmpresa(nome);

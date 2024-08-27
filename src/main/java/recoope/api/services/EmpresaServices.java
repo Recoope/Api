@@ -12,6 +12,9 @@ import recoope.api.domain.inputs.LoginParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
@@ -173,32 +176,20 @@ public class EmpresaServices {
     }
 
     private String tempoConosco(Date dataRegistro) {
-        Date dataAtual = new Date();
+        LocalDate dataRegistroLocalDate = dataRegistro.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dataAtual = LocalDate.now();
 
-        int qtdMeses, qtdAnos;
-        qtdAnos = dataAtual.getYear() - dataRegistro.getYear();
+        Period periodo = Period.between(dataRegistroLocalDate, dataAtual);
 
-        int mesAtual = dataAtual.getMonth() + 1;
-        int mesRegistro = dataRegistro.getMonth() + 1;
+        int qtdMeses = periodo.getMonths();
+        int qtdAnos = periodo.getYears();
 
-        if (mesAtual < mesRegistro) qtdMeses = (12 - mesRegistro) + mesAtual;
-        else qtdMeses = mesAtual - mesRegistro;
+        return switch (qtdAnos) {
+            case 0 -> qtdMeses <= 1 ? "1 mês." : String.format("%d meses.", qtdMeses);
+            case 1 -> "1 ano.";
+            default -> String.format("%d anos.", qtdAnos);
+        };
 
-        if (qtdMeses == 0) qtdAnos += 1;
-
-        StringBuilder tempoConosco = new StringBuilder();
-        if (qtdAnos != 0) {
-            if (qtdAnos == 1) tempoConosco.append("1 ano");
-            else tempoConosco.append(String.format("%d anos", qtdAnos));
-        }
-        if (qtdMeses != 0) {
-            if (qtdAnos != 0) tempoConosco.append(" e ");
-
-            if (qtdAnos == 1) tempoConosco.append("1 mês");
-            else tempoConosco.append(String.format("%d meses", qtdMeses));
-        }
-
-        return tempoConosco.toString();
     }
 
     private String leiloesParticipados(String id) {

@@ -1,12 +1,16 @@
 package recoope.api.domain.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.entities.Leilao;
 
 import java.sql.Date;
 
+@Getter
+@Setter
 public class LanceDto {
-    private Long idLance;
+    private  Long idLance;
 
     private Leilao leilao;
 
@@ -22,25 +26,5 @@ public class LanceDto {
         this.empresa = empresa;
         this.valor = valor;
         this.dataLance = dataLance;
-    }
-
-    public Long getIdLance() {
-        return idLance;
-    }
-
-    public Leilao getLeilao() {
-        return leilao;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public Date getDataLance() {
-        return dataLance;
     }
 }

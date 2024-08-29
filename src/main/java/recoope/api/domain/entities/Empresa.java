@@ -1,11 +1,10 @@
 package recoope.api.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,24 +13,25 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Empresa {
     @Column(name = "nome_empresa")
-    private String nomeEmpresa;
+    private String nome;
 
     @Column(name = "email_empresa")
-    private String emailEmpresa;
+    private String email;
 
     @JsonIgnore
     @Column(name = "senha_empresa")
-    private String senhaEmpresa;
+    private String senha;
 
     @Column(name = "telefone_empresa")
-    private String telefoneEmpresa;
+    private String telefone;
 
     @Id
     @Column(name = "cnpj_empresa")
-    private String cnpjEmpresa;
+    private String cnpj;
 
     @Column(name = "registro_empresa")
-    private Date registroEmpresa;
+    private Date registro;
 }

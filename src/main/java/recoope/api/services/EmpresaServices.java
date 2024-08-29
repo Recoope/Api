@@ -93,10 +93,10 @@ public class EmpresaServices {
         if (_empresaRepository.findById(cnpj).isPresent()) return new RespostaApi<>(400, "CNPJ já existente.");
         // Verificação do email.
         if (!Validacoes.EMAIL(email)) return new RespostaApi<>(400, "Email inválido.");
-        if (_empresaRepository.findByTelefoneOuEmail(email).isPresent()) return new RespostaApi<>(400, "Email já existente.");
+        if (!_empresaRepository.findByTelefoneOuEmail(email).isEmpty()) return new RespostaApi<>(400, "Email já existente.");
         // Verificação do telefone.
         if (!Validacoes.TEL(telefone)) return new RespostaApi<>(400, "Telefone inválido.");
-        if (_empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) return new RespostaApi<>(400, "Telefone já existente.");
+        if (!_empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) return new RespostaApi<>(400, "Telefone já existente.");
         // Verificação senha.
         if (!senha.equals(conf)) return new RespostaApi<>(400,"As senhas não correspondem.");
 

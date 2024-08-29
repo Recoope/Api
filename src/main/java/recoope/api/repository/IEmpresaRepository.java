@@ -8,14 +8,15 @@ import org.springframework.stereotype.Repository;
 import recoope.api.domain.entities.Empresa;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface IEmpresaRepository extends JpaRepository<Empresa, String> {
-    @Query("SELECT e FROM Empresa e WHERE (e.cnpjEmpresa = ?1 OR e.emailEmpresa = ?1) AND e.senhaEmpresa = ?2")
+    @Query("SELECT e FROM Empresa e WHERE (e.cnpj = ?1 OR e.email = ?1) AND e.senha = ?2")
     Optional<Empresa> login(String cnpjOuEmail, String senha);
-    @Query("SELECT e FROM Empresa e WHERE (e.emailEmpresa = ?1 OR e.telefoneEmpresa = ?1)")
-    Optional<Empresa> findByTelefoneOuEmail(String telefoneOuEmail);
+    @Query("SELECT e FROM Empresa e WHERE (e.email = ?1 OR e.telefone = ?1)")
+    List<Empresa> findByTelefoneOuEmail(String telefoneOuEmail);
     @Procedure(procedureName = "insert_empresa")
     void inserir(
             @Param("e_cnpj") String cnpj,

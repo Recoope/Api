@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ILanceRepository extends JpaRepository<Lance, Long>  {
-    @Query("SELECT COUNT(DISTINCT l.leilao) FROM Lance l WHERE l.empresa.cnpjEmpresa = ?1")
+    @Query("SELECT COUNT(DISTINCT l.leilao) FROM Lance l WHERE l.empresa.cnpj = ?1")
     int empresaLeiloesParticipados(String cnpj);
 
     @Query("SELECT l FROM Lance l WHERE l.leilao = ?1 AND " +

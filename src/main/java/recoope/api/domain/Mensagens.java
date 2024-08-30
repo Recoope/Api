@@ -38,5 +38,5 @@ public class Mensagens {
     public static final String EMAIL_INVALIDO = "Email inválido.";
     public static final String TELEFONE_EXISTENTE = "Telefone já existente.";
     public static final String TELEFONE_INVALIDO = "Telefone inválido.";
-
+    public static final String SENHA_INVALIDA = "A senha deve ter pelo menos 8 caracteres, um número e um caractere especial.";
 }

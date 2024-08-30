@@ -27,7 +27,7 @@ public interface ILanceRepository extends JpaRepository<Lance, Long>  {
     List<Lance> pegarLances(Empresa empresa, Leilao leilao);
 
     @Procedure(procedureName = "insert_lance")
-    void inserirEmpresa(
+    void inserir(
             @Param("e_cnpj") String cnpj,
             @Param("e_nome") String nome,
             @Param("e_email") String email,

@@ -99,9 +99,10 @@ public class EmpresaServices {
         if (!Validacoes.TEL(telefone)) return new RespostaApi<>(400, Mensagens.TELEFONE_INVALIDO);
         if (!_empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) return new RespostaApi<>(400, Mensagens.TELEFONE_EXISTENTE);
         // Verificação senha.
+        if (!Validacoes.SENHA(senha)) return new RespostaApi<>(400, Mensagens.SENHA_INVALIDA);
         if (!senha.equals(conf)) return new RespostaApi<>(400, Mensagens.SENHA_NAO_CORREPONDENTE);
 
-        _empresaRepository.inserir(cnpj, nome, email, senha, telefone, data_registro);
+        _empresaRepository.inserir(cnpj, nome, email, senha, telefone);
         return new RespostaApi<>(201, Mensagens.EMPRESA_CADASTRADA, emp);
     }
 

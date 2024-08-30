@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import recoope.api.domain.dtos.LanceDto;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "lance")

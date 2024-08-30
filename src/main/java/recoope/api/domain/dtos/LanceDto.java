@@ -5,7 +5,7 @@ import lombok.Setter;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.entities.Leilao;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Getter
 @Setter

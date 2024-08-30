@@ -23,7 +23,5 @@ public interface IEmpresaRepository extends JpaRepository<Empresa, String> {
             @Param("e_nome") String nome,
             @Param("e_email") String email,
             @Param("e_senha") String senha,
-            @Param("e_telefone") String telefone,
-            @Param("e_registro") Date dataRegistro
-            );
+            @Param("e_telefone") String telefone);
 }

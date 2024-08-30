@@ -57,6 +57,10 @@ public class Validacoes {
     }
 
     public static boolean NOME(String nome) {
-        return nome.length() >= 3;
+        return nome.length() >= 3 && nome.length() <= 255;
+    }
+
+    public static boolean SENHA(String senha) {
+        return senha.length() >= 8 && senha.matches(".*\\d.*") && senha.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
     }
 }

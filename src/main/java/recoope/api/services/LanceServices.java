@@ -10,6 +10,7 @@ import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 import recoope.api.repository.ILeilaoRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,16 +34,16 @@ public class LanceServices {
 
         if (cnpj == null || valor == null) return new RespostaApi<>(400, Mensagens.LANCE_PARAM_INVALIDOS);
 
-        Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
+        Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
 
-        if (empresaOptional.isPresent()){
+        if (leilaoOptional.isPresent()){
 
-            Optional<Leilao> leilaoOptional = _leilaoRepository.findById(idLeilao);
-            if (leilaoOptional.isPresent()) {
+            Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
+            if (empresaOptional.isPresent()) {
                 empresa = empresaOptional.get();
                 leilao = leilaoOptional.get();
-            } else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
-        } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
+            } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
+        } else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
 
         Lance lance = new Lance();
 
@@ -57,6 +58,7 @@ public class LanceServices {
         else return new RespostaApi<>(400, Mensagens.LANCE_MENOR);
 
         lance.setIdLance(_lanceRepository.lastId() + 1);
+        lance.setDataLance(new Date());
 
         _lanceRepository.save(lance);
         return new RespostaApi<>(201, Mensagens.LANCE_ATRIBUIDO, lance.toDto());
@@ -68,6 +70,7 @@ public class LanceServices {
         Leilao leilao;
 
         if (leilaoOptional.isPresent()) {
+
             Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
             if (empresaOptional.isPresent()) {
                 empresa = empresaOptional.get();

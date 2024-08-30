@@ -1,6 +1,7 @@
 package recoope.api.services;
 
 import org.springframework.stereotype.Service;
+import recoope.api.domain.Mensagens;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LeilaoPorCooperativa;
 import recoope.api.domain.entities.Cooperativa;
@@ -27,8 +28,8 @@ public class CooperativaServices {
         Optional<Cooperativa> cooperativa = _cooperativaRepository.findById(id);
 
         if (cooperativa.isPresent())
-            return new RespostaApi<>("Cooperativa encontrada com sucesso!", cooperativa.get());
-        else return new RespostaApi<>(404, "Cooperativa não encontrada!");
+            return new RespostaApi<>(Mensagens.COOPERATIVA_ENCONTRADA, cooperativa.get());
+        else return new RespostaApi<>(404, Mensagens.COOPERATIVA_NAO_ENCONTRADA);
     }
 
     public RespostaApi<List<Cooperativa>> buscar(String nomeCooperativa){
@@ -37,27 +38,27 @@ public class CooperativaServices {
         List<Cooperativa> cooperativas = _cooperativaRepository.pegarPorNome(nomeCooperativa);
         if (!cooperativas.isEmpty())
             return new RespostaApi<>(cooperativas);
-        else return new RespostaApi<>(404, "Nenhuma cooperativa encontrada.");
+        else return new RespostaApi<>(404, Mensagens.NENHUMA_COOPERATIVA_ENCONTRADA);
     }
 
     public RespostaApi<List<LeilaoPorCooperativa>> leiloes(String cnpjCooperativa){
         Cooperativa coop = pegarPorId(cnpjCooperativa).data;
-        if (coop == null) return new RespostaApi<>(400, "Cooperativa não existe.");
+        if (coop == null) return new RespostaApi<>(400, Mensagens.COOPERATIVA_NAO_EXISTE);
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativa(cnpjCooperativa);
         if (!leiloesResult.isEmpty())
             return new RespostaApi<>(toDtoList(leiloesResult));
-        else return new RespostaApi<>(404, "Não foi encontrado nenhum leilão.");
+        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
     public RespostaApi<List<LeilaoPorCooperativa>> leiloesPorMaterial(String cnpjCooperativa, String material) {
         Cooperativa coop = pegarPorId(cnpjCooperativa).data;
-        if (coop == null) return new RespostaApi<>(400, "Cooperativa não existe.");
+        if (coop == null) return new RespostaApi<>(400, Mensagens.COOPERATIVA_NAO_EXISTE);
 
         List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(cnpjCooperativa, material.toLowerCase());;
         if (!leiloesResult.isEmpty())
             return new RespostaApi<>(toDtoList(leiloesResult));
-        else return new RespostaApi<>(404, "Não foi encontrado nenhum leilão.");
+        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
     private List<LeilaoPorCooperativa> toDtoList(List<Leilao> leiloes) {

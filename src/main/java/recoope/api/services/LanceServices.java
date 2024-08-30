@@ -1,6 +1,7 @@
 package recoope.api.services;
 
 import org.springframework.stereotype.Service;
+import recoope.api.domain.Mensagens;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LanceDto;
 import recoope.api.domain.entities.*;
@@ -30,7 +31,7 @@ public class LanceServices {
         Empresa empresa;
         Leilao leilao;
 
-        if (cnpj == null || valor == null) return new RespostaApi<>(400, "CNPJ e valor não podem ser informados.");
+        if (cnpj == null || valor == null) return new RespostaApi<>(400, Mensagens.LANCE_PARAM_INVALIDOS);
 
         Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
 
@@ -40,8 +41,8 @@ public class LanceServices {
             if (leilaoOptional.isPresent()) {
                 empresa = empresaOptional.get();
                 leilao = leilaoOptional.get();
-            } else return new RespostaApi<>(404, "Leilão não encontrado!");
-        } else return new RespostaApi<>(404, "Empresa não encontrada!");
+            } else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
+        } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
 
         Lance lance = new Lance();
 
@@ -52,13 +53,13 @@ public class LanceServices {
         lance.setLeilao(leilao);
 
         if (maiorLance < params.getValor()) lance.setValor(valor);
-        else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, "Esse lance é igual ao maior lance do leilão, ele deve ser maior.");
-        else return new RespostaApi<>(400, "Esse lance é menor que o maior lance do leilão.");
+        else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, Mensagens.LANCE_IGUAL);
+        else return new RespostaApi<>(400, Mensagens.LANCE_MENOR);
 
         lance.setIdLance(_lanceRepository.lastId() + 1);
 
         _lanceRepository.save(lance);
-        return new RespostaApi<>(201, "Lance atribuido com sucesso!", lance.toDto());
+        return new RespostaApi<>(201, Mensagens.LANCE_ATRIBUIDO, lance.toDto());
     }
 
     public RespostaApi<List<Lance>> cancelarLance(String cnpj, Long idLeilao) {
@@ -71,16 +72,16 @@ public class LanceServices {
             if (empresaOptional.isPresent()) {
                 empresa = empresaOptional.get();
                 leilao = leilaoOptional.get();
-            } else return new RespostaApi<>(404, "Empresa não encontrada!");
-        } else return new RespostaApi<>(404, "Leilão não encontrado!");
+            } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
+        } else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
 
 
         List<Lance> lances = _lanceRepository.pegarLances(empresa, leilao);
 
         if (!lances.isEmpty()) {
             _lanceRepository.deleteAllInBatch(lances);
-            return new RespostaApi<>("Lance(s) cancelado com sucesso!", lances);
-        } else return new RespostaApi<>(400, "O leilão não possui lances dessa empresa!");
+            return new RespostaApi<>(Mensagens.LANCE_CANCELADO, lances);
+        } else return new RespostaApi<>(400, Mensagens.LANCE_NAO_EXISTE);
     }
 
 }

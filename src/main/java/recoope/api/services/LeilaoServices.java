@@ -1,6 +1,7 @@
 package recoope.api.services;
 
 import org.springframework.stereotype.Service;
+import recoope.api.domain.Mensagens;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LeilaoDto;
 import recoope.api.domain.entities.*;
@@ -54,9 +55,9 @@ public class LeilaoServices {
                 leilao.getCooperativa()
             );
 
-            return new RespostaApi<>("Leilão encontrado com sucesso!", leilaoDto);
+            return new RespostaApi<>(Mensagens.LEILAO_ENCONTRADO, leilaoDto);
         }
-        else return new RespostaApi<>(404, "Leilão não encontrado!");
+        else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
     }
 
     public RespostaApi<List<Leilao>> todos() {
@@ -64,14 +65,14 @@ public class LeilaoServices {
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);
-        else return new RespostaApi<>(404, "Nenhum leilão encontrado!");
+        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
     public RespostaApi<List<Leilao>> pegarPorMaterial(String material) {
         List<Leilao> leiloes = _leilaoRepository.pegarPorMaterial(material.toLowerCase());
 
         if (!leiloes.isEmpty()) return new RespostaApi<>(leiloes);
-        else return new RespostaApi<>(404, "Nenhum leilão encontrado!");
+        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
     private String tempoRestante(Leilao leilao) {

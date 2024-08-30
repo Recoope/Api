@@ -33,7 +33,7 @@ public class Mensagens {
     public static final String SENHA_NAO_CORREPONDENTE = "As senhas não correspondem.";
     public static final String CNPJ_INVALIDO = "CNPJ inválido.";
     public static final String CNPJ_EXISTENTE = "CNPJ já existente.";
-    public static final String NOME_INVALIDO = "O nome da empresa deve conter pelo menos 3 caracteres.";
+    public static final String NOME_INVALIDO = "O nome da empresa deve conter pelo menos 3 caracteres e no máximo 255 caracteres.";
     public static final String EMAIL_EXISTENTE = "Email já existente.";
     public static final String EMAIL_INVALIDO = "Email inválido.";
     public static final String TELEFONE_EXISTENTE = "Telefone já existente.";

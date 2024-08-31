@@ -1,10 +1,10 @@
 INSERT INTO cooperativa (cnpj_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa, registro_cooperativa) VALUES
-('12345678000101', 'Cooperativa Alfa', 'contato@coopalpha.com', 'senha123', '2024-03-02'),
-('98765432000123', 'Cooperativa Beta', 'contato@coopbeta.com', 'senha456', '2024-02-02');
+('12524759000152', 'Cooperativa Alfa', 'contato@coopalpha.com', 'senha123', '2024-03-02'),
+('06828704000133', 'Cooperativa Beta', 'contato@coopbeta.com', 'senha456', '2024-02-02');
 
 INSERT INTO empresa (nome_empresa, email_empresa, senha_empresa, telefone_empresa, cnpj_empresa, registro_empresa) VALUES
-('Empresa XYZ', 'contato@xyz.com', 'empresaxyz123', '11987654321', '11122233000144', '2024-03-02'),
-('Empresa ABC', 'contato@abc.com', 'empresaabc123', '21987654321', '22233344000155', '2024-02-02');
+('Empresa XYZ', 'contato@xyz.com', 'empresaxyz123', '11987654321', '49779751000147', '2024-03-02'),
+('Empresa ABC', 'contato@abc.com', 'empresaabc123', '21987654321', '30286268000100', '2024-02-02');
 
 INSERT INTO produto (tipo_produto, valor_inicial_produto, valor_final_produto, peso, foto_produto) VALUES
 ('Café', 1000.00, 1500.00, 1000.5, 'foto_cafe.jpg'),

@@ -28,7 +28,7 @@ public class Mensagens {
     // Outros.
     public static final String NAO_EXISTE_CNPJ_CORRESPONDENTE_OU_SENHA_INCORRETA = "O CNPJ fornecido não possui uma correspondência ou a senha está incorreta.";
     public static final String NAO_EXISTE_EMAIL_CORRESPONDENTE_OU_SENHA_INCORRETA = "O E-mail fornecido não possui uma correspondência ou a senha está incorreta.";
-    public static final String PARAMETROS_NULOS = "Não devem ser enviados parametros nulos.";
+    public static final String PARAMETROS_VAZIOS = "Não devem ser enviados parametros nulos.";
     public static final String LOGIN_SUCESSO = "Login realizado com sucesso!";
     public static final String SENHA_NAO_CORREPONDENTE = "As senhas não correspondem.";
     public static final String CNPJ_INVALIDO = "CNPJ inválido.";

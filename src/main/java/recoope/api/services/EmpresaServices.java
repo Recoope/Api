@@ -79,8 +79,13 @@ public class EmpresaServices {
             telefone = params.getTelefone().replaceAll("[() -]", "").trim();
             conf = params.getConfirmacaoSenha();
             senha = params.getSenha();
+
+            if (nome.equals("") || cnpj.equals("") || email.equals("") ||
+                telefone.equals("") || conf.equals("") || senha.equals(""))
+                throw new NullPointerException();
+
         } catch (NullPointerException npe) {
-            return new RespostaApi<>(400, Mensagens.PARAMETROS_NULOS);
+            return new RespostaApi<>(400, Mensagens.PARAMETROS_VAZIOS);
         }
 
         // Registrando data do cadastro

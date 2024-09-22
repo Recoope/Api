@@ -17,8 +17,11 @@ public class Produto {
     @Column(name = "tipo_produto")
     private String tipoProduto;
 
-    @Column(name = "valor_produto")
-    private Double valorProduto;
+    @Column(name = "valor_inicial_produto")
+    private Double valorInicialProduto;
+
+    @Column(name = "valor_final_produto")
+    private Double valorFinalProduto;
 
     @Column(name = "peso")
     private Double peso;

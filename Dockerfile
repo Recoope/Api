@@ -14,7 +14,7 @@ COPY src src
 RUN ./mvnw package -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-FROM openjdk:22-jdk-bullseye as production
+FROM openjdk:21-jdk-bullseye as production
 ARG DEPENDENCY=/app/target/dependency
 
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib

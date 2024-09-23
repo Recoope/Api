@@ -17,18 +17,18 @@ public class Cooperativa
 {
     @Id
     @Column(name = "cnpj_cooperativa")
-    private String cnpjCooperativa;
+    private String cnpj;
 
     @Column(name = "nome_cooperativa")
-    private String nomeCooperativa;
+    private String nome;
 
     @Column(name = "email_cooperativa")
-    private String emailCooperativa;
+    private String email;
 
     @JsonIgnore
     @Column(name = "senha_cooperativa")
-    private String senhaCooperativa;
+    private String senha;
 
     @Column(name = "registro_cooperativa")
-    private Date registroCooperativa;
+    private Date registro;
 }

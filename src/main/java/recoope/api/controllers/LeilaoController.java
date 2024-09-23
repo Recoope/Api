@@ -15,6 +15,7 @@ import java.util.Date;
 @Tag(name = "Leilao")
 @RestController
 @RequestMapping("/leilao")
+@CrossOrigin(origins = "*")
 public class LeilaoController {
     private final LeilaoServices leilaoServices;
 

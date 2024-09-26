@@ -61,7 +61,7 @@ public class LeilaoServices {
     }
 
     public RespostaApi<List<Leilao>> todos() {
-        List<Leilao> leiloes = _leilaoRepository.findAll();
+        List<Leilao> leiloes = _leilaoRepository.pegarTodosAtivos();
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);

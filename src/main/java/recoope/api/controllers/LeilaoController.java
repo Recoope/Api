@@ -33,7 +33,7 @@ public class LeilaoController {
         return leilaoServices.pegarPorId(id).get();
     }
 
-    @Operation(summary = "Pegar todos os leilões.")
+    @Operation(summary = "Pegar todos os leilões ativados.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Leilões encontrados com sucesso."),
         @ApiResponse(responseCode = "404", description = "Nenhum leilão encontrado.")

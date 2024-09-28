@@ -20,6 +20,4 @@ jobs:
           username: ubuntu                
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ./Api
-            git pull origin main
-            ../deploy.sh
+            ./deploy.sh

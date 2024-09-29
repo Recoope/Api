@@ -3,6 +3,7 @@ package recoope.api.config;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,8 @@ import javax.crypto.SecretKey;
 @Configuration
 @EnableWebSecurity
 public class JwtConfig {
+    @Value("${spring.security.active}")
+    private boolean isSecurityActive;
     private final CustomUserDetailService customUserDetailService;
 
     public JwtConfig(CustomUserDetailService customUserDetailService) {
@@ -28,12 +31,13 @@ public class JwtConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-
-                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/login/**").permitAll()
-                        .requestMatchers("/lelao/**").hasAnyRole("EMPRESA", "COOPERATIVA")
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(authorize -> {
+                    if (isSecurityActive) authorize
+                                .requestMatchers("/api-docs/**", "/swagger-ui/**", "/login/**").permitAll()
+                                .requestMatchers("/lelao/**").hasAnyRole("EMPRESA", "COOPERATIVA")
+                                .anyRequest().authenticated();
+                    else authorize.requestMatchers("/**").permitAll();
+                })
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtAuthenticatorFilter(customUserDetailService, secretKey()), UsernamePasswordAuthenticationFilter.class)

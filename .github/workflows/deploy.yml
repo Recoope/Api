@@ -15,9 +15,9 @@ jobs:
 
       - name: Deploy to Remote Server (EC22)
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 400 private_key
-          ssh -o StrictHostKeyChecking=no private_key ${{ secrets.SERVER_HOST }} "
-              cd /home/ubuntu/Api 
-              git pull origin main
-              mvn clean package -DskipTests
-              ./executar.sh"
+          ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.SERVER_HOST }} "
+            cd /home/ubuntu/Api 
+            git pull origin main
+            mvn clean package -DskipTests
+            ./executar.sh"
+

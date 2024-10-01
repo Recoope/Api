@@ -46,7 +46,7 @@ public class CooperativaController {
             @ApiResponse(responseCode = "400", description = "Cooperativa não existe."),
             @ApiResponse(responseCode = "404", description = "Nenhum leilão encontrada.")
     })
-    @GetMapping("/{id}/leiloes/")
+    @GetMapping("/{id}/leiloes")
     public ResponseEntity<RespostaApi> leiloes(@PathVariable String id) {
         return _cooperativaServices.leiloes(id).get();
     }

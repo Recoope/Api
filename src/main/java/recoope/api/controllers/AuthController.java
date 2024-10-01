@@ -52,7 +52,7 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Credenciais nulas foram passadas."),
             @ApiResponse(responseCode = "404", description = "Credenciais não possuem correspondecia.")
     })
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<RespostaApi> login(@RequestBody LoginParams params) {
         boolean isViaCnpj = Validacoes.CNPJ(params.getCnpjOuEmail());
         boolean isViaEmail = Validacoes.EMAIL(params.getCnpjOuEmail());
@@ -89,7 +89,7 @@ public class AuthController {
             String token = Jwts.builder()
                     .setSubject(user)
 //                    .claim("roles", List.of(role))
-                    .setExpiration(new Date(System.currentTimeMillis() + 21_600_000)) // 6 horas
+                    .setExpiration(new Date(System.currentTimeMillis() + 10000))
                     .signWith(secretKey, SignatureAlgorithm.HS512)
                     .compact();
 

@@ -29,21 +29,6 @@ public class EmpresaServices {
         this._lanceRepository = lanceRepository;
     }
 
-    public RespostaApi<Empresa> login(LoginParams params) {
-        boolean isViaCnpj = Validacoes.CNPJ(params.getCnpjOuEmail());
-        boolean isViaEmail = Validacoes.EMAIL(params.getCnpjOuEmail());
-
-        if (isViaCnpj || isViaEmail) {
-            Optional<Empresa> empresa = _empresaRepository.login(params.getCnpjOuEmail(), params.getSenha());
-
-            if (empresa.isPresent())
-                return new RespostaApi<>(Mensagens.LOGIN_SUCESSO, empresa.get());
-            else return isViaCnpj ?
-                new RespostaApi<>(401, Mensagens.NAO_EXISTE_CNPJ_CORRESPONDENTE_OU_SENHA_INCORRETA) :
-                new RespostaApi<>(401, Mensagens.NAO_EXISTE_EMAIL_CORRESPONDENTE_OU_SENHA_INCORRETA);
-        } else return new RespostaApi<>(400, Mensagens.EMAIL_CNPJ_INVALIDO);
-    }
-
     public RespostaApi<EmpresaDto> pegarPorId(String cnpj) {
         Optional<Empresa> empresa = _empresaRepository.findById(cnpj);
 

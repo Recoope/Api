@@ -13,11 +13,16 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Deploy to Remote Server (EC22)
+      - name: Add SSH private key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+          ls -la private_key  # Verificação se o arquivo foi criado corretamente
+
+      - name: Deploy to Remote Server (EC2)
         run: |
           ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.SERVER_HOST }} "
             cd /home/ubuntu/Api 
             git pull origin main
             mvn clean package -DskipTests
             ./executar.sh"
-

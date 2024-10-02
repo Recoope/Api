@@ -89,7 +89,7 @@ public class AuthController {
             String token = Jwts.builder()
                     .setSubject(user)
 //                    .claim("roles", List.of(role))
-                    .setExpiration(new Date(System.currentTimeMillis() + 10000))
+                    .setExpiration(new Date(System.currentTimeMillis() + (6 * 60 * 60 * 1000))) // 6 horas
                     .signWith(secretKey, SignatureAlgorithm.HS512)
                     .compact();
 

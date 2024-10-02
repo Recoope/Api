@@ -71,10 +71,7 @@ public class JwtAuthenticatorFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        boolean shouldNotFilter = path.equals("/login/") || path.equals("/login") ||
-                path.contains("/swagger-ui/index.html") || path.contains("/favicon.ico") ||
-                path.contains("/api-docs/");
-        logger.info("Filtering for path: " + path + ", should not filter: " + shouldNotFilter);
+        boolean shouldNotFilter = path.equals("/login");
         return shouldNotFilter;
     }
 }

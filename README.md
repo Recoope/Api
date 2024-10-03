@@ -8,21 +8,6 @@ Esta é uma API RESTful desenvolvida com **Spring Boot**, que permite gerenciar 
 - **Lance**: Criação e cancelamento de lances em leilões ativos.
 - **Empresa**: Gerenciamento das empresas participantes nos leilões.
 - **Cooperativa**: Funções de gerenciamento para cooperativas e suas empresas participantes.
-
-## 📖 Índice
-
-- [Instalação](#instalação)
-- [Configuração](#configuração)
-- [Documentação](#documentação)
-- [Endpoints](#endpoints)
-  - [Leilões](#leilões)
-  - [Lances](#lances)
-  - [Empresas](#empresas)
-  - [Cooperativas](#cooperativas)
-- [Exemplos de Uso](#exemplos-de-uso)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
-
 ---
 
 ## 🛠 Instalação

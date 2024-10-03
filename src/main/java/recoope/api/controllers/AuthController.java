@@ -78,6 +78,9 @@ public class AuthController {
 
                 return new RespostaApi<>(401, mensagem).get();
             }
+
+            return new RespostaApi<>(Mensagens.LOGIN_SUCESSO, token).get();
+
         } return new RespostaApi<>(401, Mensagens.EMAIL_CNPJ_INVALIDO).get();
     }
 

@@ -35,6 +35,11 @@ public class RespostaApi<T> {
         this.data = (T) data;
     }
 
+    public RespostaApi(Set data) {
+        this.message = data.size() + " resultado(s) encontrados";
+        this.data = (T) data;
+    }
+
     public ResponseEntity<RespostaApi> get() {
         return ResponseEntity.status(statusCode).body(RespostaApi.this);
     }

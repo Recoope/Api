@@ -68,8 +68,8 @@ public class LeilaoController {
             @ApiResponse(responseCode = "200", description = "Leilões encontrados com sucesso."),
             @ApiResponse(responseCode = "404", description = "Nenhum leilão encontrado.")
     })
-    @GetMapping("/vencemNoMes")
-    public ResponseEntity<RespostaApi> vencemNoMes(String cnpj, String mes) {
-        return leilaoServices.pegarFimsPorMes(cnpj, mes).get();
+    @GetMapping("/vencimentos/{cnpj}")
+    public ResponseEntity<RespostaApi> vencimentos(@PathVariable String cnpj) {
+        return leilaoServices.vencimentos(cnpj).get();
     }
 }

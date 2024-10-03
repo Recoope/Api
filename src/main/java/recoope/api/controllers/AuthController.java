@@ -23,10 +23,7 @@ import recoope.api.repository.ICooperativaRepository;
 import recoope.api.repository.IEmpresaRepository;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Tag(name = "Auth")
 @CrossOrigin(origins = "*")
@@ -57,30 +54,30 @@ public class AuthController {
         boolean isViaCnpj = Validacoes.CNPJ(params.getCnpjOuEmail());
         boolean isViaEmail = Validacoes.EMAIL(params.getCnpjOuEmail());
 
-        Map<String, String> token;
+        Map<String, String> response;
+        String token;
 
         if (isViaCnpj || isViaEmail) {
             Optional<Empresa> empOptional = empresaRepository.login(params.getCnpjOuEmail());
 
-            if (empOptional.isPresent() && empOptional.get().getSenha().equals(params.getSenha()))
-                token = Map.of("token", generateToken(empOptional.get().getEmail(), "EMPRESA"));
-            else {
-                Optional<Cooperativa> coopOptional = cooperativaRepository.login(params.getCnpjOuEmail());
+            if (empOptional.isPresent() && empOptional.get().getSenha().equals(params.getSenha())) {
+                token = generateToken(empOptional.get().getEmail(), "EMPRESA");
+                response = new HashMap() {
+                    {
+                        put("cnpj", empOptional.get().getCnpj());
+                        put("token", token);
+                    }
+                };
 
-                if (coopOptional.isPresent() && coopOptional.get().getSenha().equals(params.getSenha()))
-                    token = Map.of("token", generateToken(coopOptional.get().getEmail(), "COOPERATIVA"));
-                else {
-                    logger.info("Invalid credentials: " + params);
-                    String mensagem = isViaCnpj ?
-                            Mensagens.NAO_EXISTE_CNPJ_CORRESPONDENTE_OU_SENHA_INCORRETA :
-                            Mensagens.NAO_EXISTE_EMAIL_CORRESPONDENTE_OU_SENHA_INCORRETA;
+                return new RespostaApi<>(Mensagens.LOGIN_SUCESSO, response).get();
+            } else {
+                logger.info("Invalid credentials: " + params);
+                String mensagem = isViaCnpj ?
+                        Mensagens.NAO_EXISTE_CNPJ_CORRESPONDENTE_OU_SENHA_INCORRETA :
+                        Mensagens.NAO_EXISTE_EMAIL_CORRESPONDENTE_OU_SENHA_INCORRETA;
 
-                    return new RespostaApi<>(401, mensagem).get();
-                }
+                return new RespostaApi<>(401, mensagem).get();
             }
-
-            return new RespostaApi<>(Mensagens.LOGIN_SUCESSO, token).get();
-
         } return new RespostaApi<>(401, Mensagens.EMAIL_CNPJ_INVALIDO).get();
     }
 

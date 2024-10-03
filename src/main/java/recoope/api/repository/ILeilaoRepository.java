@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import recoope.api.domain.entities.Leilao;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,6 @@ public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
     List<Leilao> pegarTodosAtivos();
 
     @Query("SELECT l.dataFimLeilao FROM Leilao l JOIN Lance lance ON lance.leilao.idLeilao = l.idLeilao " +
-            "WHERE lance.empresa.cnpj = ?1 AND EXTRACT(MONTH FROM l.dataFimLeilao) = ?2")
-    Set<Date> pegarPorMes(String cnpjEmpresa, int mes);
+            "WHERE lance.empresa.cnpj = ?1")
+    Set<Date> pegarVencimentos(String cnpjEmpresa);
 }

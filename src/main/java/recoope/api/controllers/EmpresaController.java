@@ -51,14 +51,4 @@ public class EmpresaController {
         return empresaServices.remover(cnpj).get();
     }
 
-//    @Operation(summary = "Login empresa.")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "201", description = "Login feito com sucesso."),
-//            @ApiResponse(responseCode = "400", description = "Credenciais nulas foram passadas."),
-//            @ApiResponse(responseCode = "404", description = "Credenciais não possuem correspondecia.")
-//    })
-//    @PostMapping("login")
-//    public ResponseEntity<RespostaApi> login(@RequestBody LoginParams params) {
-//        return empresaServices.login(params).get();
-//    }
 }

@@ -2,7 +2,6 @@ package recoope.api.services;
 
 import org.springframework.stereotype.Service;
 import recoope.api.domain.Mensagens;
-import recoope.api.domain.Mes;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LeilaoDto;
 import recoope.api.domain.entities.*;
@@ -77,12 +76,11 @@ public class LeilaoServices {
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
-    public RespostaApi<Set<Date>> pegarFimsPorMes(String cnpjCooperativa, String mes) {
+    public RespostaApi<Set<Date>> vencimentos(String cnpjCooperativa) {
 
-        Set<Date> datasFim = _leilaoRepository.pegarPorMes(cnpjCooperativa, Mes.fromString(mes));
+        Set<Date> datasFim = _leilaoRepository.pegarVencimentos(cnpjCooperativa);
 
-
-        if (!datasFim.isEmpty()) return new RespostaApi<>((List) datasFim);
+        if (!datasFim.isEmpty()) return new RespostaApi<>(datasFim);
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 

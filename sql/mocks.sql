@@ -5,8 +5,8 @@ INSERT INTO cooperativa (cnpj_cooperativa, nome_cooperativa, email_cooperativa, 
 
 -- Inserindo dados na tabela empresa
 INSERT INTO empresa (cnpj_empresa, nome_empresa, email_empresa, senha_empresa, telefone_empresa) VALUES
-('98765432000155', 'Empresa X', 'empresaX@email.com', 'pass123', '11987654321'),
-('87654321000144', 'Empresa Y', 'empresaY@email.com', 'pass456', '11876543210');
+('18347306000184', 'Empresa X', 'empresaX@email.com', 'pass123', '11987654321'),
+('11553558000110', 'Empresa Y', 'empresaY@email.com', 'pass456', '11876543210');
 
 -- Inserindo dados na tabela endereco
 INSERT INTO endereco (id_endereco, cidade, rua, numero) VALUES

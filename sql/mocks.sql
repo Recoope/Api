@@ -1,7 +1,7 @@
 -- Inserindo dados na tabela cooperativa
 INSERT INTO cooperativa (cnpj_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa) VALUES
 ('07078284000188', 'Cooperativa A', 'coopA@email.com', 'senha123'),
-('23456789000111', 'Cooperativa B', 'coopB@email.com', 'senha456');
+('62365285000111', 'Cooperativa B', 'coopB@email.com', 'senha456');
 
 -- Inserindo dados na tabela empresa
 INSERT INTO empresa (cnpj_empresa, nome_empresa, email_empresa, senha_empresa, telefone_empresa) VALUES

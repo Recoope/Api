@@ -25,10 +25,10 @@ INSERT INTO leilao (id_leilao, data_inicio_leilao, data_fim_leilao, detalhes_lei
 
 -- Inserindo dados na tabela produto
 INSERT INTO produto (id_produto, tipo_produto, valor_inicial_produto, valor_final_produto, peso_produto, foto_produto, id_leilao) VALUES
-(1, 'METAL', 100.00, 150.00, 50.0, 'foto1.jpg', 1),
-(2, 'PLASTICO', 200.00, 250.00, 30.0, 'foto2.jpg', 1),
-(3, 'VIDRO', 50.00, 75.00, 20.0, 'foto3.jpg', 2),
-(4, 'PAPEL', 30.00, 40.00, 10.0, 'foto4.jpg', 2);
+(1, 'METAL', 100.00, 150.00, 50.0, 'https://capitalist.com.br/wp-content/uploads/2023/07/metal.jpg', 1),
+(2, 'PLASTICO', 200.00, 250.00, 30.0, 'https://g3i5r4x7.rocketcdn.me/wp-content/uploads/2020/10/plastico-de-onde-vem-origem-utilizacao-e-reciclagem-do-material.png', 1),
+(3, 'VIDRO', 50.00, 75.00, 20.0, 'https://abravidro.org.br/wp-content/uploads/2019/04/vidro3.jpg', 2),
+(4, 'PAPEL', 30.00, 40.00, 10.0, 'https://cdn.entrypoint.directory/assets/46588/produtos/9323/a17137723c88066fb582c164d3f8b28e65fb1dde74c7c.png', 2);
 
 -- Inserindo dados na tabela lance
 INSERT INTO lance (id_lance, id_leilao, cnpj_empresa, valor, data_lance) VALUES

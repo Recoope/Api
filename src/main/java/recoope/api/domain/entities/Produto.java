@@ -28,4 +28,7 @@ public class Produto {
 
     @Column(name = "foto_leilao")
     private String fotoLeilao;
+
+    @Column(name = "status")
+    private String status;
 }

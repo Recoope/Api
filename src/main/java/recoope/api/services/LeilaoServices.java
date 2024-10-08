@@ -25,8 +25,8 @@ public class LeilaoServices {
         _lanceRepository = lanceRepository;
     }
 
-    public RespostaApi<Leilao> pegarPorDataFim(Date data) {
-        List<Leilao> leiloes = _leilaoRepository.porDataDeFim(data);
+    public RespostaApi<Leilao> pegarPorDataFim(String cnpj, Date data) {
+        List<Leilao> leiloes = _leilaoRepository.porParticipadosDataDeFim(cnpj, data);
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);

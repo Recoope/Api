@@ -27,4 +27,7 @@ public class Endereco {
 
     @Column(name = "numero")
     private Integer numero;
+
+    @Column(name = "status")
+    private String status;
 }

@@ -41,4 +41,7 @@ public class Leilao {
     @ManyToOne
     @JoinColumn(name = "id_cooperativa")
     private Cooperativa cooperativa;
+
+    @Column(name = "status")
+    private String status;
 }

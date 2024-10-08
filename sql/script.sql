@@ -93,16 +93,6 @@ create table endereco(
     status VARCHAR DEFAULT 'Ativo'
 );
 
-create table leilao(
-    id_leilao serial primary key,
-    data_inicio_leilao date,
-    data_fim_leilao date,
-    hora_leilao time,
-    id_endereco int REFERENCES endereco(id_endereco),
-    cnpj_cooperativa varchar REFERENCES cooperativa(cnpj_cooperativa),
-    status VARCHAR DEFAULT 'Ativo'
-);
-
 create table produto(
     id_produto serial primary key,
     tipo_produto varchar,
@@ -110,7 +100,18 @@ create table produto(
     valor_final_produto numeric,
     peso_produto numeric,
     foto_produto varchar,
-    id_leilao int REFERENCES leilao(id_leilao),
+    status VARCHAR DEFAULT 'Ativo'
+);
+
+create table leilao(
+    id_leilao serial primary key,
+    data_inicio_leilao date,
+    data_fim_leilao date,
+    detalhes_leilao varchar,
+    hora_leilao time,
+    id_endereco int REFERENCES endereco(id_endereco),
+    cnpj_cooperativa varchar REFERENCES cooperativa(cnpj_cooperativa),
+    id_produto int REFERENCES produto(id_produto),
     status VARCHAR DEFAULT 'Ativo'
 );
 
@@ -170,8 +171,10 @@ CREATE OR REPLACE PROCEDURE insert_leilao (
     lan_cnpj_cooperativa varchar,
     leilao_data_inicio date,
     leilao_data_fim date,
+    leilao_detalhes_leilao varchar,
     lan_id_leilao int,
     lan_hora time,
+    lan_id_produto int,
     lan_status varchar
 
 )
@@ -182,8 +185,8 @@ BEGIN
         IF EXISTS (SELECT 1 FROM endereco WHERE id_endereco = lan_id_endereco) AND
            EXISTS (SELECT 1 FROM cooperativa WHERE cnpj_cooperativa = lan_cnpj_cooperativa) then
 
-            INSERT INTO leilao (id_leilao,data_inicio_leilao, data_fim_leilao, hora_leilao, id_endereco, cnpj_cooperativa, status)
-            VALUES (lan_id_leilao,leilao_data_inicio, leilao_data_fim,lan_hora, lan_id_endereco, lan_cnpj_cooperativa,lan_status);
+            INSERT INTO leilao (id_leilao,data_inicio_leilao, data_fim_leilao, leilao_detalhes_leilao, hora_leilao, id_endereco, cnpj_cooperativa, lan_id_produto, status)
+            VALUES (lan_id_leilao,leilao_data_inicio, leilao_data_fim, leilao_detalhes_leilao, lan_hora, lan_id_endereco, lan_cnpj_cooperativa, lan_id_produto, lan_status);
         else
             RAISE EXCEPTION 'Endereço ou produto não existe!!!';
         END IF;

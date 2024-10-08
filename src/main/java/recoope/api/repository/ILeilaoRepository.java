@@ -16,11 +16,6 @@ public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
             "(l.dataFimLeilao > CURRENT_DATE OR l.horaLeilao > CURRENT_TIME)")
     List<Leilao> pegarAtivos();
 
-    @Query("SELECT l FROM Leilao l WHERE l.dataFimLeilao >= CURRENT_DATE AND " +
-            "(l.dataFimLeilao > CURRENT_DATE OR l.horaLeilao > CURRENT_TIME) " +
-            "AND lower(l.produto.tipoProduto) IN (?1)")
-    List<Leilao> pegarAtivosPorMaterial(List<String> materiais);
-
     @Query("SELECT l FROM Leilao l WHERE l.cooperativa.cnpj = ?1")
     List<Leilao> porCooperativa(String cnpjEmpresa);
 

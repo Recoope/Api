@@ -72,9 +72,6 @@ public class LeilaoServices {
                         if (pesoMax == null || leilao.getProduto().getPeso() >= pesoMax)
                             leiloes.add(leilao);
 
-        if (materiais != null) leiloes = _leilaoRepository.pegarAtivosPorMaterial(materiais);
-        else leiloes = _leilaoRepository.pegarAtivos();
-
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);

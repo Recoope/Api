@@ -1,7 +1,6 @@
 package recoope.api.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,7 +38,7 @@ public class Leilao {
     private Produto produto;
 
     @ManyToOne
-    @JoinColumn(name = "id_cooperativa")
+    @JoinColumn(name = "cnpj_cooperativa")
     private Cooperativa cooperativa;
 
     @Column(name = "status")

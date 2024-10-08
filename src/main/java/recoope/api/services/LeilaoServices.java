@@ -10,10 +10,7 @@ import recoope.api.repository.ILeilaoRepository;
 
 import java.sql.Time;
 import java.time.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class LeilaoServices {
@@ -25,12 +22,15 @@ public class LeilaoServices {
         _lanceRepository = lanceRepository;
     }
 
-    public RespostaApi<Leilao> pegarPorDataFim(String cnpj, Date data) {
-        List<Leilao> leiloes = _leilaoRepository.porParticipadosDataDeFim(cnpj, data);
+    public RespostaApi<Leilao> pegarParticipados(String cnpj, Date fim) {
+        List<Leilao> leiloes;
+
+        if (fim == null) leiloes = _leilaoRepository.participados(cnpj);
+        else leiloes = _leilaoRepository.participadosPorDataFim(cnpj, fim);
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);
-        else return new RespostaApi<>(404, "Nenhum leilão encontrado nesta data!");
+        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
     public RespostaApi<LeilaoDto> pegarPorId(Long id) {
@@ -61,18 +61,22 @@ public class LeilaoServices {
         else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
     }
 
-    public RespostaApi<List<Leilao>> todos() {
-        List<Leilao> leiloes = _leilaoRepository.pegarTodosAtivos();
+    public RespostaApi<List<Leilao>> todos(List<String> materiais, Date ate, Double pesoMin, Double pesoMax) {
+        List<Leilao> leiloesSemfiltro = _leilaoRepository.pegarAtivos();
+        List<Leilao> leiloes = new ArrayList<>();
+
+        for (Leilao leilao : leiloesSemfiltro)
+            if (materiais == null || materiais.contains(leilao.getProduto().getTipoProduto().toUpperCase()))
+                if (ate == null || leilao.getDataFimLeilao().before(ate))
+                    if (pesoMin == null || leilao.getProduto().getPeso() >= pesoMin)
+                        if (pesoMax == null || leilao.getProduto().getPeso() >= pesoMax)
+                            leiloes.add(leilao);
+
+        if (materiais != null) leiloes = _leilaoRepository.pegarAtivosPorMaterial(materiais);
+        else leiloes = _leilaoRepository.pegarAtivos();
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);
-        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
-    }
-
-    public RespostaApi<List<Leilao>> pegarPorMaterial(String material) {
-        List<Leilao> leiloes = _leilaoRepository.pegarPorMaterial(material.toLowerCase());
-
-        if (!leiloes.isEmpty()) return new RespostaApi<>(leiloes);
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 

@@ -69,7 +69,7 @@ public class LeilaoServices {
             if (materiais == null || materiais.contains(leilao.getProduto().getTipo().toUpperCase()))
                 if (ate == null || !leilao.getDataFim().after(ate))
                     if (pesoMin == null || leilao.getProduto().getPeso() >= pesoMin)
-                        if (pesoMax == null || leilao.getProduto().getPeso() >= pesoMax)
+                        if (pesoMax == null || leilao.getProduto().getPeso() <= pesoMax)
                             leiloes.add(leilao);
 
         if (!leiloes.isEmpty())

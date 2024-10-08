@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class LanceDto {
-    private  Long idLance;
+    private  Long id;
 
     private Leilao leilao;
 
@@ -18,13 +18,13 @@ public class LanceDto {
 
     private Double valor;
 
-    private Date dataLance;
+    private Date data;
 
-    public LanceDto(Long idLance, Leilao leilao, Empresa empresa, Double valor, Date dataLance) {
-        this.idLance = idLance;
+    public LanceDto(Long id, Leilao leilao, Empresa empresa, Double valor, Date data) {
+        this.id = id;
         this.leilao = leilao;
         this.empresa = empresa;
         this.valor = valor;
-        this.dataLance = dataLance;
+        this.data = data;
     }
 }

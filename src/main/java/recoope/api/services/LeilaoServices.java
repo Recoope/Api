@@ -44,11 +44,11 @@ public class LeilaoServices {
             Lance maiorLance = _lanceRepository.maiorLance(leilao);
 
             LeilaoDto leilaoDto = new LeilaoDto(
-                leilao.getIdLeilao(),
-                leilao.getDataInicioLeilao(),
-                leilao.getDataFimLeilao(),
-                leilao.getDetalhesLeilao(),
-                leilao.getHoraLeilao(),
+                leilao.getId(),
+                leilao.getDataInicio(),
+                leilao.getDataFim(),
+                leilao.getDetalhes(),
+                leilao.getHora(),
                 tempoRestante,
                 maiorLance,
                 leilao.getEndereco(),
@@ -66,8 +66,8 @@ public class LeilaoServices {
         List<Leilao> leiloes = new ArrayList<>();
 
         for (Leilao leilao : leiloesSemfiltro)
-            if (materiais == null || materiais.contains(leilao.getProduto().getTipoProduto().toUpperCase()))
-                if (ate == null || leilao.getDataFimLeilao().before(ate))
+            if (materiais == null || materiais.contains(leilao.getProduto().getTipo().toUpperCase()))
+                if (ate == null || leilao.getDataFim().before(ate))
                     if (pesoMin == null || leilao.getProduto().getPeso() >= pesoMin)
                         if (pesoMax == null || leilao.getProduto().getPeso() >= pesoMax)
                             leiloes.add(leilao);
@@ -86,8 +86,8 @@ public class LeilaoServices {
     }
 
     private String tempoRestante(Leilao leilao) {
-        Date dataFim = leilao.getDataFimLeilao();
-        Time horaLeilao = leilao.getHoraLeilao();
+        Date dataFim = leilao.getDataFim();
+        Time horaLeilao = leilao.getHora();
 
         Instant instantDataFim = dataFim.toInstant();
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instantDataFim, ZoneId.systemDefault());

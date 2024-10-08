@@ -15,19 +15,19 @@ public class Leilao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_leilao")
-    private Long idLeilao;
+    private Long id;
 
     @Column(name = "data_inicio_leilao")
-    private Date dataInicioLeilao;
+    private Date dataInicio;
 
     @Column(name = "data_fim_leilao")
-    private Date dataFimLeilao;
+    private Date dataFim;
 
     @Column(name = "detalhes_leilao")
-    private String detalhesLeilao;
+    private String detalhes;
 
     @Column(name = "hora_leilao")
-    private Time horaLeilao;
+    private Time hora;
 
     @ManyToOne
     @JoinColumn(name = "id_endereco")

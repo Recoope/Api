@@ -12,15 +12,15 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 public class LeilaoPorCooperativa {
-    private Long idLeilao;
+    private Long id;
 
-    private Date dataInicioLeilao;
+    private Date dataInicio;
 
-    private Date dataFimLeilao;
+    private Date dataFim;
 
-    private String detalhesLeilao;
+    private String detalhes;
 
-    private Time horaLeilao;
+    private Time hora;
 
     private Endereco endereco;
 

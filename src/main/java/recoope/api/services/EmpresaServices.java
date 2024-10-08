@@ -9,14 +9,9 @@ import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
-import recoope.api.domain.inputs.LoginParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -52,7 +47,6 @@ public class EmpresaServices {
 
     public RespostaApi<Empresa> cadastrar(EmpresaParams params) {
         String nome, cnpj, email, telefone, conf, senha;
-        Date data_registro;
 
         try {
             nome = params.getNome().trim();
@@ -62,16 +56,14 @@ public class EmpresaServices {
             conf = params.getConfirmacaoSenha();
             senha = params.getSenha();
 
-            if (nome.equals("") || cnpj.equals("") || email.equals("") ||
-                telefone.equals("") || conf.equals("") || senha.equals(""))
+            if (nome.isEmpty() || cnpj.isEmpty() || email.isEmpty() ||
+                    telefone.isEmpty() || conf.isEmpty() || senha.isEmpty())
                 throw new NullPointerException();
 
         } catch (NullPointerException npe) {
             return new RespostaApi<>(400, Mensagens.PARAMETROS_VAZIOS);
         }
 
-        // Registrando data do cadastro
-        data_registro = new Date();
         Empresa emp = new Empresa(cnpj, nome, email, senha, telefone);
 
         // Verificação nome.

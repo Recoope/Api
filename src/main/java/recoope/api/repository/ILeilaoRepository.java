@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import recoope.api.domain.entities.Leilao;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;

@@ -35,7 +35,6 @@ public class EmpresaServices {
         if (empresa.isPresent()){
             Empresa empresaEnt = empresa.get();
 
-            String tempoConosco = tempoConosco(empresaEnt.getRegistro());
             String leiloesParticipados = leiloesParticipados(empresaEnt.getCnpj());
 
             EmpresaDto empresaDto = new EmpresaDto(
@@ -43,8 +42,6 @@ public class EmpresaServices {
                     empresaEnt.getEmail(),
                     empresaEnt.getTelefone(),
                     empresaEnt.getCnpj(),
-                    empresaEnt.getRegistro(),
-                    tempoConosco,
                     leiloesParticipados
             );
 
@@ -75,7 +72,7 @@ public class EmpresaServices {
 
         // Registrando data do cadastro
         data_registro = new Date();
-        Empresa emp = new Empresa(cnpj, nome, email, senha, telefone, data_registro);
+        Empresa emp = new Empresa(cnpj, nome, email, senha, telefone);
 
         // Verificação nome.
         if (!Validacoes.NOME(nome)) return new RespostaApi<>(400, Mensagens.NOME_INVALIDO);
@@ -141,7 +138,6 @@ public class EmpresaServices {
 
 
         empresaAlterada.setCnpj(empresaAlterada.getCnpj());
-        empresaAlterada.setRegistro(empresaAlterada.getRegistro());
 
         _empresaRepository.save(empresaAlterada);
         return new RespostaApi<>(201, Mensagens.EMPRESA_ATUALIZADA, empresaAlterada);
@@ -154,23 +150,6 @@ public class EmpresaServices {
             _empresaRepository.delete(empresa.get());
             return new RespostaApi<>(Mensagens.EMPRESA_REMOVIDA, empresa.get());
         } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
-    }
-
-    private String tempoConosco(Date dataRegistro) {
-        LocalDate dataRegistroLocalDate = dataRegistro.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dataAtual = LocalDate.now();
-
-        Period periodo = Period.between(dataRegistroLocalDate, dataAtual);
-
-        int qtdMeses = periodo.getMonths();
-        int qtdAnos = periodo.getYears();
-
-        return switch (qtdAnos) {
-            case 0 -> qtdMeses <= 1 ? "1 mês." : String.format("%d meses.", qtdMeses);
-            case 1 -> "1 ano.";
-            default -> String.format("%d anos.", qtdAnos);
-        };
-
     }
 
     private String leiloesParticipados(String id) {

@@ -29,6 +29,6 @@ public class Cooperativa
     @Column(name = "senha_cooperativa")
     private String senha;
 
-    @Column(name = "registro_cooperativa")
-    private Date registro;
+    @Column(name = "status")
+    private String status;
 }

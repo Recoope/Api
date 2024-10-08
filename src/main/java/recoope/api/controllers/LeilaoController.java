@@ -53,14 +53,14 @@ public class LeilaoController {
         return leilaoServices.pegarPorMaterial(material).get();
     }
 
-    @Operation(summary = "Pegar leilões pela sua data de fim.")
+    @Operation(summary = "Pegar leilões em que a empresa participa, podendo passar a data de fim")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Leilões encontrados com sucesso."),
             @ApiResponse(responseCode = "404", description = "Nenhum leilão encontrado.")
     })
     @GetMapping("/fim")
-    public ResponseEntity<RespostaApi> pegarPorDataDeFim(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date data) {
-        return leilaoServices.pegarPorDataFim(data).get();
+    public ResponseEntity<RespostaApi> pegarParticipacoes(String cnpj, @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
+        return leilaoServices.pegarPorDataFim(cnpj, dataFim).get();
     }
 
     @Operation(summary = "Pega todos as datas em que leilões participados vencem, em um mes especifico.")

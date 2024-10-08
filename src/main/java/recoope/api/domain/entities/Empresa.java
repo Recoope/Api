@@ -31,7 +31,4 @@ public class Empresa {
     @Id
     @Column(name = "cnpj_empresa")
     private String cnpj;
-
-    @Column(name = "registro_empresa")
-    private Date registro;
 }

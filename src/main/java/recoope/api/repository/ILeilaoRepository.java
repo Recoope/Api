@@ -21,10 +21,16 @@ public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
 
     @Query("SELECT l FROM Leilao l WHERE l.cooperativa.cnpj = ?1 AND lower(l.produto.tipoProduto) LIKE %?2%")
     List<Leilao> porCooperativaEMaterial(String cnpjEmpresa, String material);
-    @Query("SELECT l FROM Leilao l WHERE l.dataFimLeilao = ?1")
-    List<Leilao> porDataDeFim(Date data);
+    @Query("SELECT l FROM Leilao l JOIN Lance lance ON lance.leilao.idLeilao = l.idLeilao " +
+            "WHERE lance.empresa.cnpj = ?1 AND l.dataFimLeilao = ?2")
+    List<Leilao> porParticipados(String cnpj, Date data);
 
-    @Query("SELECT l FROM Leilao l WHERE l.dataFimLeilao >= CURRENT_DATE AND (l.dataFimLeilao > CURRENT_DATE OR l.horaLeilao > CURRENT_TIME)")
+    @Query("SELECT l FROM Leilao l JOIN Lance lance ON lance.leilao.idLeilao = l.idLeilao " +
+            "WHERE lance.empresa.cnpj = ?1 AND l.dataFimLeilao = ?2")
+    List<Leilao> porParticipadosDataDeFim(String cnpj, Date data);
+
+    @Query("SELECT l FROM Leilao l WHERE l.dataFimLeilao >= CURRENT_DATE AND " +
+            "(l.dataFimLeilao > CURRENT_DATE OR l.horaLeilao > CURRENT_TIME)")
     List<Leilao> pegarTodosAtivos();
 
     @Query("SELECT l.dataFimLeilao FROM Leilao l JOIN Lance lance ON lance.leilao.idLeilao = l.idLeilao " +

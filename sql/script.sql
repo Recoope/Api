@@ -1,4 +1,9 @@
 --Drops
+drop procedure if exists insert_cooperativa(varchar, varchar, varchar, varchar, varchar);
+drop procedure if exists insert_empresa(varchar, varchar, varchar, varchar, varchar);
+drop procedure if exists insert_produto(int, varchar, numeric, numeric, varchar, int, varchar);
+drop procedure if exists insert_leilao(int, int, varchar(14), numeric, date);
+
 drop table if exists log_cooperativa cascade;
 drop table if exists log_empresa cascade;
 drop table if exists log_leilao cascade;
@@ -15,112 +20,112 @@ drop table if exists cooperativa cascade;
 
 --Tabelas de log
 create table log_cooperativa(
-    log_cooperativa_id serial primary key,
-    cod_cooperativa varchar(14),
-    data_alteracao date not null,
-    operacao varchar(80),
-    usuario varchar(80),
-    delete_old varchar(14)
+                                log_cooperativa_id serial primary key,
+                                cod_cooperativa varchar(14),
+                                data_alteracao date not null,
+                                operacao varchar(80),
+                                usuario varchar(80),
+                                delete_old varchar(14)
 );
 
 create table log_empresa(
-    log_empresa_id serial primary key,
-    cod_empresa varchar(14),
-    data_alteracao date not null,
-    operacao varchar(80),
-    usuario varchar(80),
-    delete_old varchar(14)
+                            log_empresa_id serial primary key,
+                            cod_empresa varchar(14),
+                            data_alteracao date not null,
+                            operacao varchar(80),
+                            usuario varchar(80),
+                            delete_old varchar(14)
 );
 
 create table log_leilao(
-    log_leilao_id serial primary key,
-    cod_leilao int,
-    data_alteracao date not null,
-    operacao varchar(80),
-    usuario varchar(80),
-    delete_old int
+                           log_leilao_id serial primary key,
+                           cod_leilao int,
+                           data_alteracao date not null,
+                           operacao varchar(80),
+                           usuario varchar(80),
+                           delete_old int
 );
 
 create table log_produto(
-    log_produto_id serial primary key,
-    cod_produto int,
-    data_alteracao date not null,
-    operacao varchar(80),
-    usuario varchar(80),
-    delete_old int
+                            log_produto_id serial primary key,
+                            cod_produto int,
+                            data_alteracao date not null,
+                            operacao varchar(80),
+                            usuario varchar(80),
+                            delete_old int
 );
 
 create table log_endereco(
-    log_endereco_id serial primary key,
-    cod_endereco int,
-    data_alteracao date not null,
-    operacao varchar(80),
-    usuario varchar(80),
-    delete_old int
+                             log_endereco_id serial primary key,
+                             cod_endereco int,
+                             data_alteracao date not null,
+                             operacao varchar(80),
+                             usuario varchar(80),
+                             delete_old int
 );
 
 create table log_lance(
-    log_lance serial primary key,
-    cod_lance int,
-    data_alteracao date not null,
-    operacao varchar(80),
-    usuario varchar(80),
-    delete_old int
+                          log_lance serial primary key,
+                          cod_lance int,
+                          data_alteracao date not null,
+                          operacao varchar(80),
+                          usuario varchar(80),
+                          delete_old int
 );
 
 --Tabelas normalizadas....................................................
 create table cooperativa(
-    cnpj_cooperativa VARCHAR(14) primary key,
-    nome_cooperativa varchar,
-    email_cooperativa varchar,
-    senha_cooperativa varchar,
-    status VARCHAR DEFAULT 'Ativo'
+                            cnpj_cooperativa VARCHAR(14) primary key,
+                            nome_cooperativa varchar,
+                            email_cooperativa varchar,
+                            senha_cooperativa varchar,
+                            status VARCHAR DEFAULT 'Ativo'
 );
 
 create table empresa(
-    nome_empresa varchar,
-    email_empresa varchar,
-    senha_empresa varchar,
-    telefone_empresa varchar,
-    cnpj_empresa varchar(14) primary key
+                        nome_empresa varchar,
+                        email_empresa varchar,
+                        senha_empresa varchar,
+                        telefone_empresa varchar,
+                        cnpj_empresa varchar(14) primary key
 );
 
 create table endereco(
-    id_endereco serial primary key,
-    cidade varchar,
-    rua varchar,
-    numero int,
-    status VARCHAR DEFAULT 'Ativo'
+                         id_endereco serial primary key,
+                         cidade varchar,
+                         rua varchar,
+                         numero int,
+                         status VARCHAR DEFAULT 'Ativo'
 );
 
 create table produto(
-    id_produto serial primary key,
-    tipo_produto varchar,
-    valor_inicial_produto numeric,
-    valor_final_produto numeric,
-    peso_produto numeric,
-    foto_produto varchar,
-    status VARCHAR DEFAULT 'Ativo'
+                        id_produto serial primary key,
+                        tipo_produto varchar,
+                        valor_inicial_produto numeric,
+                        valor_final_produto numeric,
+                        peso_produto numeric,
+                        foto_produto varchar,
+                        status VARCHAR DEFAULT 'Ativo'
 );
 
 create table leilao(
-    id_leilao serial primary key,
-    data_inicio_leilao date,
-    data_fim_leilao date,
-    detalhes_leilao varchar,
-    hora_leilao time,
-    id_endereco int REFERENCES endereco(id_endereco),
-    cnpj_cooperativa varchar REFERENCES cooperativa(cnpj_cooperativa),
-    id_produto int REFERENCES produto(id_produto),
-    status VARCHAR DEFAULT 'Ativo'
+                       id_leilao serial primary key,
+                       data_inicio_leilao date,
+                       data_fim_leilao date,
+                       detalhes_leilao varchar,
+                       hora_leilao time,
+                       id_endereco int REFERENCES endereco(id_endereco),
+                       cnpj_cooperativa varchar REFERENCES cooperativa(cnpj_cooperativa),
+                       id_produto int REFERENCES produto(id_produto),
+                       status VARCHAR DEFAULT 'Ativo'
 );
 
 CREATE TABLE lance (
-    id_lance SERIAL PRIMARY KEY,
-    id_leilao INT REFERENCES leilao(id_leilao),
-    cnpj_empresa varchar REFERENCES empresa(cnpj_empresa),
-    valor NUMERIC,
-    data_lance DATE
+                       id_lance SERIAL PRIMARY KEY,
+                       id_leilao INT REFERENCES leilao(id_leilao),
+                       cnpj_empresa varchar REFERENCES empresa(cnpj_empresa),
+                       valor NUMERIC,
+                       data_lance DATE
 );
 
 --Procedure para verificar se tudo que foi para o banco esta certo........................................
@@ -185,7 +190,7 @@ BEGIN
         IF EXISTS (SELECT 1 FROM endereco WHERE id_endereco = lan_id_endereco) AND
            EXISTS (SELECT 1 FROM cooperativa WHERE cnpj_cooperativa = lan_cnpj_cooperativa) then
 
-            INSERT INTO leilao (id_leilao,data_inicio_leilao, data_fim_leilao, leilao_detalhes_leilao, hora_leilao, id_endereco, cnpj_cooperativa, lan_id_produto, status)
+            INSERT INTO leilao (id_leilao,data_inicio_leilao, data_fim_leilao, detalhes_leilao, hora_leilao, id_endereco, cnpj_cooperativa, id_produto, status)
             VALUES (lan_id_leilao,leilao_data_inicio, leilao_data_fim, leilao_detalhes_leilao, lan_hora, lan_id_endereco, lan_cnpj_cooperativa, lan_id_produto, lan_status);
         else
             RAISE EXCEPTION 'Endereço ou produto não existe!!!';
@@ -198,13 +203,13 @@ $$;
 
 
 --Produto
-create or replace procedure insert_produto (p_id_produto int,p_tipo_produto varchar, p_valor_inicial_produto numeric, p_peso_produto numeric, p_foto_produto varchar,p_id_leilao int, p_status varchar)
+create or replace procedure insert_produto (p_id_produto int,p_tipo_produto varchar, p_valor_inicial_produto numeric, p_peso_produto numeric, p_foto_produto varchar, p_status varchar)
     language 'plpgsql' as
 $$
 begin
-    if exists (select id_leilao from leilao where id_leilao=p_id_leilao) then
-        INSERT INTO produto (id_produto,tipo_produto, valor_inicial_produto, peso_produto, foto_produto, id_leilao,status) VALUES (p_id_produto, p_tipo_produto, p_valor_inicial_produto, p_peso_produto,p_foto_produto, p_id_leilao,p_status);
-    else raise exception 'Esse leilão não existe!!!';
+    if (p_valor_inicial_produto > 0) then
+        INSERT INTO produto (id_produto,tipo_produto, valor_inicial_produto, peso_produto, foto_produto,status) VALUES (p_id_produto, p_tipo_produto, p_valor_inicial_produto, p_peso_produto,p_foto_produto,p_status);
+    else raise exception 'O valor do produto não pode ser negativo!!!';
     end if;
 -- commit;
 end;

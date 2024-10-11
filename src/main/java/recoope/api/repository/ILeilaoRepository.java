@@ -12,7 +12,9 @@ import java.util.Set;
 @Repository
 public interface ILeilaoRepository extends JpaRepository<Leilao, Long> {
     @Query("SELECT l FROM Leilao l WHERE l.dataFim >= CURRENT_DATE AND " +
-            "(l.dataFim > CURRENT_DATE OR l.hora > CURRENT_TIME)")
+            "(l.dataFim > CURRENT_DATE OR l.hora > CURRENT_TIME) " +
+            "AND l.status = 'Ativo' " +
+            "ORDER BY l.dataFim DESC")
     List<Leilao> pegarAtivos();
 
     @Query("SELECT l FROM Leilao l WHERE l.cooperativa.cnpj = ?1")

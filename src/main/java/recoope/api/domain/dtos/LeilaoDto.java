@@ -25,8 +25,6 @@ public class LeilaoDto {
 
     private Time hora;
 
-    private String tempoRestante;
-
     private Lance maiorLance;
 
     private Endereco endereco;

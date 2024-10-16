@@ -14,17 +14,17 @@ public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_endereco")
-    private Long idEndereco;
+    private Long id;
 
     @Column(name = "cidade")
     private String cidade;
-
-    @Column(name = "bairro")
-    private String bairro;
 
     @Column(name = "rua")
     private String rua;
 
     @Column(name = "numero")
     private Integer numero;
+
+    @Column(name = "status")
+    private String status;
 }

@@ -2,19 +2,13 @@ package recoope.api.services;
 
 import org.springframework.stereotype.Service;
 import recoope.api.domain.Mensagens;
-import recoope.api.domain.Mes;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LeilaoDto;
 import recoope.api.domain.entities.*;
 import recoope.api.repository.ILanceRepository;
 import recoope.api.repository.ILeilaoRepository;
 
-import java.sql.Time;
-import java.time.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class LeilaoServices {
@@ -26,12 +20,15 @@ public class LeilaoServices {
         _lanceRepository = lanceRepository;
     }
 
-    public RespostaApi<Leilao> pegarPorDataFim(Date data) {
-        List<Leilao> leiloes = _leilaoRepository.porDataDeFim(data);
+    public RespostaApi<Leilao> pegarParticipados(String cnpj, Date fim) {
+        List<Leilao> leiloes;
+
+        if (fim == null) leiloes = _leilaoRepository.participados(cnpj);
+        else leiloes = _leilaoRepository.participadosPorDataFim(cnpj, fim);
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);
-        else return new RespostaApi<>(404, "Nenhum leilão encontrado nesta data!");
+        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
     public RespostaApi<LeilaoDto> pegarPorId(Long id) {
@@ -41,16 +38,14 @@ public class LeilaoServices {
 
             Leilao leilao = leilaoOptional.get();
 
-            String tempoRestante = tempoRestante(leilao);
             Lance maiorLance = _lanceRepository.maiorLance(leilao);
 
             LeilaoDto leilaoDto = new LeilaoDto(
-                leilao.getIdLeilao(),
-                leilao.getDataInicioLeilao(),
-                leilao.getDataFimLeilao(),
-                leilao.getDetalhesLeilao(),
-                leilao.getHoraLeilao(),
-                tempoRestante,
+                leilao.getId(),
+                leilao.getDataInicio(),
+                leilao.getDataFim(),
+                leilao.getDetalhes(),
+                leilao.getHora(),
                 maiorLance,
                 leilao.getEndereco(),
                 leilao.getProduto(),
@@ -62,62 +57,27 @@ public class LeilaoServices {
         else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
     }
 
-    public RespostaApi<List<Leilao>> todos() {
-        List<Leilao> leiloes = _leilaoRepository.pegarTodosAtivos();
+    public RespostaApi<List<Leilao>> todos(List<String> materiais, Date ate, Double pesoMin, Double pesoMax) {
+        List<Leilao> leiloesSemfiltro = _leilaoRepository.pegarAtivos();
+        List<Leilao> leiloes = new ArrayList<>();
+
+        for (Leilao leilao : leiloesSemfiltro)
+            if (materiais == null || materiais.contains(leilao.getProduto().getTipo().toUpperCase()))
+                if (ate == null || !leilao.getDataFim().after(ate))
+                    if (pesoMin == null || leilao.getProduto().getPeso() >= pesoMin)
+                        if (pesoMax == null || leilao.getProduto().getPeso() <= pesoMax)
+                            leiloes.add(leilao);
 
         if (!leiloes.isEmpty())
             return new RespostaApi<>(leiloes);
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
     }
 
-    public RespostaApi<List<Leilao>> pegarPorMaterial(String material) {
-        List<Leilao> leiloes = _leilaoRepository.pegarPorMaterial(material.toLowerCase());
+    public RespostaApi<Set<Date>> vencimentos(String cnpjCooperativa) {
 
-        if (!leiloes.isEmpty()) return new RespostaApi<>(leiloes);
+        Set<Date> datasFim = _leilaoRepository.pegarVencimentos(cnpjCooperativa);
+
+        if (!datasFim.isEmpty()) return new RespostaApi<>(datasFim);
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
-    }
-
-    public RespostaApi<Set<Date>> pegarFimsPorMes(String cnpjCooperativa, String mes) {
-
-        Set<Date> datasFim = _leilaoRepository.pegarPorMes(cnpjCooperativa, Mes.fromString(mes));
-
-
-        if (!datasFim.isEmpty()) return new RespostaApi<>((List) datasFim);
-        else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
-    }
-
-    private String tempoRestante(Leilao leilao) {
-        Date dataFim = leilao.getDataFimLeilao();
-        Time horaLeilao = leilao.getHoraLeilao();
-
-        Instant instantDataFim = dataFim.toInstant();
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instantDataFim, ZoneId.systemDefault());
-        LocalTime localTime = horaLeilao.toLocalTime();
-
-        LocalDateTime dataHoraLeilao = localDateTime.toLocalDate().atTime(localTime);
-
-        Date data = Date.from(dataHoraLeilao.atZone(ZoneId.systemDefault()).toInstant());
-
-        Date agora = new Date();
-        long diferencaMillis = data.getTime() - agora.getTime();
-
-        if (diferencaMillis <= 0) {
-            return "0";
-        }
-
-        long segundos = diferencaMillis / 1000;
-        long minutos = segundos / 60;
-        long horas = minutos / 60;
-        long dias = horas / 24;
-
-        if (dias > 0) {
-            return dias + " dias.";
-        } else {
-            long horasRestantes = horas % 24;
-            long minutosRestantes = minutos % 60;
-            long segundosRestantes = segundos % 60;
-
-            return horasRestantes + "h" + minutosRestantes + "m" + segundosRestantes + "s.";
-        }
     }
 }

@@ -1,7 +1,6 @@
 package recoope.api.domain.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import recoope.api.domain.entities.Cooperativa;
@@ -16,17 +15,15 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 public class LeilaoDto {
-    private Long idLeilao;
+    private Long id;
 
-    private Date dataInicioLeilao;
+    private Date dataInicio;
 
-    private Date dataFimLeilao;
+    private Date dataFim;
 
-    private String detalhesLeilao;
+    private String detalhes;
 
-    private Time horaLeilao;
-
-    private String tempoRestante;
+    private Time hora;
 
     private Lance maiorLance;
 

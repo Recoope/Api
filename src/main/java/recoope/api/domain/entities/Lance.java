@@ -18,7 +18,7 @@ public class Lance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_lance")
-    private Long idLance;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne
@@ -33,15 +33,15 @@ public class Lance {
     private Double valor;
 
     @Column(name = "data_lance")
-    private Date dataLance;
+    private Date data;
 
     public LanceDto toDto() {
         return new LanceDto(
-            idLance,
+            id,
             leilao,
             empresa,
             valor,
-            dataLance
+            data
         );
     }
 }

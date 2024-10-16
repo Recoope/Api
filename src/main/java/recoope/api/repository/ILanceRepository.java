@@ -20,7 +20,7 @@ public interface ILanceRepository extends JpaRepository<Lance, Long>  {
            " l.valor = (SELECT MAX(l2.valor) FROM Lance l2 WHERE l2.leilao = ?1)")
     Lance maiorLance(Leilao leilao);
 
-    @Query("SELECT MAX(l.idLance) FROM Lance l")
+    @Query("SELECT MAX(l.id) FROM Lance l")
     Long lastId();
 
     @Query("SELECT l FROM Lance l WHERE l.empresa = ?1 AND l.leilao = ?2 ORDER BY l.valor DESC")

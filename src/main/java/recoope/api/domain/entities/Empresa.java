@@ -1,12 +1,8 @@
 package recoope.api.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "empresa")
@@ -31,7 +27,4 @@ public class Empresa {
     @Id
     @Column(name = "cnpj_empresa")
     private String cnpj;
-
-    @Column(name = "registro_empresa")
-    private Date registro;
 }

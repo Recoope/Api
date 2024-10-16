@@ -5,24 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @AllArgsConstructor
 public class EmpresaDto {
 
-    private String nomeEmpresa;
+    private String nome;
 
-    private String emailEmpresa;
+    private String email;
 
-    private String telefoneEmpresa;
+    private String telefone;
 
-    private String cnpjEmpresa;
-
-    private Date registroEmpresa;
-
-    private String tempoConosco;
+    private String cnpj;
 
     private String leiloesParticipados;
 }

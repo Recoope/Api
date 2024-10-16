@@ -27,9 +27,8 @@ public class CooperativaServices {
 
         Optional<Cooperativa> cooperativa = _cooperativaRepository.findById(id);
 
-        if (cooperativa.isPresent())
-            return new RespostaApi<>(Mensagens.COOPERATIVA_ENCONTRADA, cooperativa.get());
-        else return new RespostaApi<>(404, Mensagens.COOPERATIVA_NAO_ENCONTRADA);
+        return cooperativa.map(value -> new RespostaApi<>(Mensagens.COOPERATIVA_ENCONTRADA, value))
+                .orElseGet(() -> new RespostaApi<>(404, Mensagens.COOPERATIVA_NAO_ENCONTRADA));
     }
 
     public RespostaApi<List<Cooperativa>> buscar(String nomeCooperativa){
@@ -55,7 +54,7 @@ public class CooperativaServices {
         Cooperativa coop = pegarPorId(cnpjCooperativa).data;
         if (coop == null) return new RespostaApi<>(400, Mensagens.COOPERATIVA_NAO_EXISTE);
 
-        List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(cnpjCooperativa, material.toLowerCase());;
+        List<Leilao> leiloesResult = _leilaoRepository.porCooperativaEMaterial(cnpjCooperativa, material.toLowerCase());
         if (!leiloesResult.isEmpty())
             return new RespostaApi<>(toDtoList(leiloesResult));
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
@@ -67,11 +66,11 @@ public class CooperativaServices {
 
         for (Leilao leilao: leiloes) {
             LeilaoPorCooperativa leilaoPorCooperativaDto =
-                    new LeilaoPorCooperativa(leilao.getIdLeilao(),
-                            leilao.getDataInicioLeilao(),
-                            leilao.getDataFimLeilao(),
-                            leilao.getDetalhesLeilao(),
-                            leilao.getHoraLeilao(),
+                    new LeilaoPorCooperativa(leilao.getId(),
+                            leilao.getDataInicio(),
+                            leilao.getDataFim(),
+                            leilao.getDetalhes(),
+                            leilao.getHora(),
                             leilao.getEndereco(),
                             leilao.getProduto());
 

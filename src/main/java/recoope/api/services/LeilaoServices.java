@@ -8,8 +8,6 @@ import recoope.api.domain.entities.*;
 import recoope.api.repository.ILanceRepository;
 import recoope.api.repository.ILeilaoRepository;
 
-import java.sql.Time;
-import java.time.*;
 import java.util.*;
 
 @Service
@@ -40,7 +38,6 @@ public class LeilaoServices {
 
             Leilao leilao = leilaoOptional.get();
 
-            String tempoRestante = tempoRestante(leilao);
             Lance maiorLance = _lanceRepository.maiorLance(leilao);
 
             LeilaoDto leilaoDto = new LeilaoDto(
@@ -49,7 +46,6 @@ public class LeilaoServices {
                 leilao.getDataFim(),
                 leilao.getDetalhes(),
                 leilao.getHora(),
-                tempoRestante,
                 maiorLance,
                 leilao.getEndereco(),
                 leilao.getProduto(),
@@ -83,40 +79,5 @@ public class LeilaoServices {
 
         if (!datasFim.isEmpty()) return new RespostaApi<>(datasFim);
         else return new RespostaApi<>(404, Mensagens.NENHUM_LEILAO_ENCONTRADO);
-    }
-
-    private String tempoRestante(Leilao leilao) {
-        Date dataFim = leilao.getDataFim();
-        Time horaLeilao = leilao.getHora();
-
-        Instant instantDataFim = dataFim.toInstant();
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instantDataFim, ZoneId.systemDefault());
-        LocalTime localTime = horaLeilao.toLocalTime();
-
-        LocalDateTime dataHoraLeilao = localDateTime.toLocalDate().atTime(localTime);
-
-        Date data = Date.from(dataHoraLeilao.atZone(ZoneId.systemDefault()).toInstant());
-
-        Date agora = new Date();
-        long diferencaMillis = data.getTime() - agora.getTime();
-
-        if (diferencaMillis <= 0) {
-            return "0";
-        }
-
-        long segundos = diferencaMillis / 1000;
-        long minutos = segundos / 60;
-        long horas = minutos / 60;
-        long dias = horas / 24;
-
-        if (dias > 0) {
-            return dias + " dias.";
-        } else {
-            long horasRestantes = horas % 24;
-            long minutosRestantes = minutos % 60;
-            long segundosRestantes = segundos % 60;
-
-            return horasRestantes + "h" + minutosRestantes + "m" + segundosRestantes + "s.";
-        }
     }
 }

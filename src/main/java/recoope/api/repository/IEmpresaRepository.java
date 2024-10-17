@@ -19,9 +19,9 @@ public interface IEmpresaRepository extends JpaRepository<Empresa, String> {
     List<Empresa> findByTelefoneOuEmail(String telefoneOuEmail);
     @Procedure(procedureName = "insert_empresa")
     void inserir(
-            @Param("e_cnpj") String cnpj,
             @Param("e_nome") String nome,
             @Param("e_email") String email,
             @Param("e_senha") String senha,
-            @Param("e_telefone") String telefone);
+            @Param("e_telefone") String telefone,
+            @Param("e_cnpj") String cnpj);
 }

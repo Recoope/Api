@@ -81,7 +81,7 @@ public class EmpresaServices {
         if (!Validacoes.SENHA(senha)) return new RespostaApi<>(400, Mensagens.SENHA_INVALIDA);
         if (!senha.equals(conf)) return new RespostaApi<>(400, Mensagens.SENHA_NAO_CORREPONDENTE);
 
-        _empresaRepository.inserir(cnpj, nome, email, senha, telefone);
+        _empresaRepository.inserir(nome, email, senha, telefone, cnpj);
         return new RespostaApi<>(201, Mensagens.EMPRESA_CADASTRADA, emp);
     }
 

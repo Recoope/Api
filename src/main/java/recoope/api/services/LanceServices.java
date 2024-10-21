@@ -60,7 +60,7 @@ public class LanceServices {
         lance.setId(_lanceRepository.lastId() + 1);
         lance.setData(new Date());
 
-        _lanceRepository.save(lance);
+        _lanceRepository.inserir(lance.getId().intValue(), leilao.getId().intValue(), cnpj, lance.getValor(), lance.getData());
         return new RespostaApi<>(201, Mensagens.LANCE_ATRIBUIDO, lance.toDto());
     }
 

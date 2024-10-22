@@ -36,4 +36,15 @@ public interface ILanceRepository extends JpaRepository<Lance, Long>  {
             @Param("lan_data") Date data
     );
 
+    @Query("SELECT lc FROM Leilao l JOIN Lance lc ON lc.leilao.id = l.id " +
+            "WHERE (l.dataFim < CURRENT_DATE OR l.dataFim = CURRENT_DATE AND l.hora < CURRENT_TIME) AND " +
+            "lc.valor = (" +
+            "    SELECT MAX(lc2.valor) " +
+            "    FROM Lance lc2 " +
+            "    WHERE lc2.leilao.id = l.id " +
+            ") " +
+            "AND lc.empresa.cnpj = ?1 " +
+            "ORDER BY l.dataFim DESC")
+    List<Lance> pegarVencidosComMaiorLance(String cnpj);
+
 }

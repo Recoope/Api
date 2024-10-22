@@ -25,9 +25,9 @@ public class CooperativaController {
             @ApiResponse(responseCode = "200", description = "Cooperativa encontrada com sucesso."),
             @ApiResponse(responseCode = "404", description = "Cooperativa não encontrada.")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable String id) {
-        return _cooperativaServices.pegarPorId(id).get();
+    @GetMapping("/{cnpj}")
+    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable String cnpj) {
+        return _cooperativaServices.pegarPorId(cnpj).get();
     }
 
     @Operation(summary = "Buscar cooperativas.")

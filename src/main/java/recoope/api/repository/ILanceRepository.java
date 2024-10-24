@@ -9,7 +9,7 @@ import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.entities.Lance;
 import recoope.api.domain.entities.Leilao;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Repository

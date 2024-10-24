@@ -4,12 +4,15 @@ import org.springframework.stereotype.Service;
 import recoope.api.domain.Mensagens;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LanceDto;
-import recoope.api.domain.entities.*;
+import recoope.api.domain.entities.Empresa;
+import recoope.api.domain.entities.Lance;
+import recoope.api.domain.entities.Leilao;
 import recoope.api.domain.inputs.LanceParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 import recoope.api.repository.ILeilaoRepository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -60,7 +63,7 @@ public class LanceServices {
         lance.setId(_lanceRepository.lastId() + 1);
         lance.setData(new Date());
 
-        _lanceRepository.inserir(lance.getId().intValue(), leilao.getId().intValue(), cnpj, lance.getValor(), lance.getData());
+        _lanceRepository.save(lance);
         return new RespostaApi<>(201, Mensagens.LANCE_ATRIBUIDO, lance.toDto());
     }
 

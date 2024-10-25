@@ -12,18 +12,17 @@ import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 import recoope.api.repository.ILeilaoRepository;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LanceServices {
+public class LanceService {
     private final ILeilaoRepository _leilaoRepository;
     private final ILanceRepository _lanceRepository;
     private final IEmpresaRepository _empresaRepository;
 
-    public LanceServices(ILeilaoRepository leilaoRepository, ILanceRepository lanceRepository, IEmpresaRepository empresaRepository) {
+    public LanceService(ILeilaoRepository leilaoRepository, ILanceRepository lanceRepository, IEmpresaRepository empresaRepository) {
         _leilaoRepository = leilaoRepository;
         _lanceRepository = lanceRepository;
         _empresaRepository = empresaRepository;

@@ -7,16 +7,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
-import recoope.api.services.CooperativaServices;
+import recoope.api.services.CooperativaService;
 
 
 @Tag(name = "Cooperativa")
 @RestController
 @RequestMapping("/cooperativa")
 public class CooperativaController {
-    private final CooperativaServices _cooperativaServices;
+    private final CooperativaService _cooperativaServices;
 
-    public CooperativaController(CooperativaServices cooperativaServices) {
+    public CooperativaController(CooperativaService cooperativaServices) {
         _cooperativaServices = cooperativaServices;
     }
 

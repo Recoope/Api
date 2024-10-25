@@ -11,11 +11,11 @@ import recoope.api.repository.ILeilaoRepository;
 import java.util.*;
 
 @Service
-public class LeilaoServices {
+public class LeilaoService {
     private final ILeilaoRepository _leilaoRepository;
     private final ILanceRepository _lanceRepository;
 
-    public LeilaoServices(ILeilaoRepository leilaoRepository, ILanceRepository lanceRepository) {
+    public LeilaoService(ILeilaoRepository leilaoRepository, ILanceRepository lanceRepository) {
         _leilaoRepository = leilaoRepository;
         _lanceRepository = lanceRepository;
     }

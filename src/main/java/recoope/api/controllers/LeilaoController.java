@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
-import recoope.api.services.LeilaoServices;
+import recoope.api.services.LeilaoService;
 
 import java.util.Date;
 import java.util.List;
@@ -18,9 +18,9 @@ import java.util.List;
 @RequestMapping("/leilao")
 @CrossOrigin(origins = "*")
 public class LeilaoController {
-    private final LeilaoServices leilaoServices;
+    private final LeilaoService leilaoServices;
 
-    public LeilaoController(LeilaoServices leilaoServices) {
+    public LeilaoController(LeilaoService leilaoServices) {
         this.leilaoServices = leilaoServices;
     }
 

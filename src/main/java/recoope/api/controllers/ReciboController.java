@@ -7,16 +7,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
-import recoope.api.services.ReciboServices;
+import recoope.api.services.ReciboService;
 
 @Tag(name = "Recibos")
 @RestController
 @RequestMapping("/recibo")
 @CrossOrigin(origins = "*")
 public class ReciboController {
-    private final ReciboServices reciboServices;
+    private final ReciboService reciboServices;
 
-    public ReciboController(ReciboServices reciboServices) {
+    public ReciboController(ReciboService reciboServices) {
         this.reciboServices = reciboServices;
     }
 

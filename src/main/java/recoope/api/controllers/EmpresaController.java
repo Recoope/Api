@@ -4,22 +4,20 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
-import recoope.api.domain.inputs.LoginParams;
-import recoope.api.services.EmpresaServices;
+import recoope.api.services.EmpresaService;
 
 @Tag(name = "Empresa")
 @RestController
 @RequestMapping("/empresa")
 public class EmpresaController {
-    private final EmpresaServices empresaServices;
+    private final EmpresaService empresaServices;
 
-    public EmpresaController(EmpresaServices empresaServices) {
+    public EmpresaController(EmpresaService empresaServices) {
         this.empresaServices = empresaServices;
     }
 

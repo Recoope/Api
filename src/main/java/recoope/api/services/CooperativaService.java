@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CooperativaServices {
+public class CooperativaService {
     private final ICooperativaRepository _cooperativaRepository;
     private final ILeilaoRepository _leilaoRepository;
 
-    public CooperativaServices(ICooperativaRepository cooperativaRepository, ILeilaoRepository leilaoRepository) {
+    public CooperativaService(ICooperativaRepository cooperativaRepository, ILeilaoRepository leilaoRepository) {
         _cooperativaRepository = cooperativaRepository;
         _leilaoRepository = leilaoRepository;
     }

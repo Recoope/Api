@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ReciboServices {
+public class ReciboService {
     private final ILanceRepository _lanceRepository;
 
-    public ReciboServices(ILanceRepository lanceRepository) {
-
+    public ReciboService(ILanceRepository lanceRepository) {
         _lanceRepository = lanceRepository;
     }
 

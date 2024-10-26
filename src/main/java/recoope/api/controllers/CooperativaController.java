@@ -7,16 +7,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
-import recoope.api.services.CooperativaServices;
+import recoope.api.services.CooperativaService;
 
 
 @Tag(name = "Cooperativa")
 @RestController
 @RequestMapping("/cooperativa")
 public class CooperativaController {
-    private final CooperativaServices _cooperativaServices;
+    private final CooperativaService _cooperativaServices;
 
-    public CooperativaController(CooperativaServices cooperativaServices) {
+    public CooperativaController(CooperativaService cooperativaServices) {
         _cooperativaServices = cooperativaServices;
     }
 
@@ -25,9 +25,9 @@ public class CooperativaController {
             @ApiResponse(responseCode = "200", description = "Cooperativa encontrada com sucesso."),
             @ApiResponse(responseCode = "404", description = "Cooperativa não encontrada.")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable String id) {
-        return _cooperativaServices.pegarPorId(id).get();
+    @GetMapping("/{cnpj}")
+    public ResponseEntity<RespostaApi> pegarPorId(@PathVariable String cnpj) {
+        return _cooperativaServices.pegarPorId(cnpj).get();
     }
 
     @Operation(summary = "Buscar cooperativas.")

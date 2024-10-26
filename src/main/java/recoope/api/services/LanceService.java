@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import recoope.api.domain.Mensagens;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.dtos.LanceDto;
-import recoope.api.domain.entities.*;
+import recoope.api.domain.entities.Empresa;
+import recoope.api.domain.entities.Lance;
+import recoope.api.domain.entities.Leilao;
 import recoope.api.domain.inputs.LanceParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
@@ -15,12 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LanceServices {
+public class LanceService {
     private final ILeilaoRepository _leilaoRepository;
     private final ILanceRepository _lanceRepository;
     private final IEmpresaRepository _empresaRepository;
 
-    public LanceServices(ILeilaoRepository leilaoRepository, ILanceRepository lanceRepository, IEmpresaRepository empresaRepository) {
+    public LanceService(ILeilaoRepository leilaoRepository, ILanceRepository lanceRepository, IEmpresaRepository empresaRepository) {
         _leilaoRepository = leilaoRepository;
         _lanceRepository = lanceRepository;
         _empresaRepository = empresaRepository;

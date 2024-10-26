@@ -9,17 +9,18 @@ import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
+import recoope.api.domain.inputs.LoginParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 
 import java.util.Optional;
 
 @Service
-public class EmpresaServices {
+public class EmpresaService {
     private final IEmpresaRepository _empresaRepository;
     private final ILanceRepository _lanceRepository;
 
-    public EmpresaServices(IEmpresaRepository empresaRepository, ILanceRepository lanceRepository) {
+    public EmpresaService(IEmpresaRepository empresaRepository, ILanceRepository lanceRepository) {
         this._empresaRepository = empresaRepository;
         this._lanceRepository = lanceRepository;
     }
@@ -81,7 +82,7 @@ public class EmpresaServices {
         if (!Validacoes.SENHA(senha)) return new RespostaApi<>(400, Mensagens.SENHA_INVALIDA);
         if (!senha.equals(conf)) return new RespostaApi<>(400, Mensagens.SENHA_NAO_CORREPONDENTE);
 
-        _empresaRepository.inserir(cnpj, nome, email, senha, telefone);
+        _empresaRepository.inserir(nome, email, senha, telefone, cnpj);
         return new RespostaApi<>(201, Mensagens.EMPRESA_CADASTRADA, emp);
     }
 

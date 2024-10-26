@@ -134,9 +134,9 @@ create or replace procedure insert_cooperativa (c_cnpj varchar, c_nome varchar, 
     language 'plpgsql' as
 $$
 begin
-    if c_email SIMILAR TO '%[@.]%' then
+    if c_email ~ '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' then
         if length(c_senha)>7 and c_senha SIMILAR TO '%[0-9]%' and c_senha SIMILAR TO '%[@.*%#!]%' then
-            if c_email SIMILAR TO '%[@.]%' then
+            if length(c_cnpj)=14 then
                 INSERT INTO cooperativa (cnpj_cooperativa, nome_cooperativa, email_cooperativa, senha_cooperativa, status) VALUES (c_cnpj, c_nome, c_email, c_senha, c_status);
             else raise exception 'CNPJ deve ter 14 digitos!!!';
             end if;
@@ -153,7 +153,7 @@ create or replace procedure insert_empresa (e_nome varchar, e_email varchar, e_s
     language 'plpgsql' as
 $$
 begin
-    if e_email SIMILAR TO '%[@.]%' then
+    if e_email ~ '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' then
         if length(e_senha)>7 and e_senha SIMILAR TO '%[0-9]%' and e_senha SIMILAR TO '%[@.*%#!]%' then
             if length(e_telefone)=11 and e_telefone SIMILAR TO '[0-9]+' then
                 if length(e_cnpj)=14 then
@@ -164,10 +164,10 @@ begin
             end if;
         else raise exception 'Senha menor que 8 dígitos ou não tem numeros ou não possui caracteres especiais!!!';
         end if;
-    else raise exception 'Email não pode conter números e deve ter (@ e .)!!!';
+    else raise exception 'Email deve ter (@ e .) (2)!!!';
     end if;
 -- commit;
-end;
+end
 $$;
 
 --Leilão

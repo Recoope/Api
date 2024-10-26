@@ -4,21 +4,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.inputs.LanceParams;
-import recoope.api.services.LanceServices;
+import recoope.api.services.LanceService;
 
 @Tag(name = "Lance")
 @RestController
 @RequestMapping("/lance")
 public class LanceController {
-    private final LanceServices lanceServices;
+    private final LanceService lanceServices;
 
-    public LanceController(LanceServices lanceServices) {
+    public LanceController(LanceService lanceServices) {
         this.lanceServices = lanceServices;
     }
 

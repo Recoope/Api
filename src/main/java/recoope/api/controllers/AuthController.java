@@ -34,13 +34,24 @@ public class AuthController {
 
     @Operation(summary = "Gerar código para recuperar acesso, no esquecer senha.")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Login feito com sucesso."),
-            @ApiResponse(responseCode = "400", description = "Credenciais nulas foram passadas."),
-            @ApiResponse(responseCode = "404", description = "Credenciais não possuem correspondecia.")
+            @ApiResponse(responseCode = "201", description = "Código gerado no redis."),
+            @ApiResponse(responseCode = "404", description = "Não é possivel gerar o código porque a empresa não existe."),
+            @ApiResponse(responseCode = "503", description = "Não é possivel gerar o código porque o redis está inacessível.")
     })
-    @PostMapping("/recuperar/{cnpj}")
-    public ResponseEntity<RespostaApi> token(@PathVariable String cnpj) {
-        return authService.gerarRecuperacao(cnpj).get();
+    @PostMapping("/recuperar/{cnpjOuEmail}")
+    public ResponseEntity<RespostaApi> recuperacao(@PathVariable String cnpjOuEmail) {
+        return authService.gerarRecuperacao(cnpjOuEmail).get();
+    }
+
+    @Operation(summary = "Gerar código para recuperar acesso, no esquecer senha.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Código gerado no redis."),
+            @ApiResponse(responseCode = "404", description = "Não é possivel gerar o código porque a empresa não existe."),
+            @ApiResponse(responseCode = "503", description = "Não é possivel gerar o código porque o redis está inacessível.")
+    })
+    @PostMapping("/validarRecuperacao/{cnpj}/{code}")
+    public ResponseEntity<RespostaApi> recuperacao(@PathVariable String cnpj, String code) {
+        return authService.confirmarRecuperacao(cnpj, code).get();
     }
 
 }

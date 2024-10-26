@@ -84,26 +84,45 @@ public class AuthService {
 
     }
 
-    public RespostaApi gerarRecuperacao(String cnpj) {
+    public RespostaApi<Map<String, String>> gerarRecuperacao(String cnpjOuEmail) {
 
-        Optional<Empresa> empOptional = empresaRepository.findById(cnpj);
+        Optional<Empresa> empOptional = empresaRepository.login(cnpjOuEmail);
+
         if (empOptional.isPresent()) {
+            String cnpj = empOptional.get().getCnpj();
 
-            Random random = new Random();
-            int randomNumber = 100000 + random.nextInt(900000);
-            logger.info("Código gerado: " + randomNumber + " para a chave recovery:" + cnpj);
+            try (UnifiedJedis jedis = new UnifiedJedis()) {
+                Random random = new Random();
+                String codigoGerado = String.valueOf(100000 + random.nextInt(900000));
+                logger.info("Código gerado: " + codigoGerado + " para a chave recovery:" + cnpj);
 
-            UnifiedJedis jedis = new UnifiedJedis();
 
-            jedis.set("recovery:" + cnpj, String.valueOf(randomNumber));
-            jedis.expire("recovery:" + cnpj, 60 * 15);
+                jedis.set("recovery:" + cnpj, codigoGerado);
+                jedis.expire("recovery:" + cnpj, 60 * 15);
 
-            jedis.close();
+                Map<String, String> codigo = new HashMap<>(){{
+                   put("code", codigoGerado);
+                }};
 
-            return new RespostaApi<>("Mensagens.VERIFIQUE_SEU_EMAIL", null);
+                return new RespostaApi<>(Mensagens.CODIGO_ENVIADO, codigo);
+            } catch (Exception e) {
+                return new RespostaApi<>(503, Mensagens.ERRO_REDIS);
+            }
         }
 
         return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
+    }
+
+    public RespostaApi<String> confirmarRecuperacao(String cnpj, String code) {
+        try(UnifiedJedis jedis = new UnifiedJedis()){
+            String recoveredCode = jedis.get("recovery:" + cnpj);
+            if (code.equals(recoveredCode)) {
+                return new RespostaApi<>(Mensagens.CODIGO_VALIDO, null);
+            }
+            return new RespostaApi<>(401, Mensagens.CODIGO_INVALIDO);
+        } catch (Exception e) {
+            return new RespostaApi<>(503, Mensagens.ERRO_REDIS);
+        }
     }
 
     private String generateToken(String user) {

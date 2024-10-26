@@ -12,7 +12,7 @@ public class Mensagens {
     public static final String EMPRESA_CADASTRADA = "Empresa cadastrada com sucesso!";
     public static final String EMPRESA_ATUALIZADA = "Empresa atualizada com sucesso!";
     public static final String EMPRESA_REMOVIDA = "Empresa removida com sucesso!";
-    public static final String EMPRESA_NAO_ENCONTRADA = "Empresa encontrada com sucesso!";
+    public static final String EMPRESA_NAO_ENCONTRADA = "Empresa não encontrada!";
     public static final String EMAIL_CNPJ_INVALIDO = "Parâmetro fornecido não é um E-mail ou CNPJ.";
     // Leilão.
     public static final String LEILAO_ENCONTRADO = "Leilão encontrado com sucesso!";
@@ -40,4 +40,8 @@ public class Mensagens {
     public static final String TELEFONE_INVALIDO = "Telefone inválido.";
     public static final String SENHA_INVALIDA = "A senha deve ter pelo menos 8 caracteres, um número e um caractere especial.";
     public static final String NENHUM_RECIBO_ENCONTRADO = "Nenhum recibo encontrado";
+    public static final String CODIGO_ENVIADO = "Código de recuperação gerado com sucesso!";
+    public static final String CODIGO_VALIDO = "Código de recuperação confere.";
+    public static final String CODIGO_INVALIDO = "Código de recuperação inválido.";
+    public static final String ERRO_REDIS = "Não foi possível gerar o código de recuperação, tente novamente mais tarde.";
 }

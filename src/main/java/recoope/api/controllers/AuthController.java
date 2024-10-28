@@ -45,13 +45,13 @@ public class AuthController {
 
     @Operation(summary = "Gerar código para recuperar acesso, no esquecer senha.")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Código gerado no redis."),
-            @ApiResponse(responseCode = "404", description = "Não é possivel gerar o código porque a empresa não existe."),
-            @ApiResponse(responseCode = "503", description = "Não é possivel gerar o código porque o redis está inacessível.")
+            @ApiResponse(responseCode = "201", description = "Código é válido."),
+            @ApiResponse(responseCode = "401", description = "Código não é válido."),
+            @ApiResponse(responseCode = "503", description = "Não é possivel validar o código porque o redis está inacessível.")
     })
-    @PostMapping("/validarRecuperacao/{cnpj}/{code}")
+    @PostMapping("/validarRecuperacao/{cnpj}")
     public ResponseEntity<RespostaApi> recuperacao(@PathVariable String cnpj, String code) {
-        return authService.confirmarRecuperacao(cnpj, code).get();
+        return authService.validarRecuperacao(cnpj, code).get();
     }
 
 }

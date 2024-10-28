@@ -81,7 +81,7 @@ public class LanceService {
         } else return new RespostaApi<>(404, Mensagens.LEILAO_NAO_ENCONTRADO);
 
 
-        List<Lance> lances = _lanceRepository.pegarLances(empresa, leilao);
+        List<Lance> lances = _lanceRepository.pegarLancesPorLeilao(empresa, leilao);
 
         if (!lances.isEmpty()) {
             _lanceRepository.deleteAllInBatch(lances);

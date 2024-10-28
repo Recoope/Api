@@ -30,6 +30,12 @@ public class RespostaApi<T> {
         this.data = null;
     }
 
+    public RespostaApi(String message) {
+        this.statusCode = 200;
+        this.message = message;
+        this.data = null;
+    }
+
     public RespostaApi(List data) {
         this.message = data.size() + " resultado(s) encontrados";
         this.data = (T) data;

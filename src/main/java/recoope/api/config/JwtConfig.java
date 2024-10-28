@@ -33,7 +33,7 @@ public class JwtConfig {
         http
                 .authorizeHttpRequests(authorize -> {
                     if (isSecurityActive) authorize
-                                .requestMatchers("/api-docs/**", "/swagger-ui/**", "/login/**", "/cadastrar/**").permitAll()
+                                .requestMatchers("/api-docs/**", "/swagger-ui/**", "/login/**", "/empresa/cadastrar/**").permitAll()
                                 .requestMatchers("/**").hasAnyRole("EMPRESA", "COOPERATIVA")
                                 .anyRequest().authenticated();
                     else authorize.requestMatchers("/**").permitAll();

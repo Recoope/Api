@@ -28,7 +28,7 @@ public class EmpresaController {
     }
 
     @Operation(summary = "Cadastrar empresa.")
-    @PostMapping("/cadastrar")
+    @PostMapping("/cadastrar/")
     public ResponseEntity<RespostaApi> cadastrar(@RequestBody EmpresaParams empresaRegistroParams){
         return empresaServices.cadastrar(empresaRegistroParams).get();
     }

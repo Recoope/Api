@@ -9,7 +9,7 @@ import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.entities.Lance;
 import recoope.api.domain.entities.Leilao;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -21,11 +21,28 @@ public interface ILanceRepository extends JpaRepository<Lance, Long>  {
            "l.valor = (SELECT MAX(l2.valor) FROM Lance l2 WHERE l2.leilao = ?1)")
     Lance maiorLance(Leilao leilao);
 
+    @Query("SELECT l FROM Lance l " +
+            "WHERE l.empresa.cnpj = ?1 AND " +
+            "l.valor = (SELECT MAX(l2.valor) FROM Lance l2 WHERE l2.leilao = l.leilao)")
+    List<Lance> lancesSobressalentesPorEmpresa(String cnpj);
+
     @Query("SELECT MAX(l.id) FROM Lance l")
     Long lastId();
 
     @Query("SELECT l FROM Lance l WHERE l.empresa = ?1 AND l.leilao = ?2 ORDER BY l.valor DESC")
-    List<Lance> pegarLances(Empresa empresa, Leilao leilao);
+    List<Lance> pegarLancesPorLeilao(Empresa empresa, Leilao leilao);
+
+    @Query("SELECT l FROM Lance l " +
+            "WHERE l.empresa = ?1 AND " +
+            "l.valor = (SELECT MAX(l2.valor) FROM Lance l2 " +
+            "           WHERE l2.leilao = l.leilao AND l2.empresa = ?1)")
+    List<Lance> pegarLances(Empresa empresa);
+
+    @Query("SELECT l FROM Lance l " +
+            "WHERE l.empresa = ?1 AND l.leilao.dataFim = ?2 AND " +
+            "l.valor = (SELECT MAX(l2.valor) FROM Lance l2 " +
+            "           WHERE l2.leilao = l.leilao AND l2.empresa = ?1)")
+    List<Lance> pegarLances(Empresa empresa, Date fim);
 
     @Procedure(procedureName = "insert_lance")
     void inserir(

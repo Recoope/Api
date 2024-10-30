@@ -22,7 +22,5 @@ jobs:
       - name: Deploy to Remote Server (EC2)
         run: |
           ssh -i private_key -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_HOST }} "
-            cd /home/ubuntu/Api 
-            git pull origin main
-            mvn clean package -DskipTests
-            ./executar.sh"
+            cd ./home/ubuntu/RecoopeCompose 
+            ./deploy

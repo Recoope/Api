@@ -26,3 +26,4 @@ jobs:
             git pull origin main
             cd ..
             ./deploy.sh"
+

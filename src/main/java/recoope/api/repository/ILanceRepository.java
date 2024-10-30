@@ -35,13 +35,15 @@ public interface ILanceRepository extends JpaRepository<Lance, Long>  {
     @Query("SELECT l FROM Lance l " +
             "WHERE l.empresa = ?1 AND " +
             "l.valor = (SELECT MAX(l2.valor) FROM Lance l2 " +
-            "           WHERE l2.leilao = l.leilao AND l2.empresa = ?1)")
+            "           WHERE l2.leilao = l.leilao AND l2.empresa = ?1) " +
+            "ORDER BY l.data DESC")
     List<Lance> pegarLances(Empresa empresa);
 
     @Query("SELECT l FROM Lance l " +
             "WHERE l.empresa = ?1 AND l.leilao.dataFim = ?2 AND " +
             "l.valor = (SELECT MAX(l2.valor) FROM Lance l2 " +
-            "           WHERE l2.leilao = l.leilao AND l2.empresa = ?1)")
+            "           WHERE l2.leilao = l.leilao AND l2.empresa = ?1) " +
+            "ORDER BY l.data DESC")
     List<Lance> pegarLances(Empresa empresa, Date fim);
 
     @Procedure(procedureName = "insert_lance")

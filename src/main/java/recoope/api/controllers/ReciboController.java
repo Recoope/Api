@@ -23,10 +23,10 @@ public class ReciboController {
     @Operation(summary = "Pegar recibos pelo CNPJ.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Recibos encontrados com sucesso."),
-            @ApiResponse(responseCode = "204", description = "Empresa não possui recibos.")
+            @ApiResponse(responseCode = "404", description = "Empresa não possui recibos.")
     })
     @GetMapping("/{cnpj}")
-    public ResponseEntity<RespostaApi> pegarRecibos(@PathVariable String cnpj) {
-        return reciboServices.pegarRecibos(cnpj).get();
+    public ResponseEntity<RespostaApi> pegarRecibos(@PathVariable String cnpj, @RequestParam(value = "dataDesc", defaultValue = "true") boolean dataDesc) {
+        return reciboServices.pegarRecibos(cnpj, dataDesc).get();
     }
 }

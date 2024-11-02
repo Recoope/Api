@@ -18,14 +18,16 @@ public class ReciboService {
         _lanceRepository = lanceRepository;
     }
 
-    public RespostaApi<List<ReciboDTO>> pegarRecibos(String cnpj) {
-        List<Lance> vencidosComMaiorLance = _lanceRepository.pegarVencidosComMaiorLance(cnpj);
+    public RespostaApi<List<ReciboDTO>> pegarRecibos(String cnpj, boolean dataDesc) {
+        List<Lance> vencidosComMaiorLance = dataDesc ?
+                _lanceRepository.pegarVencidosComMaiorLanceRecentes(cnpj) :
+                _lanceRepository.pegarVencidosComMaiorLanceAnteriores(cnpj);
         List<ReciboDTO> reciboDTOS = new ArrayList<>();
 
         for (Lance vencido: vencidosComMaiorLance)
             reciboDTOS.add(new ReciboDTO(
                     vencido.getLeilao().getId().intValue(),
-                    vencido.getData(),
+                    vencido.getLeilao().getDataFim(),
                     vencido.getLeilao().getHora(),
                     vencido.getLeilao().getCooperativa().getNome(),
                     vencido.getLeilao().getCooperativa().getCnpj(),

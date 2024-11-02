@@ -133,7 +133,7 @@ public class EmpresaService {
         empresaAlterada.setCnpj(empresaAlterada.getCnpj());
 
         _empresaRepository.save(empresaAlterada);
-        return new RespostaApi<>(201, Mensagens.EMPRESA_ATUALIZADA, empresaAlterada);
+        return new RespostaApi<>(200, Mensagens.EMPRESA_ATUALIZADA, empresaAlterada);
     }
 
     public RespostaApi<Empresa> remover(String cnpj) {
@@ -142,6 +142,22 @@ public class EmpresaService {
         if (empresa.isPresent()) {
             _empresaRepository.delete(empresa.get());
             return new RespostaApi<>(Mensagens.EMPRESA_REMOVIDA, empresa.get());
+        } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
+    }
+
+    public RespostaApi<Empresa> alterarSenha(String cnpj, String novaSenha) {
+        Optional<Empresa> empresaOpt = _empresaRepository.findById(cnpj);
+
+        if (empresaOpt.isPresent()) {
+
+            if (!Validacoes.SENHA(novaSenha)) return new RespostaApi<>(400, Mensagens.SENHA_INVALIDA);
+
+            Empresa empresa = empresaOpt.get();
+
+            empresa.setSenha(novaSenha);
+
+            _empresaRepository.save(empresa);
+            return new RespostaApi<>(Mensagens.SENHA_ALTERADA, empresa);
         } else return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
     }
 

@@ -62,13 +62,13 @@ public class EmpresaController {
         return empresaServices.remover(cnpj).get();
     }
 
-    @Operation(summary = "Alterar empresa.")
+    @Operation(summary = "Alterar senha.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Empresa alterada com sucesso."),
-            @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já existentes."),
+            @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Senha invalida."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    @PatchMapping("/alterar/{cnpj}")
+    @PatchMapping("/alterarSenha/{cnpj}")
     public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestBody String novaSenha){
         return empresaServices.alterarSenha(cnpj, novaSenha).get();
     }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
 import recoope.api.domain.inputs.AlterarEmpresaParams;
+import recoope.api.domain.inputs.AlterarSenhaParam;
 import recoope.api.domain.inputs.EmpresaParams;
 import recoope.api.services.EmpresaService;
 
@@ -69,7 +70,7 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
     @PatchMapping("/alterarSenha/{cnpj}")
-    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestBody String novaSenha){
-        return empresaServices.alterarSenha(cnpj, novaSenha).get();
+    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestBody AlterarSenhaParam novaSenha){
+        return empresaServices.alterarSenha(cnpj, novaSenha.getNovaSenha()).get();
     }
 }

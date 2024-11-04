@@ -9,7 +9,6 @@ import recoope.api.domain.dtos.EmpresaDto;
 import recoope.api.domain.entities.Empresa;
 import recoope.api.domain.inputs.AlterarEmpresaParams;
 import recoope.api.domain.inputs.EmpresaParams;
-import recoope.api.domain.inputs.LoginParams;
 import recoope.api.repository.IEmpresaRepository;
 import recoope.api.repository.ILanceRepository;
 
@@ -130,7 +129,7 @@ public class EmpresaService {
         } else return new RespostaApi<>(400, Mensagens.TELEFONE_INVALIDO);
 
 
-        empresaAlterada.setCnpj(empresaAlterada.getCnpj());
+        empresaAlterada.setCnpj(cnpj);
 
         _empresaRepository.save(empresaAlterada);
         return new RespostaApi<>(200, Mensagens.EMPRESA_ATUALIZADA, empresaAlterada);

@@ -87,13 +87,14 @@ public class EmpresaService {
 
     public RespostaApi<Empresa> alterar(String cnpj, AlterarEmpresaParams params) {
         Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
-        String nome, email, telefone;
+        String nome, email, telefone, senha;
         boolean emailAlterado = false, telefoneAlterado = false;
 
         Empresa empresaAlterada = new Empresa();
 
         if (empresaOptional.isPresent()) {
             Empresa empresa = empresaOptional.get();
+            senha = empresa.getSenha();
 
             if (params.getNome() == null) nome = empresa.getNome();
             else nome = params.getNome().trim();
@@ -130,6 +131,7 @@ public class EmpresaService {
 
 
         empresaAlterada.setCnpj(cnpj);
+        empresaAlterada.setSenha(senha);
 
         _empresaRepository.save(empresaAlterada);
         return new RespostaApi<>(200, Mensagens.EMPRESA_ATUALIZADA, empresaAlterada);

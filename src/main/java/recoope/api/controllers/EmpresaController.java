@@ -70,7 +70,7 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
     @PatchMapping("/alterarSenha/{cnpj}")
-    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestBody AlterarSenhaParam novaSenha){
-        return empresaServices.alterarSenha(cnpj, novaSenha.getNovaSenha()).get();
+    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestParam String novaSenha){
+        return empresaServices.alterarSenha(cnpj, novaSenha).get();
     }
 }

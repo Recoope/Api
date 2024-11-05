@@ -147,7 +147,7 @@ public class EmpresaService {
     }
 
     public RespostaApi<Empresa> alterarSenha(String cnpj, String novaSenha) {
-        Optional<Empresa> empresaOpt = _empresaRepository.findById(cnpj);
+        Optional<Empresa> empresaOpt = _empresaRepository.findByCnpj(cnpj);
 
         if (empresaOpt.isPresent()) {
 

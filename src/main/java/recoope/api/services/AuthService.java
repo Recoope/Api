@@ -159,7 +159,7 @@ public class AuthService {
         return refreshToken;
     }
 
-    public RespostaApi<Object> refreshToken(String cnpj, String refreshToken) {
+    public RespostaApi<Map<String, String>> refreshToken(String cnpj, String refreshToken) {
 
         Optional<Empresa> empOptional = empresaRepository.findById(cnpj);
 

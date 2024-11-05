@@ -4,7 +4,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -50,12 +49,18 @@ public class AuthService {
         Optional<Empresa> empOptional = empresaRepository.login(params.getCnpjOuEmail());
 
         if (empOptional.isPresent() && empOptional.get().getSenha().equals(params.getSenha())) {
-            token = generateToken(empOptional.get().getEmail());
+            Empresa empresa = empOptional.get();
+            String cnpj = empresa.getCnpj();
+
+            String refreshToken = generateRefreshToken(empresa);
+            token = generateToken(empresa.getEmail());
+
             response = new HashMap() {
                 {
                     put("context", "EMPRESA");
-                    put("cnpj", empOptional.get().getCnpj());
-                    put("token", token);
+                    put("cnpj", cnpj);
+                    put("refreshToken", refreshToken);
+                    put("token", "Bearer " + token);
                 }
             };
 
@@ -139,10 +144,41 @@ public class AuthService {
                     .compact();
 
             logger.info("Generated token: " +  token);
-            return "Bearer " + token;
+            return token;
         } catch (Exception e) {
             logger.info("JWT generation error: " + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "JWT generation error", e);
+        }
+    }
+
+    private String generateRefreshToken(Empresa empresa) {
+        String refreshToken = generateToken(empresa.toString());
+        empresa.setRefreshToken(refreshToken);
+
+        empresaRepository.save(empresa);
+        return refreshToken;
+    }
+
+    public RespostaApi<Object> refreshToken(String cnpj, String refreshToken) {
+
+        Optional<Empresa> empOptional = empresaRepository.findById(cnpj);
+
+        if (empOptional.isPresent()) {
+
+            if (empOptional.get().getRefreshToken().equals(refreshToken)) {
+                String newToken = generateToken(empOptional.get().getEmail());
+                logger.info("Refreshed token: " + newToken);
+
+                Map<String, String> response = new HashMap() {{
+                    put("token", "Bearer " + newToken);
+                }};
+
+                return new RespostaApi<>(Mensagens.REFRESH_TOKEN_SUCESSO, response);
+            } else {
+                return new RespostaApi<>(401, Mensagens.REFRESH_TOKEN_INVALIDO);
+            }
+        } else {
+            return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
         }
     }
 }

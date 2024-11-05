@@ -27,4 +27,7 @@ public class Empresa {
     @Id
     @Column(name = "cnpj_empresa")
     private String cnpj;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
 }

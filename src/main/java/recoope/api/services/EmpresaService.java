@@ -64,7 +64,7 @@ public class EmpresaService {
             return new RespostaApi<>(400, Mensagens.PARAMETROS_VAZIOS);
         }
 
-        Empresa emp = new Empresa(cnpj, nome, email, senha, telefone);
+        Empresa emp = new Empresa(cnpj, nome, email, senha, telefone, null);
 
         // Verificação nome.
         if (!Validacoes.NOME(nome)) return new RespostaApi<>(400, Mensagens.NOME_INVALIDO);

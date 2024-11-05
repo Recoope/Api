@@ -45,4 +45,6 @@ public class Mensagens {
     public static final String RECUPERACAO_INVALIDO = "O Código de recuperação é inválido.";
     public static final String ERRO_REDIS = "Não foi possível gerar o código de recuperação, tente novamente mais tarde.";
     public static final String SENHA_ALTERADA = "Senha alterada com sucesso!";
+    public static final String REFRESH_TOKEN_SUCESSO = "Refresh token gerado com sucesso!";
+    public static final String REFRESH_TOKEN_INVALIDO = "Refresh token inválido.";
 }

@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recoope.api.domain.RespostaApi;
+import recoope.api.domain.inputs.AlterarSenhaParam;
 import recoope.api.domain.inputs.LoginParams;
+import recoope.api.domain.inputs.RefreshTokenParam;
 import recoope.api.services.AuthService;
 
 @Tag(name = "Auth")
@@ -54,4 +56,15 @@ public class AuthController {
         return authService.validarRecuperacao(cnpj, code).get();
     }
 
+
+    @Operation(summary = "Refresh token.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Senha invalida."),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
+    })
+    @PostMapping("/refreshToken/{cnpj}")
+    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestBody RefreshTokenParam refreshTokenParam){
+        return authService.refreshToken(cnpj, refreshTokenParam.getRefreshToken()).get();
+    }
 }

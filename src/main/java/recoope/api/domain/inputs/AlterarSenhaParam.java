@@ -9,8 +9,4 @@ import lombok.Setter;
 @Setter
 public class AlterarSenhaParam {
     private String novaSenha;
-
-    @JsonCreator
-    public AlterarSenhaParam(@JsonProperty("novaSenha") String novaSenha) {
-        this.novaSenha = novaSenha;
-    }}
+}

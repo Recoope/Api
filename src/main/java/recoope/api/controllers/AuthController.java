@@ -59,8 +59,8 @@ public class AuthController {
 
     @Operation(summary = "Refresh token.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso."),
-            @ApiResponse(responseCode = "400", description = "Senha invalida."),
+            @ApiResponse(responseCode = "200", description = "Token atualizado com sucesso."),
+            @ApiResponse(responseCode = "401", description = "Refresh token invalido."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
     @PostMapping("/refreshToken/{cnpj}")

@@ -64,7 +64,7 @@ public class AuthController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
     @PostMapping("/refreshToken/{cnpj}")
-    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestBody RefreshTokenParam refreshTokenParam){
-        return authService.refreshToken(cnpj, refreshTokenParam.getRefreshToken()).get();
+    public ResponseEntity<RespostaApi> alterarSenha(@PathVariable String cnpj, @RequestParam String  refreshTokenParam){
+        return authService.refreshToken(cnpj, refreshTokenParam).get();
     }
 }

@@ -58,7 +58,7 @@ public class EmpresaController {
             @ApiResponse(responseCode = "200", description = "Empresa deletada com sucesso."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    @DeleteMapping("/remover/{cpnj}")
+    @DeleteMapping("/remover/{cnpj}")
     public ResponseEntity<RespostaApi> remover(@PathVariable String cnpj) {
         return empresaServices.remover(cnpj).get();
     }

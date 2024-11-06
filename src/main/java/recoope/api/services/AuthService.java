@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +19,6 @@ import recoope.api.repository.ICooperativaRepository;
 import recoope.api.repository.IEmpresaRepository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.UnifiedJedis;
 
 import javax.crypto.SecretKey;
 import java.util.*;
@@ -29,7 +29,10 @@ public class AuthService {
     public final SecretKey secretKey;
     private final IEmpresaRepository empresaRepository;
     private final ICooperativaRepository cooperativaRepository;
-    private final JedisPool jedisPool = new JedisPool();
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
 
     public AuthService (SecretKey secretKey, IEmpresaRepository empresaRepository, ICooperativaRepository cooperativaRepository) {
         this.secretKey = secretKey;
@@ -103,7 +106,7 @@ public class AuthService {
             String codigo = String.valueOf(100000 + random.nextInt(900000));
             logger.info("Código gerado: " + codigo + " para a chave recovery:" + cnpj);
 
-            try (Jedis jedis = jedisPool.getResource()) {
+            try (Jedis jedis = new Jedis(redisHost, redisPort)) {
                 jedis.set("recovery:" + cnpj, codigo);
                 jedis.expire("recovery:" + cnpj, 60 * 15);
 
@@ -113,6 +116,8 @@ public class AuthService {
 
                 return new RespostaApi<>(Mensagens.RECUPERACAO_GERADO, response);
             } catch (Exception e) {
+                logger.info("Redis error: " + e.getMessage());
+                logger.info("Redis URL: " + redisHost + ":" + redisPort);
                 return new RespostaApi<>(503, Mensagens.ERRO_REDIS);
             }
 
@@ -124,9 +129,10 @@ public class AuthService {
     public RespostaApi validarRecuperacao(String cnpj, String codigo) {
         String codigoVerdadeiro;
 
-        try (Jedis jedis = jedisPool.getResource()) {
+        try (Jedis jedis = new Jedis(redisHost, redisPort)) {
             codigoVerdadeiro = jedis.get("recovery:" + cnpj);
         } catch (Exception e) {
+            logger.info("Redis error: " + e.getMessage());
             return new RespostaApi<>(503, Mensagens.ERRO_REDIS);
         }
 

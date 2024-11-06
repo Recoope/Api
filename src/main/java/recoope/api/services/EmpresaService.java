@@ -87,7 +87,7 @@ public class EmpresaService {
 
     public RespostaApi<Empresa> alterar(String cnpj, AlterarEmpresaParams params) {
         Optional<Empresa> empresaOptional = _empresaRepository.findById(cnpj);
-        String nome, email, telefone, senha;
+        String nome, email, telefone, senha, refreshToken;
         boolean emailAlterado = false, telefoneAlterado = false;
 
         Empresa empresaAlterada = new Empresa();
@@ -95,6 +95,7 @@ public class EmpresaService {
         if (empresaOptional.isPresent()) {
             Empresa empresa = empresaOptional.get();
             senha = empresa.getSenha();
+            refreshToken = empresa.getRefreshToken();
 
             if (params.getNome() == null) nome = empresa.getNome();
             else nome = params.getNome().trim();
@@ -130,6 +131,7 @@ public class EmpresaService {
         } else return new RespostaApi<>(400, Mensagens.TELEFONE_INVALIDO);
 
 
+        empresaAlterada.setRefreshToken(refreshToken);
         empresaAlterada.setCnpj(cnpj);
         empresaAlterada.setSenha(senha);
 

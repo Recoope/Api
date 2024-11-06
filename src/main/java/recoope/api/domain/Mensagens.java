@@ -21,7 +21,7 @@ public class Mensagens {
     // Lance
     public static final String LANCE_ATRIBUIDO = "Lance atribuido com sucesso!";
     public static final String LANCE_IGUAL = "Esse lance é igual ao maior lance do leilão, ele deve ser maior.";
-    public static final String LANCE_MENOR = "Esse lance é menor que o maior lance do leilão.";
+    public static final String LANCE_MENOR = "Esse lance é menor que o lance inicial ou maior lance do leilão.";
     public static final String LANCE_NAO_EXISTE = "O leilão não possui lances dessa empresa!";
     public static final String LANCE_CANCELADO = "Lance(s) cancelado com sucesso!";
     public static final String LANCE_PARAM_INVALIDOS = "CNPJ e valor devem ser informados.";

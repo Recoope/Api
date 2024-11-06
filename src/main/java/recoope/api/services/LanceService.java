@@ -55,13 +55,14 @@ public class LanceService {
         lance.setEmpresa(empresa);
         lance.setLeilao(leilao);
 
-        if (maiorLance < params.getValor()) lance.setValor(valor);
+        if (leilao.getProduto().getValorInicial() > params.getValor() && maiorLance < params.getValor())
+            lance.setValor(valor);
         else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, Mensagens.LANCE_IGUAL);
         else return new RespostaApi<>(400, Mensagens.LANCE_MENOR);
 
         Long id = _lanceRepository.lastId();
         if (id != null) lance.setId(id + 1);
-        else lance.setId(0l);
+        else lance.setId(0L);
 
         lance.setData(new Date());
 

@@ -59,7 +59,10 @@ public class LanceService {
         else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, Mensagens.LANCE_IGUAL);
         else return new RespostaApi<>(400, Mensagens.LANCE_MENOR);
 
-        lance.setId(_lanceRepository.lastId() + 1);
+        Long id = _lanceRepository.lastId();
+        if (id != null) lance.setId(id + 1);
+        else lance.setId(0l);
+
         lance.setData(new Date());
 
         _lanceRepository.save(lance);

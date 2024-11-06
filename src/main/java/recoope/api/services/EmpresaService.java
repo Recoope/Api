@@ -97,39 +97,52 @@ public class EmpresaService {
             senha = empresa.getSenha();
             refreshToken = empresa.getRefreshToken();
 
-            if (params.getNome() == null) nome = empresa.getNome();
-            else nome = params.getNome().trim();
-            if (params.getEmail() == null) email = empresa.getEmail();
-            else {
+            nome = params.getNome() == null ? empresa.getNome() : params.getNome().trim();
+
+            if (params.getEmail() == null || params.getEmail().equals(empresa.getEmail())) {
+                email = empresa.getEmail();
+            } else {
                 email = params.getEmail().trim();
                 emailAlterado = true;
             }
-            if (params.getTelefone() == null) telefone = empresa.getTelefone();
-            else {
+
+            if (params.getTelefone() == null || params.getTelefone().equals(empresa.getTelefone())) {
+                telefone = empresa.getTelefone();
+            } else {
                 telefone = params.getTelefone().replaceAll("[() -]", "").trim();
                 telefoneAlterado = true;
             }
-
         } else {
             return new RespostaApi<>(404, Mensagens.EMPRESA_NAO_ENCONTRADA);
         }
 
-        // Verificação nome.
+        // Verificação do nome
         if (Validacoes.NOME(nome)) empresaAlterada.setNome(nome);
         else return new RespostaApi<>(400, Mensagens.NOME_INVALIDO);
 
-        // Verificação do email.
+        // Verificação do email
         if (Validacoes.EMAIL(email)) {
-            if (!emailAlterado || _empresaRepository.findByTelefoneOuEmail(email).isEmpty()) empresaAlterada.setEmail(email);
-            else return new RespostaApi<>(400, Mensagens.EMAIL_EXISTENTE);
-        } else return new RespostaApi<>(400, Mensagens.EMAIL_INVALIDO);
+            if (!emailAlterado ||
+                    _empresaRepository.findByTelefoneOuEmail(email).stream().allMatch(e -> e.getCnpj().equals(cnpj))) {
+                empresaAlterada.setEmail(email);
+            } else {
+                return new RespostaApi<>(400, Mensagens.EMAIL_EXISTENTE);
+            }
+        } else {
+            return new RespostaApi<>(400, Mensagens.EMAIL_INVALIDO);
+        }
 
-        // Verificação do telefone.
+        // Verificação do telefone
         if (Validacoes.TEL(telefone)) {
-            if (!telefoneAlterado || _empresaRepository.findByTelefoneOuEmail(telefone).isEmpty()) empresaAlterada.setTelefone(telefone);
-            else return new RespostaApi<>(400, Mensagens.TELEFONE_EXISTENTE);
-        } else return new RespostaApi<>(400, Mensagens.TELEFONE_INVALIDO);
-
+            if (!telefoneAlterado ||
+                    _empresaRepository.findByTelefoneOuEmail(telefone).stream().allMatch(e -> e.getCnpj().equals(cnpj))) {
+                empresaAlterada.setTelefone(telefone);
+            } else {
+                return new RespostaApi<>(400, Mensagens.TELEFONE_EXISTENTE);
+            }
+        } else {
+            return new RespostaApi<>(400, Mensagens.TELEFONE_INVALIDO);
+        }
 
         empresaAlterada.setRefreshToken(refreshToken);
         empresaAlterada.setCnpj(cnpj);
@@ -138,6 +151,7 @@ public class EmpresaService {
         _empresaRepository.save(empresaAlterada);
         return new RespostaApi<>(200, Mensagens.EMPRESA_ATUALIZADA, empresaAlterada);
     }
+
 
     public RespostaApi<Empresa> remover(String cnpj) {
         Optional<Empresa> empresa = _empresaRepository.findById(cnpj);

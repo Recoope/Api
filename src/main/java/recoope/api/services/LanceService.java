@@ -55,7 +55,7 @@ public class LanceService {
         lance.setEmpresa(empresa);
         lance.setLeilao(leilao);
 
-        if (leilao.getProduto().getValorInicial() < params.getValor() && maiorLance < params.getValor())
+        if (leilao.getProduto().getValorInicial() <= params.getValor() && maiorLance < params.getValor())
             lance.setValor(valor);
         else if (maiorLance.equals(params.getValor())) return new RespostaApi<>(400, Mensagens.LANCE_IGUAL);
         else return new RespostaApi<>(400, Mensagens.LANCE_MENOR);
